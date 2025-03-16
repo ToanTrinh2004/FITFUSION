@@ -1,0 +1,73 @@
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import '../theme/theme.dart'; // Import theme
+
+class IntroApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: appGradient, // Áp dụng gradient từ theme.dart
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, // Căn giữa theo chiều dọc
+          children: [
+            // Hình ảnh logo
+            Image.asset(
+              'assets/logo.png',
+              width: 300, // Điều chỉnh kích thước ảnh
+            ),
+
+            // Phần chữ và nút bấm
+            Column(
+              children: [
+                const Text("FITFUSION", style: AppTextStyles.title),
+                const SizedBox(height: 8),
+                const Text("SỐNG CÂN BẰNG, SỐNG TỐT", style: AppTextStyles.subtitle),
+                const SizedBox(height: 40),
+
+                // Nút Đăng Nhập
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white, // Màu nền trắng
+                    foregroundColor: AppColors.primary, // Chữ đỏ
+                    minimumSize: const Size(210, 50), // Kích thước cố định
+                  ),
+                  onPressed: () {}, // Xử lý đăng nhập
+                  child: const Text("ĐĂNG NHẬP", style: AppTextStyles.buttonlogin),
+                ),
+                const SizedBox(height: 15),
+
+                // Nút Đăng Ký
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary, // Nền đỏ
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(210, 50),
+                  ),
+                  onPressed: () {}, // Xử lý đăng ký
+                  child: const Text("ĐĂNG KÝ", style: AppTextStyles.buttonregister),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 20), // Thêm khoảng cách giữa nút và dòng quên mật khẩu
+
+            // Dòng "Forgot your password?"
+             // Dòng "Forgot your password?"
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: TextButton(
+                onPressed: () {}, // Xử lý khi bấm quên mật khẩu
+                child: const Text("Forgot your password?", style: AppTextStyles.forgotPassword),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+} 
