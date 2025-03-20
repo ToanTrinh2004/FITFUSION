@@ -67,6 +67,12 @@ flutter:
     - assets/gym.png
     - assets/pt.png
     - assets/logo.png
+    - assets/male.png
+    - assets/female.png
+    - assets/measure_height.png
+
+
+
 
 
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../theme/theme.dart'; // Import theme
+import '../theme/theme.dart';
 import '../widgets/inputfield.dart';
+import 'detail_sex.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -45,7 +46,12 @@ class RegisterScreen extends StatelessWidget {
                   foregroundColor: Colors.white,
                   minimumSize: const Size(200, 50),
                 ),
-                onPressed: () {}, // Xử lý đăng ký
+                onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SexSelectionScreen()), 
+                );
+                }, // Xử lý đăng ký
                 child: const Text("ĐĂNG KÝ", style: AppTextStyles.button),
               ),
 
