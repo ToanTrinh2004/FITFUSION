@@ -29,23 +29,15 @@ class LoginScreen extends StatelessWidget {
                 width: 250,
               ),
               const SizedBox(height: 30),
-
               const InputField(label: "Tên đăng nhập"),
               const SizedBox(height: 10),
-
               const InputField(label: "Mật khẩu", isPassword: true),
               const SizedBox(height: 40),
-              
-
               // Button ĐĂNG NHẬP
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(200, 50),
-                  ),
+                  style: ButtonStyles.buttonTwo,
                   onPressed: () {}, // Xử lý đăng nhập
-                  child: const Text("ĐĂNG NHẬP", style: AppTextStyles.button),
+                  child: const Text("ĐĂNG NHẬP", style: AppTextStyles.textButtonTwo),
                 ),
               
               const SizedBox(height: 20),

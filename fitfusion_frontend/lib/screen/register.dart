@@ -23,9 +23,9 @@ class RegisterScreen extends StatelessWidget {
 
               Image.asset(
                 'assets/logo.png',
-                width: 250,
+                width: 200,
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 10),
 
               const InputField(label:"Họ và tên"),
               const SizedBox(height: 10),
@@ -37,25 +37,21 @@ class RegisterScreen extends StatelessWidget {
               const SizedBox(height: 10),
 
               const InputField(label:"Nhập lại mật khẩu", isPassword: true),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
               // Nút "ĐĂNG KÝ"
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(200, 50),
-                ),
+                style: ButtonStyles.buttonTwo,
                 onPressed: () {
                   Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SexSelectionScreen()), 
                 );
                 }, // Xử lý đăng ký
-                child: const Text("ĐĂNG KÝ", style: AppTextStyles.button),
+                child: const Text("ĐĂNG KÝ", style: AppTextStyles.textButtonTwo),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
             ],
           ),
         ),
