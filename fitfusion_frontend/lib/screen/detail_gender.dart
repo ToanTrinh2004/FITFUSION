@@ -26,17 +26,16 @@ class _GenderSelectionScreenState extends State<GenderSelectionScreen> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.9,
+        height: double.infinity,
         decoration: const BoxDecoration(gradient: appGradient),
         
         child: Column(
           children: [
             HeaderWidget(fullname: widget.fullname),
-            const SizedBox(height: 20),
 
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 40),
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: boxGradient.withOpacity(0.5),
