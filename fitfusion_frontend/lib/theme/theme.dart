@@ -27,17 +27,18 @@ class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
-  static const TextStyle buttonregister = TextStyle(
+  static const TextStyle button = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
     color: AppColors.buttonText,
   );
 
-  static const TextStyle buttonlogin = TextStyle(
+    static const TextStyle button_intro = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
     color: AppColors.textSecondary,
   );
+
   static const TextStyle forgotPassword = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
@@ -50,8 +51,14 @@ class AppTextStyles {
     color: AppColors.textPrimary,
   );
 }
-
-/// 🎨 Gradient nền của app
+class ButtonStyles {
+  static final ButtonStyle primary = ElevatedButton.styleFrom(
+    backgroundColor: AppColors.primary,
+    foregroundColor: Colors.white,
+    minimumSize: const Size(200, 50),
+  );
+}
+/// Gradient nền của app
 const LinearGradient appGradient = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,

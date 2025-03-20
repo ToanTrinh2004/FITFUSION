@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 import 'login.dart';
+import 'register.dart';
 
 class IntroApp extends StatelessWidget {
   const IntroApp({super.key});
@@ -33,18 +34,19 @@ class IntroApp extends StatelessWidget {
 
                 // Nút Đăng Nhập
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // Màu nền trắng
-                    foregroundColor: AppColors.primary, // Chữ đỏ
-                    minimumSize: const Size(210, 50), // Kích thước cố định
-                  ),
+                  // style: ElevatedButton.styleFrom(
+                  //   backgroundColor: AppColors.background, // Nền đỏ
+                  //   foregroundColor: Colors.red,
+                  //   minimumSize: const Size(210, 50), // Kích thước cố định
+                  // ),
+                 style: ButtonStyles.primary,
                   onPressed: () {
                     Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LoginScreen()), 
                 );
                   }, // Xử lý đăng nhập
-                  child: const Text("ĐĂNG NHẬP", style: AppTextStyles.buttonlogin),
+                  child: const Text("ĐĂNG NHẬP", style: AppTextStyles.button_intro),
                 ),
                 const SizedBox(height: 15),
 
@@ -55,8 +57,13 @@ class IntroApp extends StatelessWidget {
                     foregroundColor: Colors.white,
                     minimumSize: const Size(210, 50),
                   ),
-                  onPressed: () {}, // Xử lý đăng ký
-                  child: const Text("ĐĂNG KÝ", style: AppTextStyles.buttonregister),
+                  onPressed: () {
+                     Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RegisterScreen()), 
+                );
+                  }, // Xử lý đăng ký
+                  child: const Text("ĐĂNG KÝ", style: AppTextStyles.button),
                 ),
               ],
             ),
