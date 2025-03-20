@@ -6,6 +6,8 @@ void main() {
 }
 
 class FitFusionApp extends StatelessWidget {
+  const FitFusionApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
