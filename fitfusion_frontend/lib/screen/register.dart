@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/theme.dart'; // Import theme
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
 
+class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,8 +13,6 @@ class LoginScreen extends StatelessWidget {
           gradient: appGradient,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -29,41 +26,38 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
 
+              buildInputField("Họ và tên"),
+              const SizedBox(height: 10),
+
               buildInputField("Tên đăng nhập"),
               const SizedBox(height: 10),
 
               buildInputField("Mật khẩu", ),
-              const SizedBox(height: 40),
-              
+              const SizedBox(height: 10),
 
-              // Button ĐĂNG NHẬP
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(200, 50),
-                  ),
-                  onPressed: () {}, // Xử lý đăng nhập
-                  child: const Text("ĐĂNG NHẬP", style: AppTextStyles.button),
+              buildInputField("Nhập lại mật khẩu", isPassword: true),
+              const SizedBox(height: 30),
+
+              // Nút "ĐĂNG KÝ"
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(200, 50),
                 ),
-              
+                onPressed: () {}, // Xử lý đăng ký
+                child: const Text("ĐĂNG KÝ", style: AppTextStyles.button),
+              ),
+
               const SizedBox(height: 20),
-
-                // "Quên mật khẩu"
-                Center(
-                  child: TextButton(
-                    onPressed: () {}, // Xử lý khi bấm quên mật khẩu
-                    child: const Text("Forgot your password?", style: AppTextStyles.forgotPassword),
-                  ),
-                ),
-              ],
-            ),
+            ],
           ),
         ),
       ),
     );
   }
-    Widget buildInputField(String label, {bool isPassword = false}) {
+
+  Widget buildInputField(String label, {bool isPassword = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -74,7 +68,7 @@ class LoginScreen extends StatelessWidget {
           height: 50,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(15),
           ),
           child: TextField(
             obscureText: isPassword,
@@ -87,5 +81,4 @@ class LoginScreen extends StatelessWidget {
       ],
     );
   }
-
 }
