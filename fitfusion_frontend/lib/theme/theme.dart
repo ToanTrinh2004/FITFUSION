@@ -23,6 +23,7 @@ class AppTextStyles {
     fontStyle: FontStyle.italic, // Chữ nghiêng
     color: AppColors.textSecondary,
   );
+
   static const TextStyle textButtonOne = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
@@ -33,6 +34,13 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );
+  
+    static const TextStyle button_intro = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textSecondary,
+  );
+
   static const TextStyle forgotPassword = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
