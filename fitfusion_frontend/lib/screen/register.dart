@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/theme.dart'; // Import theme
-
+import '../widgets/widget.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -22,20 +22,20 @@ class RegisterScreen extends StatelessWidget {
 
               Image.asset(
                 'assets/logo.png',
-                width: 200,
+                width: 250,
               ),
               const SizedBox(height: 30),
 
-              buildInputField("Họ và tên"),
+              const InputField(label:"Họ và tên"),
               const SizedBox(height: 10),
 
-              buildInputField("Tên đăng nhập"),
+              const InputField(label:"Tên đăng nhập"),
               const SizedBox(height: 10),
 
-              buildInputField("Mật khẩu", ),
+              const InputField(label:"Mật khẩu"),
               const SizedBox(height: 10),
 
-              buildInputField("Nhập lại mật khẩu", isPassword: true),
+              const InputField(label:"Nhập lại mật khẩu", isPassword: true),
               const SizedBox(height: 30),
 
               // Nút "ĐĂNG KÝ"
@@ -54,31 +54,6 @@ class RegisterScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget buildInputField(String label, {bool isPassword = false}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: AppTextStyles.subtitle),
-        const SizedBox(height: 5),
-        Container(
-          width: 270,
-          height: 50,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: TextField(
-            obscureText: isPassword,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(horizontal: 15),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

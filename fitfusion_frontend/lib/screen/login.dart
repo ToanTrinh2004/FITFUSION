@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/theme.dart'; // Import theme
+import '../widgets/widget.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -25,14 +26,14 @@ class LoginScreen extends StatelessWidget {
 
               Image.asset(
                 'assets/logo.png',
-                width: 200,
+                width: 250,
               ),
               const SizedBox(height: 30),
 
-              buildInputField("Tên đăng nhập"),
+              const InputField(label: "Tên đăng nhập"),
               const SizedBox(height: 10),
 
-              buildInputField("Mật khẩu", ),
+              const InputField(label: "Mật khẩu", isPassword: true),
               const SizedBox(height: 40),
               
 
@@ -63,29 +64,4 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
-    Widget buildInputField(String label, {bool isPassword = false}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: AppTextStyles.subtitle),
-        const SizedBox(height: 5),
-        Container(
-          width: 270,
-          height: 50,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: TextField(
-            obscureText: isPassword,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(horizontal: 15),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
 }
