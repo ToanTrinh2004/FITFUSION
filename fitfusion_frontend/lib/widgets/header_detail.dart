@@ -17,7 +17,7 @@ class HeaderWidget extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           "Xin chào, $fullname",
-          style:AppTextStyles.subtitle
+          style:AppTextStyles.little_title
         ),
       ],
     );
