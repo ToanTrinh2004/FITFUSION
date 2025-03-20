@@ -11,32 +11,27 @@ class AppColors {
   static const Color buttonBg = Color(0x7FB3261E); // Nền button đỏ mờ
   static const Color buttonText = Color(0xFFFFFFFF); // Chữ trên button
 }
-
-/// 🖋️ Định nghĩa kiểu chữ
 class AppTextStyles {
   static const TextStyle title = TextStyle(
     fontSize: 40,
     fontWeight: FontWeight.w900,
     color: AppColors.textPrimary,
   );
-
   static const TextStyle subtitle = TextStyle(
     fontSize: 25,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.italic, // Chữ nghiêng
-    color: AppColors.textPrimary,
+    color: AppColors.textSecondary,
   );
-
-  static const TextStyle buttonregister = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.bold,
-    color: AppColors.buttonText,
-  );
-
-  static const TextStyle buttonlogin = TextStyle(
+  static const TextStyle textButtonOne = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
     color: AppColors.textSecondary,
+  );
+  static const TextStyle textButtonTwo = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
   );
   static const TextStyle forgotPassword = TextStyle(
     fontSize: 14,
@@ -47,11 +42,20 @@ class AppTextStyles {
   static const TextStyle text = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
-    color: AppColors.textPrimary,
+    color: AppColors.textSecondary,
   );
 }
-
-/// 🎨 Gradient nền của app
+class ButtonStyles {
+  static final ButtonStyle buttonOne = ElevatedButton.styleFrom(
+    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+    minimumSize: const Size(200, 50),
+  );
+  static final ButtonStyle buttonTwo = ElevatedButton.styleFrom(
+    backgroundColor: AppColors.primary, // Nền đỏ
+    minimumSize: const Size(200, 50),
+  );
+}
+/// Gradient nền của app
 const LinearGradient appGradient = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
