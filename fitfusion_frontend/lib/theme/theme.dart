@@ -44,6 +44,11 @@ class AppTextStyles {
     color: AppColors.textSecondary,
     decoration: TextDecoration.underline,
   );
+  static const TextStyle text = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
 }
 
 /// 🎨 Gradient nền của app

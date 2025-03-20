@@ -1,8 +1,10 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import '../theme/theme.dart'; // Import theme
+import '../theme/theme.dart';
+import 'login.dart';
 
 class IntroApp extends StatelessWidget {
+  const IntroApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +38,12 @@ class IntroApp extends StatelessWidget {
                     foregroundColor: AppColors.primary, // Chữ đỏ
                     minimumSize: const Size(210, 50), // Kích thước cố định
                   ),
-                  onPressed: () {}, // Xử lý đăng nhập
+                  onPressed: () {
+                    Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()), 
+                );
+                  }, // Xử lý đăng nhập
                   child: const Text("ĐĂNG NHẬP", style: AppTextStyles.buttonlogin),
                 ),
                 const SizedBox(height: 15),
@@ -54,10 +61,7 @@ class IntroApp extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 20), // Thêm khoảng cách giữa nút và dòng quên mật khẩu
-
-            // Dòng "Forgot your password?"
-             // Dòng "Forgot your password?"
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
               child: TextButton(
