@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 import '../widgets/header_detail.dart';
-
+import 'detail_age.dart';
 class HeightInputScreen extends StatefulWidget {
   final String fullname;
 
@@ -65,7 +65,12 @@ class _HeightInputScreenState extends State<HeightInputScreen> {
                       const SizedBox(height: 30),
                       ElevatedButton(
                         style: ButtonStyles.buttonTwo,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AgeSelectionScreen(fullname: '',)), 
+                          );
+                        },
                         child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
                       ),
                     ],
