@@ -11,22 +11,18 @@ class AppColors {
   static const Color buttonBg = Color(0x7FB3261E); // Nền button đỏ mờ
   static const Color buttonText = Color(0xFFFFFFFF); // Chữ trên button
 }
-
-/// 🖋️ Định nghĩa kiểu chữ
 class AppTextStyles {
   static const TextStyle title = TextStyle(
     fontSize: 40,
     fontWeight: FontWeight.w900,
     color: AppColors.textPrimary,
   );
-
   static const TextStyle subtitle = TextStyle(
     fontSize: 25,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.italic, // Chữ nghiêng
     color: AppColors.textSecondary,
   );
-
   static const TextStyle textButtonOne = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
@@ -37,13 +33,6 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );
-  
-    static const TextStyle button_intro = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.bold,
-    color: AppColors.textSecondary,
-  );
-
   static const TextStyle forgotPassword = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
@@ -53,7 +42,7 @@ class AppTextStyles {
   static const TextStyle text = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
-    color: AppColors.textPrimary,
+    color: AppColors.textSecondary,
   );
 }
 class ButtonStyles {
