@@ -1,7 +1,8 @@
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 import '../widgets/inputfield.dart';
-import 'detail_sex.dart';
+import 'detail_gender.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -14,11 +15,11 @@ class RegisterScreen extends StatelessWidget {
           gradient: appGradient,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("FITFUSION", style: AppTextStyles.title),
+              const AppBarCustom(),
               const SizedBox(height: 20),
 
               Image.asset(
@@ -45,7 +46,7 @@ class RegisterScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SexSelectionScreen()), 
+                  MaterialPageRoute(builder: (context) => GenderSelectionScreen(fullname: '',)), 
                 );
                 }, // Xử lý đăng ký
                 child: const Text("ĐĂNG KÝ", style: AppTextStyles.textButtonTwo),

@@ -23,6 +23,11 @@ class AppTextStyles {
     fontStyle: FontStyle.italic, // Chữ nghiêng
     color: AppColors.textSecondary,
   );
+  static const TextStyle little_title = TextStyle( 
+    fontSize: 20,
+    fontWeight: FontWeight.w900,
+    color: AppColors.textPrimary,
+  );
   static const TextStyle textButtonOne = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
@@ -42,7 +47,12 @@ class AppTextStyles {
   static const TextStyle text = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
-    color: AppColors.textSecondary,
+    color: AppColors.textPrimary,
+  );
+  static const TextStyle normal = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.normal,
+    color: Color.fromARGB(255, 0, 0, 0),
   );
 }
 class ButtonStyles {
@@ -55,9 +65,15 @@ class ButtonStyles {
     minimumSize: const Size(200, 50),
   );
 }
-/// Gradient nền của app
+///background
 const LinearGradient appGradient = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
   colors: [AppColors.primary, AppColors.secondary, AppColors.background],
 );
+
+const LinearGradient boxGradient = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  colors:[ Color(0xFF999999), AppColors.background],
+  );
