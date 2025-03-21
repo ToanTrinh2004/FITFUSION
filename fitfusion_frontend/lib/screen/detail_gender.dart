@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 import '../widgets/header_detail.dart';
 import '../widgets/gender.dart';
-
+import 'detail_measure_height.dart';
 class GenderSelectionScreen extends StatefulWidget {
   final String fullname;
 
@@ -82,7 +82,12 @@ class _GenderSelectionScreenState extends State<GenderSelectionScreen> {
 
                       ElevatedButton(
                         style: ButtonStyles.buttonTwo,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HeightInputScreen(fullname: '',)), 
+                          );
+                        },
                         child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
                       ),
                     ],
