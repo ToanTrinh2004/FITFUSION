@@ -1,7 +1,8 @@
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
-import '../widgets/header_detail.dart';
 import 'detail_age.dart';
+
 class HeightInputScreen extends StatefulWidget {
   final String fullname;
 
@@ -23,7 +24,8 @@ class _HeightInputScreenState extends State<HeightInputScreen> {
         decoration: const BoxDecoration(gradient: appGradient),
         child: Column(
           children: [
-            HeaderWidget(fullname: widget.fullname),
+            const SizedBox(height: 20),
+            AppBarCustomHeader(fullname: widget.fullname),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 40),

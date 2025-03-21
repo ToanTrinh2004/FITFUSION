@@ -1,6 +1,6 @@
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
-import '../widgets/header_detail.dart';
 import '../widgets/gender.dart';
 import 'detail_measure_height.dart';
 class GenderSelectionScreen extends StatefulWidget {
@@ -31,8 +31,8 @@ class _GenderSelectionScreenState extends State<GenderSelectionScreen> {
         
         child: Column(
           children: [
-            HeaderWidget(fullname: widget.fullname),
-
+            const SizedBox(height: 20,),
+            AppBarCustomHeader(fullname: widget.fullname),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 40),

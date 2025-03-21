@@ -20,7 +20,7 @@ class InputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTextStyles.subtitle),
+        Text(label, style: AppTextStyles.text),
         const SizedBox(height: 5),
         Container(
           width: width ?? 270, // mặc định 270

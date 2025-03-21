@@ -38,7 +38,7 @@ class IntroApp extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()), 
+                  MaterialPageRoute(builder: (context) =>LoginScreen()), 
                 );
                   }, // Xử lý đăng nhập
                   child: const Text("ĐĂNG NHẬP", style: AppTextStyles.textButtonOne),

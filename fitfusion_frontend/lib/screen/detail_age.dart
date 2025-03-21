@@ -1,6 +1,6 @@
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
-import '../widgets/header_detail.dart';
 
 class AgeSelectionScreen extends StatefulWidget {
   final String fullname;
@@ -23,7 +23,7 @@ class _AgeSelectionScreenState extends State<AgeSelectionScreen> {
         decoration: const BoxDecoration(gradient: appGradient),
         child: Column(
           children: [
-            HeaderWidget(fullname: widget.fullname),
+            AppBarCustomHeader(fullname: widget.fullname),
 
             Expanded(
               child: Padding(
@@ -35,13 +35,11 @@ class _AgeSelectionScreenState extends State<AgeSelectionScreen> {
                     border: Border.all(color: AppColors.buttonBg),
                   ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center, // Căn giữa mọi thứ
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
-                      Text(
-                        "Bạn bao nhiêu tuổi?",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
+                      const Text("Bạn bao nhiêu tuổi?", style: AppTextStyles.little_title),
+
                       SizedBox(height: 20), 
 
                       Expanded(
@@ -50,7 +48,7 @@ class _AgeSelectionScreenState extends State<AgeSelectionScreen> {
                           child: ListWheelScrollView.useDelegate(
                             itemExtent: 50, // Khoảng cách giữa các số
                             physics: FixedExtentScrollPhysics(),
-                            diameterRatio: 1.3, // Giảm đường kính để gọn hơn
+                            diameterRatio: 1.3, // Giảm đường kính
                             controller: FixedExtentScrollController(initialItem: 2),
                             onSelectedItemChanged: (index) => setState(() => selectedAge = index + 18),
                             childDelegate: ListWheelChildBuilderDelegate(
