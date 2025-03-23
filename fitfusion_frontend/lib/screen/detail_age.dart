@@ -1,6 +1,7 @@
 import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
+import 'detail_bmi.dart';
 
 class AgeSelectionScreen extends StatefulWidget {
   final String fullname;
@@ -87,10 +88,10 @@ class _AgeSelectionScreenState extends State<AgeSelectionScreen> {
                       ElevatedButton(
                         style: ButtonStyles.buttonTwo,
                         onPressed: () {
-                           // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => HeightInputScreen(fullname: '',)), 
-                             // );
+                           Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => WeightInputScreen(fullname:'' ,height: ,)), 
+                             );
                              },
                         child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
                       ),
