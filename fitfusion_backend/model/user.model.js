@@ -19,24 +19,27 @@ const useSchema = new mongoose.Schema({
     phone: { type: String, }
 });
 
-useSchema.pre('save',async function() {
+useSchema.pre('save', async function (next) {
     try {
-        var user = this;
-        const salt  = await(bcrypt.genSalt(10));
-        const hashpass = await bcrypt.hash(user.password,salt);
-        user.password = hashpass;
-    } catch (error) {
+        if (!this.isModified("password")) return next();
         
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        
+        next();
+    } catch (error) {
+        next(error);
     }
-})
-useSchema.methods.comparePassword = async function(userPassword){
+});
+
+useSchema.methods.comparePassword = async function (userPassword) {
     try {
-        const isMatch = await bcrypt.compare(userPassword,this.comparePassword);
-        return isMatch;
+        return await bcrypt.compare(userPassword, this.password);
     } catch (error) {
-        
+        throw error;
     }
-}
+};
+
 const UserModel = db.model('user',useSchema);
 
 module.exports = UserModel;
