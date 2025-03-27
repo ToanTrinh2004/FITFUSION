@@ -1,10 +1,30 @@
-import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
+import '../models/user_info_model.dart';
+import '../widgets/tabbar.dart';
 import '../theme/theme.dart';
 import '../widgets/inputfield.dart';
 import 'detail_gender.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController fullnameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    fullnameController.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,27 +48,38 @@ class RegisterScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
 
-              const InputField(label:"Họ và tên"),
+              InputField(label: "Họ và tên", controller: fullnameController),
               const SizedBox(height: 10),
 
-              const InputField(label:"Tên đăng nhập"),
+              InputField(label: "Tên đăng nhập", controller: usernameController),
               const SizedBox(height: 10),
 
-              const InputField(label:"Mật khẩu"),
+              InputField(label: "Mật khẩu", controller: passwordController, isPassword: true),
               const SizedBox(height: 10),
 
-              const InputField(label:"Nhập lại mật khẩu", isPassword: true),
+              InputField(label: "Nhập lại mật khẩu", controller: confirmPasswordController, isPassword: true),
               const SizedBox(height: 20),
 
-              // Nút "ĐĂNG KÝ"
               ElevatedButton(
                 style: ButtonStyles.buttonTwo,
                 onPressed: () {
-                  Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GenderSelectionScreen(fullname: '',)), 
-                );
-                }, // Xử lý đăng ký
+                  if (passwordController.text == confirmPasswordController.text) {
+                    UserInfoModel userInfo = UserInfoModel(
+                      fullname: fullnameController.text,
+                    );
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GenderSelectionScreen(userInfo: userInfo),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Mật khẩu không khớp!")),
+                    );
+                  }
+                },
                 child: const Text("ĐĂNG KÝ", style: AppTextStyles.textButtonTwo),
               ),
 

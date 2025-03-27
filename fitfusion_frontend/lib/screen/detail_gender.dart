@@ -1,93 +1,105 @@
-import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
-import '../theme/theme.dart';
-import '../widgets/gender.dart';
+import '../models/user_info_model.dart';
 import 'detail_measure_height.dart';
-class GenderSelectionScreen extends StatefulWidget {
-  final String fullname;
+import '../theme/theme.dart';
+import '../widgets/tabbar.dart';
+import '../widgets/gender.dart';
 
-  const GenderSelectionScreen({super.key, required this.fullname});
+class GenderSelectionScreen extends StatefulWidget {
+  final UserInfoModel userInfo;
+
+  const GenderSelectionScreen({super.key, required this.userInfo});
 
   @override
   _GenderSelectionScreenState createState() => _GenderSelectionScreenState();
 }
 
 class _GenderSelectionScreenState extends State<GenderSelectionScreen> {
-  String selectedGender = '';
+  String? selectedGender;
+
+  final List<Map<String, String>> genders = [
+    {"gender": "Nam", "imagePath": "assets/male.png"},
+    {"gender": "Nữ", "imagePath": "assets/female.png"},
+  ];
 
   void selectGender(String gender) {
     setState(() {
       selectedGender = gender;
+          print("Giới tính đã chọn: $selectedGender"); // Debug để kiểm tra trong console
+
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(gradient: appGradient),
-        
         child: Column(
           children: [
-            const SizedBox(height: 20,),
-            AppBarCustomHeader(fullname: widget.fullname),
+            SizedBox(height: screenHeight * 0.02),
+            AppBarCustomHeader(fullname: widget.userInfo.fullname),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 40),
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.05,
+                  vertical: screenHeight * 0.02,
+                ),
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: boxGradient.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(20),
-                    border:Border.all(color: AppColors.buttonBg)
+                    border: Border.all(color: AppColors.buttonBg),
                   ),
                   child: Column(
                     children: [
-                      Padding(padding:EdgeInsets.symmetric(vertical: 10)),
+                      SizedBox(height: screenHeight * 0.03),
                       const Text("Giới tính của bạn là gì?", style: AppTextStyles.little_title),
-                      const SizedBox(height: 20),
-
+                      SizedBox(height: screenHeight * 0.03),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GenderOptionWidget(
-                            gender: "Nam",
-                            imagePath: "assets/male.png",
-                            isSelected: selectedGender == "Nam",
-                            onTap: () => selectGender("Nam"),
+                        children: genders.map((genderData) {
+                          return Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
+                            child: GenderOptionWidget(
+                              gender: genderData['gender']!,
+                              imagePath: genderData['imagePath']!,
+                              isSelected: selectedGender == genderData['gender'],
+                              onTap: () => selectGender(genderData['gender']!),
+                            ),
                           ),
-                          const SizedBox(width: 10),
-                          GenderOptionWidget(
-                            gender: "Nữ",
-                            imagePath: "assets/female.png",
-                            isSelected: selectedGender == "Nữ",
-                            onTap: () => selectGender("Nữ"),
-                          ),
-                        ],
+                          );
+                        }).toList(),
                       ),
-
-                      const SizedBox(height: 30),
-
+                      SizedBox(height: screenHeight * 0.04),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal:  10), // Cách viền trên dưới 10px
+                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
                         child: Text(
-                          "Chúng tôi sử dụng giới tính của bạn để thiết kế kế hoạch ăn kiêng tốt nhất cho bạn. Nếu bạn không xác định mình là bất kỳ lựa chọn nào trong số này, vui lòng chọn giới tính gần nhất với hồ sơ nội tiết tố của bạn.",
+                          "Chúng tôi sử dụng giới tính của bạn để thiết kế kế hoạch ăn kiêng tốt nhất cho bạn.",
                           style: AppTextStyles.normal,
+                          textAlign: TextAlign.center,
                         ),
                       ),
-
-
-                      const SizedBox(height: 30),
-
+                      SizedBox(height: screenHeight * 0.05),
                       ElevatedButton(
                         style: ButtonStyles.buttonTwo,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HeightInputScreen(fullname: '',)), 
-                          );
-                        },
+                        onPressed: selectedGender != null
+                            ? () {
+                                widget.userInfo.gender = selectedGender;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HeightInputScreen(userInfo: widget.userInfo), 
+                                  ),
+                                );
+                              }
+                            : null,
                         child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
                       ),
                     ],

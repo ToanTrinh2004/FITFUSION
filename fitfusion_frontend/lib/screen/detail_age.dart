@@ -2,11 +2,12 @@ import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 import 'detail_bmi.dart';
+import '../models/user_info_model.dart';
 
 class AgeSelectionScreen extends StatefulWidget {
-  final String fullname;
+  final UserInfoModel userInfo;
 
-  const AgeSelectionScreen({super.key, required this.fullname});
+  const AgeSelectionScreen({super.key, required this.userInfo});
 
   @override
   _AgeSelectionScreenState createState() => _AgeSelectionScreenState();
@@ -24,7 +25,7 @@ class _AgeSelectionScreenState extends State<AgeSelectionScreen> {
         decoration: const BoxDecoration(gradient: appGradient),
         child: Column(
           children: [
-            AppBarCustomHeader(fullname: widget.fullname),
+            AppBarCustomHeader(fullname: widget.userInfo.fullname),
 
             Expanded(
               child: Padding(
@@ -85,16 +86,16 @@ class _AgeSelectionScreenState extends State<AgeSelectionScreen> {
 
                       SizedBox(height: 30),
 
-                      ElevatedButton(
-                        style: ButtonStyles.buttonTwo,
-                        onPressed: () {
-                           Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => WeightInputScreen(fullname:'' ,height: ,)), 
-                             );
-                             },
-                        child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
-                      ),
+                      // ElevatedButton(
+                      //   style: ButtonStyles.buttonTwo,
+                      //   onPressed: () {
+                      //      Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(builder: (context) => WeightInputScreen(fullname:'' ,height: ,)), 
+                      //        );
+                      //        },
+                      //   child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
+                      // ),
 
                       SizedBox(height: 50),
                     ],
