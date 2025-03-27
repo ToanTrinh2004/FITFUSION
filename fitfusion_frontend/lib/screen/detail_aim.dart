@@ -1,43 +1,26 @@
-import 'package:fitfusion_frontend/screen/detail_aim.dart';
+import 'package:fitfusion_frontend/screen/detail_aim_weight.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 import '../models/user_info_model.dart';
 import '../widgets/tabbar.dart';
-import '../widgets/inputfield.dart';
 
-class WeightInputScreen extends StatefulWidget {
+class GoalSelectionScreen extends StatefulWidget {
   final UserInfoModel userInfo;
 
-  const WeightInputScreen({super.key, required this.userInfo});
+  const GoalSelectionScreen({super.key, required this.userInfo});
 
   @override
-  _WeightInputScreenState createState() => _WeightInputScreenState();
+  _GoalSelectionScreenState createState() => _GoalSelectionScreenState();
 }
 
-class _WeightInputScreenState extends State<WeightInputScreen> {
-  late TextEditingController _weightController;
-  bool isButtonEnabled = false;
+class _GoalSelectionScreenState extends State<GoalSelectionScreen> {
+  String? selectedGoal;
 
-  @override
-  void initState() {
-    super.initState();
-    _weightController = TextEditingController(text: widget.userInfo.weight?.toString() ?? "60");
-    _weightController.addListener(_updateBMI);
-  }
-
-  void _updateBMI() {
+  void _selectGoal(String goal) {
     setState(() {
-      double? weight = double.tryParse(_weightController.text);
-      isButtonEnabled = weight != null && weight > 0;
-      widget.userInfo.weight = weight ?? 60;
-      widget.userInfo.calculateBMI();
+      selectedGoal = goal;
+      widget.userInfo.goal = goal; 
     });
-  }
-
-  @override
-  void dispose() {
-    _weightController.dispose();
-    super.dispose();
   }
 
   @override
@@ -70,40 +53,30 @@ class _WeightInputScreenState extends State<WeightInputScreen> {
                   child: Column(
                     children: [
                       const Text(
-                        "Cân nặng của bạn là bao nhiêu?",
+                        "Mục tiêu chính về chế độ ăn uống của bạn là gì?",
                         style: AppTextStyles.little_title,
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 0.03),
-                      InputField(label: '', controller: _weightController, width: 100, height: 50, isNumeric: true),
-                      SizedBox(height: screenHeight * 0.03),
-                      const Text(
-                        "Chỉ số BMI của bạn là:",
-                        style: AppTextStyles.little_title,
-                      ),
-                      Text(
-                        widget.userInfo.bmi.toStringAsFixed(1),
-                        style: AppTextStyles.title
-                      ),
-                      Text(
-                        "Bạn đang ở mức: ${widget.userInfo.bmiStatus}",
-                        style: AppTextStyles.subtitle,
-                      ),
-                      SizedBox(height: screenHeight * 0.03),
-                      Image.asset("assets/BMI.png", width: screenWidth * 0.8),
+                      SizedBox(height: screenHeight * 0.1),
+
+                      _buildGoalButton("Giảm cân"),
+                      _buildGoalButton("Sức khỏe cải thiện"),
+                      _buildGoalButton("Tăng cân"),
+
                       SizedBox(height: screenHeight * 0.05),
+
                       ElevatedButton(
                         style: ButtonStyles.buttonTwo,
-                        onPressed: isButtonEnabled
+                        onPressed: selectedGoal != null
                             ? () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>GoalSelectionScreen(userInfo: widget.userInfo),
+                                    builder: (context) => AimWeightScreen(userInfo: widget.userInfo),
                                   ),
                                 );
                               }
-                            : null, 
+                            : null, // Vô hiệu hóa nếu chưa chọn
                         child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
                       ),
                     ],
@@ -112,6 +85,28 @@ class _WeightInputScreenState extends State<WeightInputScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGoalButton(String goal) {
+    bool isSelected = selectedGoal == goal;
+    return GestureDetector(
+      onTap: () => _selectGoal(goal),
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.textSecondary : AppColors.textPrimary,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Colors.red, width: 2),
+        ),
+        child: Text(
+          goal,
+          style:  isSelected ? AppTextStyles.textButtonTwo : AppTextStyles.textButtonOne,
+          textAlign: TextAlign.center,
         ),
       ),
     );

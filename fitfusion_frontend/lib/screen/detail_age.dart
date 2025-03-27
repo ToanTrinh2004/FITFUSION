@@ -1,9 +1,8 @@
-import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
-import 'detail_bmi.dart';
+import 'detail_bmi.dart'; 
 import '../models/user_info_model.dart';
-
+import '../widgets/tabbar.dart';
 class AgeSelectionScreen extends StatefulWidget {
   final UserInfoModel userInfo;
 
@@ -14,10 +13,13 @@ class AgeSelectionScreen extends StatefulWidget {
 }
 
 class _AgeSelectionScreenState extends State<AgeSelectionScreen> {
-  int selectedAge = 24; // Mặc định 24 tuổi
+  int selectedAge = 24; // Mặc định là 24 tuổi
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -25,43 +27,54 @@ class _AgeSelectionScreenState extends State<AgeSelectionScreen> {
         decoration: const BoxDecoration(gradient: appGradient),
         child: Column(
           children: [
+            SizedBox(height: screenHeight * 0.03),
             AppBarCustomHeader(fullname: widget.userInfo.fullname),
 
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.05,
+                  vertical: screenHeight * 0.02,
+                ),
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: boxGradient.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: AppColors.buttonBg),
                   ),
+                  padding: EdgeInsets.all(screenWidth * 0.05),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(padding: const EdgeInsets.symmetric(vertical: 10)),
-                      const Text("Bạn bao nhiêu tuổi?", style: AppTextStyles.little_title),
-
-                      SizedBox(height: 20), 
+                      const Text(
+                        "Bạn bao nhiêu tuổi?",
+                        style: AppTextStyles.little_title,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: screenHeight * 0.03),
 
                       Expanded(
                         child: SizedBox(
-                          height: 120, 
+                          height: 120,
                           child: ListWheelScrollView.useDelegate(
-                            itemExtent: 50, // Khoảng cách giữa các số
-                            physics: FixedExtentScrollPhysics(),
-                            diameterRatio: 1.3, // Giảm đường kính
-                            controller: FixedExtentScrollController(initialItem: 2),
-                            onSelectedItemChanged: (index) => setState(() => selectedAge = index + 18),
+                            itemExtent: 50, 
+                            physics: const FixedExtentScrollPhysics(),
+                            diameterRatio: 1.3,
+                            controller: FixedExtentScrollController(initialItem: selectedAge - 18),
+                            onSelectedItemChanged: (index) {
+                              setState(() {
+                                selectedAge = index + 18;
+                              });
+                            },
                             childDelegate: ListWheelChildBuilderDelegate(
                               builder: (context, index) {
                                 int age = index + 18;
                                 bool isSelected = age == selectedAge;
 
                                 return AnimatedContainer(
-                                  duration: Duration(milliseconds: 300),
+                                  duration: const Duration(milliseconds: 300),
                                   alignment: Alignment.center,
-                                  height: isSelected ? 55 : 45, // Số được chọn to hơn
+                                  height: isSelected ? 55 : 45,
                                   decoration: isSelected
                                       ? BoxDecoration(
                                           border: Border.all(color: Colors.red, width: 3),
@@ -78,28 +91,31 @@ class _AgeSelectionScreenState extends State<AgeSelectionScreen> {
                                   ),
                                 );
                               },
-                              childCount: 83, // Giới hạn số tuổi
+                              childCount: 83,
                             ),
                           ),
                         ),
                       ),
 
-                      SizedBox(height: 30),
+                      SizedBox(height: screenHeight * 0.05),
 
-                      // ElevatedButton(
-                      //   style: ButtonStyles.buttonTwo,
-                      //   onPressed: () {
-                      //      Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(builder: (context) => WeightInputScreen(fullname:'' ,height: ,)), 
-                      //        );
-                      //        },
-                      //   child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
-                      // ),
+                      ElevatedButton(
+                        style: ButtonStyles.buttonTwo,
+                        onPressed: () {
+                          widget.userInfo.age = selectedAge; // Lưu tuổi vào userInfo
+                          print("Tuổi đã chọn: ${widget.userInfo.age}");
 
-                      SizedBox(height: 50),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WeightInputScreen(userInfo: widget.userInfo),
+                            ),
+                          );
+                        },
+                        child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
+                      ),
                     ],
-                  )
+                  ),
                 ),
               ),
             ),
