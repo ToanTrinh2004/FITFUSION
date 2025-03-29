@@ -11,34 +11,33 @@ class AppColors {
   static const Color buttonBg = Color(0x7FB3261E); // Nền button đỏ mờ
   static const Color buttonText = Color(0xFFFFFFFF); // Chữ trên button
 }
-
-/// 🖋️ Định nghĩa kiểu chữ
 class AppTextStyles {
   static const TextStyle title = TextStyle(
     fontSize: 40,
     fontWeight: FontWeight.w900,
     color: AppColors.textPrimary,
   );
-
   static const TextStyle subtitle = TextStyle(
     fontSize: 25,
     fontWeight: FontWeight.bold,
     fontStyle: FontStyle.italic, // Chữ nghiêng
+    color: AppColors.textSecondary,
+  );
+  static const TextStyle little_title = TextStyle( 
+    fontSize: 20,
+    fontWeight: FontWeight.w900,
     color: AppColors.textPrimary,
   );
-
-  static const TextStyle button = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.bold,
-    color: AppColors.buttonText,
-  );
-
-    static const TextStyle button_intro = TextStyle(
+  static const TextStyle textButtonOne = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
     color: AppColors.textSecondary,
   );
-
+  static const TextStyle textButtonTwo = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
   static const TextStyle forgotPassword = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
@@ -50,11 +49,31 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );
+  static const TextStyle normal = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.normal,
+    color: Color.fromARGB(255, 0, 0, 0),
+  );
 }
-
-/// Gradient nền của app
+class ButtonStyles {
+  static final ButtonStyle buttonOne = ElevatedButton.styleFrom(
+    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+    minimumSize: const Size(200, 50),
+  );
+  static final ButtonStyle buttonTwo = ElevatedButton.styleFrom(
+    backgroundColor: AppColors.primary, // Nền đỏ
+    minimumSize: const Size(200, 50),
+  );
+}
+///background
 const LinearGradient appGradient = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
   colors: [AppColors.primary, AppColors.secondary, AppColors.background],
 );
+
+const LinearGradient boxGradient = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  colors:[ Color(0xFF999999), AppColors.background],
+  );

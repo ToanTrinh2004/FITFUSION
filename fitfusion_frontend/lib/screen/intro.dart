@@ -34,39 +34,28 @@ class IntroApp extends StatelessWidget {
 
                 // Nút Đăng Nhập
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.background, // Nền đỏ
-                    foregroundColor: Colors.red,
-                    minimumSize: const Size(210, 50), // Kích thước cố định
-                  ),
+                  style: ButtonStyles.buttonOne,
                   onPressed: () {
                     Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()), 
+                  MaterialPageRoute(builder: (context) =>LoginScreen()), 
                 );
                   }, // Xử lý đăng nhập
-                  child: const Text("ĐĂNG NHẬP", style: AppTextStyles.button_intro),
+                  child: const Text("ĐĂNG NHẬP", style: AppTextStyles.textButtonOne),
                 ),
                 const SizedBox(height: 15),
-
-                // Nút Đăng Ký
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary, // Nền đỏ
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(210, 50),
-                  ),
+                  style: ButtonStyles.buttonTwo,
                   onPressed: () {
                      Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => RegisterScreen()), 
                 );
                   }, // Xử lý đăng ký
-                  child: const Text("ĐĂNG KÝ", style: AppTextStyles.button),
+                  child: const Text("ĐĂNG KÝ", style: AppTextStyles.textButtonTwo),
                 ),
               ],
             ),
-
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),

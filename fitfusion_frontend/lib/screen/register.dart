@@ -1,6 +1,8 @@
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
-import '../theme/theme.dart'; // Import theme
-
+import '../theme/theme.dart';
+import '../widgets/inputfield.dart';
+import 'detail_gender.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -13,72 +15,48 @@ class RegisterScreen extends StatelessWidget {
           gradient: appGradient,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("FITFUSION", style: AppTextStyles.title),
+              const AppBarCustom(),
               const SizedBox(height: 20),
 
               Image.asset(
                 'assets/logo.png',
                 width: 200,
               ),
-              const SizedBox(height: 30),
-
-              buildInputField("Họ và tên"),
               const SizedBox(height: 10),
 
-              buildInputField("Tên đăng nhập"),
+              const InputField(label:"Họ và tên"),
               const SizedBox(height: 10),
 
-              buildInputField("Mật khẩu", ),
+              const InputField(label:"Tên đăng nhập"),
               const SizedBox(height: 10),
 
-              buildInputField("Nhập lại mật khẩu", isPassword: true),
-              const SizedBox(height: 30),
+              const InputField(label:"Mật khẩu"),
+              const SizedBox(height: 10),
+
+              const InputField(label:"Nhập lại mật khẩu", isPassword: true),
+              const SizedBox(height: 20),
 
               // Nút "ĐĂNG KÝ"
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(200, 50),
-                ),
-                onPressed: () {}, // Xử lý đăng ký
-                child: const Text("ĐĂNG KÝ", style: AppTextStyles.button),
+                style: ButtonStyles.buttonTwo,
+                onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GenderSelectionScreen(fullname: '',)), 
+                );
+                }, // Xử lý đăng ký
+                child: const Text("ĐĂNG KÝ", style: AppTextStyles.textButtonTwo),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget buildInputField(String label, {bool isPassword = false}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: AppTextStyles.subtitle),
-        const SizedBox(height: 5),
-        Container(
-          width: 270,
-          height: 50,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: TextField(
-            obscureText: isPassword,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(horizontal: 15),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
