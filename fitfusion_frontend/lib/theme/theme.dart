@@ -61,7 +61,7 @@ class ButtonStyles {
     minimumSize: const Size(200, 50),
   );
   static final ButtonStyle buttonTwo = ElevatedButton.styleFrom(
-    backgroundColor: AppColors.primary, // Nền đỏ
+    backgroundColor: AppColors.primary, 
     minimumSize: const Size(200, 50),
   );
 }

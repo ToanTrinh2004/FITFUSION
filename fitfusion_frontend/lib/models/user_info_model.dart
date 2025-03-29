@@ -9,6 +9,8 @@ class UserInfoModel {
   double bmiAim = 0.0;
   String? goal;
   double weightLossPercentage = 0.0;
+  DateTime? aimDate;
+  String? health;
 
   UserInfoModel({
     required this.fullname,
@@ -18,6 +20,8 @@ class UserInfoModel {
     this.aimWeight,
     this.age,
     this.goal,
+    this.aimDate,
+    this.health,
   });
 
   void calculateBMI() {
@@ -65,6 +69,8 @@ class UserInfoModel {
       aimWeight: (json['aimWeight'] as num?)?.toDouble(),
       age: json['age'] as int?,
       goal: json['goal'],
+      aimDate: json['aimDate'] != null ? DateTime.parse(json['aimDate']) : null,
+      health: json['health'],
     );
   }
 
@@ -78,6 +84,8 @@ class UserInfoModel {
       'age': age,
       'goal': goal,
       'weightLossPercentage': weightLossPercentage,
+      'aimDate': aimDate?.toIso8601String(),
+      'health': health,
     };
   }
 }

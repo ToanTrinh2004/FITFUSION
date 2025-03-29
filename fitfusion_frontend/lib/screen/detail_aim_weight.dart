@@ -1,3 +1,4 @@
+import 'package:fitfusion_frontend/screen/detail_aim_date.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 import '../models/user_info_model.dart';
@@ -28,33 +29,51 @@ class _AimWeightScreenState extends State<AimWeightScreen> {
   }
 
   void _updateAimWeight() {
-    setState(() {
-      double? aimWeight = double.tryParse(_aimWeightController.text);
-      double currentWeight = widget.userInfo.weight ?? 0.0;
-      String goal = widget.userInfo.goal ?? "";
-      errorMessage = null;
+  setState(() {
+    double? aimWeight = double.tryParse(_aimWeightController.text);
+    double currentWeight = widget.userInfo.weight ?? 0.0;
+    double height = widget.userInfo.height ?? 1.7;
+    String goal = widget.userInfo.goal ?? "";
+    errorMessage = null;
 
-      if (aimWeight != null && aimWeight > 0) {
-        if (goal == "Giảm cân" && aimWeight >= currentWeight) {
-          errorMessage = "Cân nặng mục tiêu đang lớn hơn cân nặng hiện tại";
-        } else if (goal == "Tăng cân" && aimWeight <= currentWeight) {
+    if (aimWeight != null && aimWeight > 0) {
+      if (goal == "Giảm cân" && aimWeight >= currentWeight) {
+        errorMessage = "Cân nặng mục tiêu đang lớn hơn cân nặng hiện tại";
+      } else if (goal == "Tăng cân") {
+        double minGain = 2.0; // Mức tăng tối thiểu
+        if (aimWeight <= currentWeight) {
           errorMessage = "Cân nặng mục tiêu đang nhỏ hơn cân nặng hiện tại";
-        } else if (goal == "Cải thiện sức khỏe") {
-          double bmiMin = 18.5;
-          double bmiMax = 24.9;
-          if (aimWeight < bmiMin || aimWeight > bmiMax) {
-            errorMessage = "Cân nặng mục tiêu không nằm trong vùng BMI bình thường";
-          }
+        } else if (aimWeight < currentWeight + minGain) {
+          errorMessage = "Bạn nên đặt cân nặng mục tiêu tăng ít nhất ${minGain}kg";
         }
-        
-        isButtonEnabled = errorMessage == null;
-        widget.userInfo.aimWeight = aimWeight;
-        widget.userInfo.calculateBMIAim();
-      } else {
-        isButtonEnabled = false;
+      } else if (goal == "Cải thiện sức khỏe") {
+        double bmiMin = 18.5;
+        double bmiMax = 24.9;
+        double weightMin = bmiMin * (height * height);
+        double weightMax = bmiMax * (height * height);
+        if (aimWeight < weightMin || aimWeight > weightMax) {
+          errorMessage = "Cân nặng mục tiêu không nằm trong vùng BMI bình thường (${weightMin.toStringAsFixed(1)}kg - ${weightMax.toStringAsFixed(1)}kg)";
+        }
       }
-    });
-  }
+
+      // Cập nhật giá trị và tính toán lại BMI mục tiêu
+      isButtonEnabled = errorMessage == null;
+      widget.userInfo.aimWeight = aimWeight;
+      widget.userInfo.calculateBMIAim();
+
+      // Cập nhật phần trăm cân nặng giảm
+      if (widget.userInfo.weight != null && widget.userInfo.aimWeight != null) {
+        widget.userInfo.weightLossPercentage =
+            ((widget.userInfo.weight! - widget.userInfo.aimWeight!) / widget.userInfo.weight!) * 100;
+      } else {
+        widget.userInfo.weightLossPercentage = 0.0;
+      }
+    } else {
+      isButtonEnabled = false;
+    }
+  });
+}
+
 
   @override
   void dispose() {
@@ -109,7 +128,29 @@ class _AimWeightScreenState extends State<AimWeightScreen> {
                       ),
                       Text(
                         widget.userInfo.bmiAim.toStringAsFixed(1),
-                        style: AppTextStyles.title,
+                        style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(-1.5, -1.5),
+                              color: Colors.red,
+                            ),
+                            Shadow(
+                              offset: Offset(1.5, -1.5),
+                              color: Colors.red,
+                            ),
+                            Shadow(
+                              offset: Offset(-1.5, 1.5),
+                              color: Colors.red,
+                            ),
+                            Shadow(
+                              offset: Offset(1.5, 1.5),
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(height: screenHeight * 0.02),
                       Container(
@@ -140,6 +181,20 @@ class _AimWeightScreenState extends State<AimWeightScreen> {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.05),
+                      ElevatedButton(
+                        style: ButtonStyles.buttonTwo,
+                        onPressed: isButtonEnabled
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AimDateScreen(userInfo: widget.userInfo), 
+                                  ),
+                                );
+                              }
+                            : null,
+                        child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
+                      ),
                     ],
                   ),
                 ),

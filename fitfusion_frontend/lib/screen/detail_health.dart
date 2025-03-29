@@ -1,25 +1,25 @@
-import 'detail_aim_weight.dart';
+import 'package:fitfusion_frontend/screen/total_detail.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 import '../models/user_info_model.dart';
 import '../widgets/tabbar.dart';
 
-class GoalSelectionScreen extends StatefulWidget {
+class HealthScreen extends StatefulWidget {
   final UserInfoModel userInfo;
 
-  const GoalSelectionScreen({super.key, required this.userInfo});
+  const HealthScreen({super.key, required this.userInfo});
 
   @override
-  _GoalSelectionScreenState createState() => _GoalSelectionScreenState();
+  _HealthScreenState createState() => _HealthScreenState();
 }
 
-class _GoalSelectionScreenState extends State<GoalSelectionScreen> {
-  String? selectedGoal;
+class _HealthScreenState extends State<HealthScreen> {
+  String? selectedHealth;
 
-  void _selectGoal(String goal) {
+  void _selectHealth(String Health) {
     setState(() {
-      selectedGoal = goal;
-      widget.userInfo.goal = goal; 
+      selectedHealth = Health;
+      widget.userInfo.health = Health;
     });
   }
 
@@ -53,30 +53,32 @@ class _GoalSelectionScreenState extends State<GoalSelectionScreen> {
                   child: Column(
                     children: [
                       const Text(
-                        "Mục tiêu chính về chế độ ăn uống của bạn là gì?",
+                        "Bạn có tình trạng sức khỏe nào không?",
                         style: AppTextStyles.little_title,
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: screenHeight * 0.1),
+                      SizedBox(height: screenHeight * 0.05),
 
-                      _buildGoalButton("Giảm cân"),
-                      _buildGoalButton("Sức khỏe cải thiện"),
-                      _buildGoalButton("Tăng cân"),
+                      _buildHealthButton("Không có"),
+                      _buildHealthButton("Huyết áp cao"),
+                      _buildHealthButton("Bệnh tiểu đường"),
+                      _buildHealthButton("Cholesterol cao"),
+                      _buildHealthButton("Khác"),
 
                       SizedBox(height: screenHeight * 0.05),
 
                       ElevatedButton(
                         style: ButtonStyles.buttonTwo,
-                        onPressed: selectedGoal != null
+                        onPressed: selectedHealth != null
                             ? () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => AimWeightScreen(userInfo: widget.userInfo),
+                                    builder: (context) => TotalDetailScreen(userInfo: widget.userInfo),
                                   ),
                                 );
                               }
-                            : null, // Vô hiệu hóa nếu chưa chọn
+                            : null, 
                         child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
                       ),
                     ],
@@ -90,10 +92,10 @@ class _GoalSelectionScreenState extends State<GoalSelectionScreen> {
     );
   }
 
-  Widget _buildGoalButton(String goal) {
-    bool isSelected = selectedGoal == goal;
+  Widget _buildHealthButton(String Health) {
+    bool isSelected = selectedHealth == Health;
     return GestureDetector(
-      onTap: () => _selectGoal(goal),
+      onTap: () => _selectHealth(Health),
       child: Container(
         width: double.infinity,
         margin: const EdgeInsets.symmetric(vertical: 8),
@@ -104,8 +106,8 @@ class _GoalSelectionScreenState extends State<GoalSelectionScreen> {
           border: Border.all(color: Colors.red, width: 2),
         ),
         child: Text(
-          goal,
-          style:  isSelected ? AppTextStyles.textButtonTwo : AppTextStyles.textButtonOne,
+          Health,
+          style: isSelected ? AppTextStyles.textButtonTwo : AppTextStyles.textButtonOne,
           textAlign: TextAlign.center,
         ),
       ),
