@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 import 'detail_age.dart';
 import '../models/user_info_model.dart';
-import '../widgets/inputfield.dart'; // Import InputField
+import '../widgets/inputfield.dart'; 
 
 class HeightInputScreen extends StatefulWidget {
   final UserInfoModel userInfo;
@@ -16,6 +16,20 @@ class HeightInputScreen extends StatefulWidget {
 
 class _HeightInputScreenState extends State<HeightInputScreen> {
   final TextEditingController _heightController = TextEditingController();
+  bool isButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _heightController.addListener(_validateInput);
+  }
+
+  void _validateInput() {
+    setState(() {
+      double? height = double.tryParse(_heightController.text);
+      isButtonEnabled = height != null && height > 0; // Chỉ bật nếu có số hợp lệ
+    });
+  }
 
   @override
   void dispose() {
@@ -64,13 +78,13 @@ class _HeightInputScreenState extends State<HeightInputScreen> {
                       ),
                       SizedBox(height: screenHeight * 0.03),
                       
-                      // Sử dụng InputField thay vì TextField
-                      InputField(label: 'Nhập chiều cao (cm)',controller: _heightController,height: 50,width: 150, isNumeric: true,),
+                      InputField(label: 'Nhập chiều cao (cm)',controller: _heightController,height: 50,width: 200, isNumeric: true,),
                         
                       SizedBox(height: screenHeight * 0.05),
                       ElevatedButton(
                         style: ButtonStyles.buttonTwo,
-                        onPressed: () {
+                        onPressed: isButtonEnabled
+                        ?() {
                           widget.userInfo.height = double.tryParse(_heightController.text);
 
                               print("Chiều cao đã nhập: ${widget.userInfo.height}");
@@ -81,7 +95,7 @@ class _HeightInputScreenState extends State<HeightInputScreen> {
                               builder: (context) => AgeSelectionScreen(userInfo: widget.userInfo),
                             ),
                           );
-                        },
+                        }:null,
                         child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
                       ),
                     ],

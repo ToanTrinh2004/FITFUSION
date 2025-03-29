@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// 🎨 Định nghĩa màu sắc dùng trong app
 class AppColors {
   static const Color primary = Color(0xFFB3261E); // Màu chính (đỏ)
   static const Color primaryHalf = Color(0x7FB3261E); // Màu chính mờ (50%)
@@ -11,6 +10,7 @@ class AppColors {
   static const Color buttonBg = Color(0x7FB3261E); // Nền button đỏ mờ
   static const Color buttonText = Color(0xFFFFFFFF); // Chữ trên button
 }
+
 class AppTextStyles {
   static const TextStyle title = TextStyle(
     fontSize: 40,

@@ -1,41 +1,50 @@
+import 'package:fitfusion_frontend/screen/detail_aim.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
+import '../models/user_info_model.dart';
 import '../widgets/tabbar.dart';
+import '../widgets/inputfield.dart';
 
 class WeightInputScreen extends StatefulWidget {
-  final String fullname;
-  final double height; 
+  final UserInfoModel userInfo;
 
-  const WeightInputScreen({super.key, required this.fullname, required this.height});
+  const WeightInputScreen({super.key, required this.userInfo});
 
   @override
   _WeightInputScreenState createState() => _WeightInputScreenState();
 }
 
 class _WeightInputScreenState extends State<WeightInputScreen> {
-  double weight = 60; // Mặc định 60kg
-  double bmi = 0;
-  String bmiStatus = "";
+  late TextEditingController _weightController;
+  bool isButtonEnabled = false;
 
-  void calculateBMI() {
+  @override
+  void initState() {
+    super.initState();
+    _weightController = TextEditingController(text: widget.userInfo.weight?.toString() ?? "60");
+    _weightController.addListener(_updateBMI);
+  }
+
+  void _updateBMI() {
     setState(() {
-      bmi = weight / (widget.height * widget.height);
-      if (bmi < 18.5) {
-        bmiStatus = "Underweight";
-      } else if (bmi < 25) {
-        bmiStatus = "Normal";
-      } else if (bmi < 30) {
-        bmiStatus = "Overweight";
-      } else if (bmi < 35) {
-        bmiStatus = "Obese";
-      } else {
-        bmiStatus = "Extremely Obese";
-      }
+      double? weight = double.tryParse(_weightController.text);
+      isButtonEnabled = weight != null && weight > 0;
+      widget.userInfo.weight = weight ?? 60;
+      widget.userInfo.calculateBMI();
     });
   }
 
   @override
+  void dispose() {
+    _weightController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -43,80 +52,60 @@ class _WeightInputScreenState extends State<WeightInputScreen> {
         decoration: const BoxDecoration(gradient: appGradient),
         child: Column(
           children: [
-            AppBarCustomHeader(fullname: widget.fullname),
-
+            SizedBox(height: screenHeight * 0.03),
+            AppBarCustomHeader(fullname: widget.userInfo.fullname),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.05,
+                  vertical: screenHeight * 0.02,
+                ),
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: boxGradient.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: AppColors.buttonBg),
                   ),
+                  padding: EdgeInsets.all(screenWidth * 0.05),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Cân nặng của bạn là bao nhiêu?", style: AppTextStyles.little_title),
-                      
-                      SizedBox(height: 20),
-                      
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 80,
-                            child: TextField(
-                              textAlign: TextAlign.center,
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
-                              onChanged: (value) {
-                                setState(() {
-                                  weight = double.tryParse(value) ?? 60;
-                                  calculateBMI();
-                                });
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Text("kg", style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.red)),
-                        ],
+                      const Text(
+                        "Cân nặng của bạn là bao nhiêu?",
+                        style: AppTextStyles.little_title,
+                        textAlign: TextAlign.center,
                       ),
-                      
-                      SizedBox(height: 20),
-                      
-                      const Text("Chỉ số khối cơ thể (BMI) của bạn là", style: TextStyle(fontSize: 18, color: Colors.white)),
-                      
+                      const SizedBox(height: 0.03),
+                      InputField(label: '', controller: _weightController, width: 100, height: 50, isNumeric: true),
+                      SizedBox(height: screenHeight * 0.03),
+                      const Text(
+                        "Chỉ số BMI của bạn là:",
+                        style: AppTextStyles.little_title,
+                      ),
                       Text(
-                        bmi.toStringAsFixed(1),
-                        style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.red),
+                        widget.userInfo.bmi.toStringAsFixed(1),
+                        style: AppTextStyles.title
                       ),
-                      
                       Text(
-                        "BMI của bạn cho thấy bạn đang $bmiStatus",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                        "Bạn đang ở mức: ${widget.userInfo.bmiStatus}",
+                        style: AppTextStyles.subtitle,
                       ),
-                      
-                      SizedBox(height: 20),
-                      
-                      Image.asset("assets/BMI.png", width: 300), // Hình ảnh BMI
-                      
-                      SizedBox(height: 20),
-                      
+                      SizedBox(height: screenHeight * 0.03),
+                      Image.asset("assets/BMI.png", width: screenWidth * 0.8),
+                      SizedBox(height: screenHeight * 0.05),
                       ElevatedButton(
                         style: ButtonStyles.buttonTwo,
-                        onPressed: () {
-                          // Điều hướng sang màn hình tiếp theo
-                        },
+                        onPressed: isButtonEnabled
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>GoalSelectionScreen(userInfo: widget.userInfo),
+                                  ),
+                                );
+                              }
+                            : null, 
                         child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
                       ),
-
-                      SizedBox(height: 50),
                     ],
                   ),
                 ),
