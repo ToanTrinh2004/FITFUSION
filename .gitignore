@@ -28,3 +28,5 @@ Thumbs.db                # Windows system files
 # Logs
 *.log                    # Any log files
 *.log.*                  # Any log file extensions
+# envy
+.env
