@@ -1,7 +1,8 @@
+import 'package:fitfusion_frontend/screen/home.dart';
 import 'package:flutter/material.dart';
-import '../theme/theme.dart';
-import '../models/user_info_model.dart';
-import '../widgets/tabbar.dart';
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
+import 'package:fitfusion_frontend/models/user_info_model.dart';
+import 'package:fitfusion_frontend/theme/theme.dart';
 
 class TotalDetailScreen extends StatelessWidget {
   final UserInfoModel userInfo;
@@ -68,7 +69,12 @@ class TotalDetailScreen extends StatelessWidget {
                       ElevatedButton(
                         style: ButtonStyles.buttonTwo,
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.push( 
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(userInfo: userInfo),
+                            ),
+                          );
                         },
                         child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
                       ),
@@ -89,8 +95,8 @@ class TotalDetailScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: AppTextStyles.little_title),
-          Text(value, style: AppTextStyles.little_title),
+          Text(label, style: AppTextStyles.little_title_1),
+          Text(value, style: AppTextStyles.little_title_1),
         ],
       ),
     );

@@ -1,4 +1,4 @@
-import 'package:fitfusion_frontend/widgets/tabbar.dart';
+import '../widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart'; // Import theme
 import '../widgets/inputfield.dart';

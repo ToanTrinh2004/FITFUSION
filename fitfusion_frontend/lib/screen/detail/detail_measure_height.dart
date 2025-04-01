@@ -1,9 +1,9 @@
-import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
-import '../theme/theme.dart';
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
+import 'package:fitfusion_frontend/models/user_info_model.dart';
+import 'package:fitfusion_frontend/theme/theme.dart';
+import 'package:fitfusion_frontend/widgets/inputfield.dart'; 
 import 'detail_age.dart';
-import '../models/user_info_model.dart';
-import '../widgets/inputfield.dart'; 
 
 class HeightInputScreen extends StatefulWidget {
   final UserInfoModel userInfo;

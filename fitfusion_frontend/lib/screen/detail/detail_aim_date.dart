@@ -1,9 +1,9 @@
-import 'package:fitfusion_frontend/screen/detail_health.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../theme/theme.dart';
-import '../models/user_info_model.dart';
-import '../widgets/tabbar.dart';
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
+import 'package:fitfusion_frontend/models/user_info_model.dart';
+import 'package:fitfusion_frontend/theme/theme.dart';
+import 'detail_health.dart';
 
 class AimDateScreen extends StatefulWidget {
   final UserInfoModel userInfo;

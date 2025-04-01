@@ -1,9 +1,9 @@
-import 'package:fitfusion_frontend/screen/detail_aim.dart';
+import 'detail_aim.dart';
 import 'package:flutter/material.dart';
-import '../theme/theme.dart';
-import '../models/user_info_model.dart';
-import '../widgets/tabbar.dart';
-import '../widgets/inputfield.dart';
+import 'package:fitfusion_frontend/models/user_info_model.dart';
+import 'package:fitfusion_frontend/theme/theme.dart';
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
+import 'package:fitfusion_frontend/widgets/inputfield.dart';
 
 class WeightInputScreen extends StatefulWidget {
   final UserInfoModel userInfo;
