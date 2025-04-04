@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/user_info_model.dart';
 import 'detail_measure_height.dart';
-import '../theme/theme.dart';
-import '../widgets/tabbar.dart';
-import '../widgets/gender.dart';
+import 'package:fitfusion_frontend/models/user_info_model.dart';
+import 'package:fitfusion_frontend/theme/theme.dart';
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
+import 'package:fitfusion_frontend/widgets/gender.dart';
 
 class GenderSelectionScreen extends StatefulWidget {
   final UserInfoModel userInfo;

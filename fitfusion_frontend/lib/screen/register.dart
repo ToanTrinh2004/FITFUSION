@@ -3,7 +3,7 @@ import '../models/user_info_model.dart';
 import '../widgets/tabbar.dart';
 import '../theme/theme.dart';
 import '../widgets/inputfield.dart';
-import 'detail_gender.dart';
+import 'detail/detail_gender.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override

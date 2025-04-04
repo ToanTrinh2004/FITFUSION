@@ -1,6 +1,7 @@
 import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
-import '../theme/theme.dart'; // Import theme
+import 'package:fitfusion_frontend/theme/theme.dart'; 
+
 class selectHLV extends StatefulWidget {
   const selectHLV({super.key});
 

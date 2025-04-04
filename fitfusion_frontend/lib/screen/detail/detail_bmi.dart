@@ -1,9 +1,9 @@
-import 'package:fitfusion_frontend/screen/detail_aim.dart';
+import 'detail_aim.dart';
 import 'package:flutter/material.dart';
-import '../theme/theme.dart';
-import '../models/user_info_model.dart';
-import '../widgets/tabbar.dart';
-import '../widgets/inputfield.dart';
+import 'package:fitfusion_frontend/models/user_info_model.dart';
+import 'package:fitfusion_frontend/theme/theme.dart';
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
+import 'package:fitfusion_frontend/widgets/inputfield.dart';
 
 class WeightInputScreen extends StatefulWidget {
   final UserInfoModel userInfo;
@@ -21,7 +21,8 @@ class _WeightInputScreenState extends State<WeightInputScreen> {
   @override
   void initState() {
     super.initState();
-    _weightController = TextEditingController(text: widget.userInfo.weight?.toString() ?? "60");
+    _weightController =
+        TextEditingController(text: widget.userInfo.weight?.toString() ?? "60");
     _weightController.addListener(_updateBMI);
   }
 
@@ -74,24 +75,29 @@ class _WeightInputScreenState extends State<WeightInputScreen> {
                         style: AppTextStyles.little_title,
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 0.03),
-                      InputField(label: '', controller: _weightController, width: 100, height: 50, isNumeric: true),
+                      InputField(
+                          label: '',
+                          controller: _weightController,
+                          width: 100,
+                          height: 50,
+                          isNumeric: true),
                       SizedBox(height: screenHeight * 0.03),
                       const Text(
                         "Chỉ số BMI của bạn là:",
                         style: AppTextStyles.little_title,
                       ),
-                      Text(
-                        widget.userInfo.bmi.toStringAsFixed(1),
-                        style: AppTextStyles.title
-                      ),
+                      Text(widget.userInfo.bmi.toStringAsFixed(1),
+                          style: AppTextStyles.title),
                       Text(
                         "Bạn đang ở mức: ${widget.userInfo.bmiStatus}",
-                        style: AppTextStyles.subtitle,
+                        style: AppTextStyles.subtitle.copyWith(
+                          fontSize: screenHeight * 0.025,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: screenHeight * 0.03),
+                      SizedBox(height: screenHeight * 0.01),
                       Image.asset("assets/BMI.png", width: screenWidth * 0.8),
-                      SizedBox(height: screenHeight * 0.05),
+                      SizedBox(height: screenHeight * 0.015),
                       ElevatedButton(
                         style: ButtonStyles.buttonTwo,
                         onPressed: isButtonEnabled
@@ -99,12 +105,14 @@ class _WeightInputScreenState extends State<WeightInputScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>GoalSelectionScreen(userInfo: widget.userInfo),
+                                    builder: (context) => GoalSelectionScreen(
+                                        userInfo: widget.userInfo),
                                   ),
                                 );
                               }
-                            : null, 
-                        child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
+                            : null,
+                        child: const Text("TIẾP TỤC",
+                            style: AppTextStyles.textButtonTwo),
                       ),
                     ],
                   ),

@@ -9,6 +9,8 @@ class UserInfoModel {
   double bmiAim = 0.0;
   String? goal;
   double weightLossPercentage = 0.0;
+  DateTime? aimDate;
+  String? health;
 
   UserInfoModel({
     required this.fullname,
@@ -18,6 +20,8 @@ class UserInfoModel {
     this.aimWeight,
     this.age,
     this.goal,
+    this.aimDate,
+    this.health,
   });
 
   void calculateBMI() {
@@ -31,15 +35,17 @@ class UserInfoModel {
   String get bmiStatus {
     if (bmi < 18.5) {
       return "Gầy";
-    } else if (bmi < 24.9) {
+    } else if ((bmi >= 18.5) && (bmi <= 24.9)) {
       return "Bình thường";
-    } else if (bmi < 29.9) {
+    } else if ((bmi > 24.9) && (bmi <= 29.9)) {
       return "Thừa cân";
-    } else {
+    } else if((bmi > 29.9) && (bmi <= 34.9)){
       return "Béo phì";
+    } else {
+      return "Nguy hiểm";
     }
   }
-  
+
   void calculateBMIAim() {
     if (height != null && aimWeight != null && height! > 0) {
       bmiAim = aimWeight! / ((height! / 100) * (height! / 100));
@@ -65,6 +71,8 @@ class UserInfoModel {
       aimWeight: (json['aimWeight'] as num?)?.toDouble(),
       age: json['age'] as int?,
       goal: json['goal'],
+      aimDate: json['aimDate'] != null ? DateTime.parse(json['aimDate']) : null,
+      health: json['health'],
     );
   }
 
@@ -78,6 +86,8 @@ class UserInfoModel {
       'age': age,
       'goal': goal,
       'weightLossPercentage': weightLossPercentage,
+      'aimDate': aimDate?.toIso8601String(),
+      'health': health,
     };
   }
 }
