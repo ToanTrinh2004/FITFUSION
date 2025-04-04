@@ -1,10 +1,8 @@
-<<<<<<< HEAD
+
 import 'package:fitfusion_frontend/screen/intro.dart';
 import 'package:fitfusion_frontend/screen/profile.dart';
 import 'package:flutter/material.dart';
-=======
-    import 'package:flutter/material.dart';
->>>>>>> 95d47bdd402b1f1d38d15cb31180da5212a41e55
+import 'package:flutter/material.dart';
 import '../theme/theme.dart'; // Import theme nếu cần
 
 class AppBarCustom extends StatelessWidget {
