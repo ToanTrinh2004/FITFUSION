@@ -63,14 +63,16 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - assets/food.png
-    - assets/gym.png
-    - assets/pt.png
+    - assets/calories.png
+    - assets/coach.png
+    - assets/workout.png
+    - assets/nutrition.png
     - assets/logo.png
     - assets/male.png
     - assets/female.png
     - assets/measure_height.png
-
+    - assets/BMI.png
+    - assets/body_img/
 
 
 
