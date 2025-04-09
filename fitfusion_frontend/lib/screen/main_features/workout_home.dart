@@ -2,8 +2,8 @@ import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:fitfusion_frontend/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class Selectexercise extends StatelessWidget {
-  const Selectexercise({super.key});
+class WorkoutScreen extends StatelessWidget {
+  const WorkoutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

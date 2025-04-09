@@ -25,7 +25,7 @@ class _GenderSelectionScreenState extends State<GenderSelectionScreen> {
   void selectGender(String gender) {
     setState(() {
       selectedGender = gender;
-          print("Giới tính đã chọn: $selectedGender"); // Debug để kiểm tra trong console
+          print("Giới tính đã chọn: $selectedGender"); 
 
     });
   }

@@ -27,7 +27,7 @@ class _HeightInputScreenState extends State<HeightInputScreen> {
   void _validateInput() {
     setState(() {
       double? height = double.tryParse(_heightController.text);
-      isButtonEnabled = height != null && height > 0; // Chỉ bật nếu có số hợp lệ
+      isButtonEnabled = height != null && height > 0;
     });
   }
 

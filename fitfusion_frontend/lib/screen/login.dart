@@ -1,6 +1,6 @@
 import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
-import '../theme/theme.dart'; // Import theme
+import '../theme/theme.dart'; 
 import '../widgets/inputfield.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -31,10 +31,9 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 10),
               const InputField(label: "Mật khẩu", isPassword: true),
               const SizedBox(height: 40),
-              // Button ĐĂNG NHẬP
               ElevatedButton(
                 style: ButtonStyles.buttonTwo,
-                onPressed: () {}, // Xử lý đăng nhập
+                onPressed: () {},
                 child: const Text(
                   "ĐĂNG NHẬP",
                   style: AppTextStyles.textButtonTwo,
@@ -44,7 +43,7 @@ class LoginScreen extends StatelessWidget {
               // "Quên mật khẩu"
               Center(
                 child: TextButton(
-                  onPressed: () {}, // Xử lý khi bấm quên mật khẩu
+                  onPressed: () {}, 
                   child: const Text(
                     "Forgot your password?",
                     style: AppTextStyles.forgotPassword,

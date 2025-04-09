@@ -2,14 +2,14 @@ import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fitfusion_frontend/theme/theme.dart'; 
 
-class selectHLV extends StatefulWidget {
-  const selectHLV({super.key});
+class CoachScreen extends StatefulWidget {
+  const CoachScreen({super.key});
 
   @override
-  _selectHLVState createState() => _selectHLVState();
+  CoachScreenState createState() => CoachScreenState();
 }
 
-class _selectHLVState extends State<selectHLV> {
+class CoachScreenState extends State<CoachScreen> {
   double _age = 25; // Default age value
   String _selectedGender = "Tất cả";
   String _selectedField = "Tất cả";

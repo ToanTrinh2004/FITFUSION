@@ -3,10 +3,10 @@ import '../models/user_info_model.dart';
 import '../theme/theme.dart';
 import '../widgets/tabbar.dart';
 import '../widgets/widget_home.dart';
-// import '../screens/coach_screen.dart'; 
-// import '../screens/calories_screen.dart';
-// import '../screens/workout_screen.dart';
-// import '../screens/nutrition_screen.dart';
+import 'package:fitfusion_frontend/screen/main_features/coach.dart'; 
+import 'package:fitfusion_frontend/screen/main_features/calories/calories.dart';
+import 'package:fitfusion_frontend/screen/main_features/workout_home.dart';
+import 'package:fitfusion_frontend/screen/main_features/nutrition.dart';
 
 class HomeScreen extends StatelessWidget {
   final UserInfoModel userInfo;
@@ -40,10 +40,10 @@ class HomeScreen extends StatelessWidget {
                         gradientColors: [Color(0xFF54CAF7), Colors.white],
                         isTextLeft: true,
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => CoachScreen()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CoachScreen()),
+                          );
                         },
                       ),
                       FeatureButton(
@@ -52,10 +52,10 @@ class HomeScreen extends StatelessWidget {
                         gradientColors: [Colors.white, Color(0xFFF7C818)],
                         isTextLeft: false,
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => CaloriesScreen()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CaloriesScreen(userInfo: userInfo,)),
+                          );
                         },
                       ),
                       FeatureButton(
@@ -64,10 +64,10 @@ class HomeScreen extends StatelessWidget {
                         gradientColors: [Color(0xFF9CB327), Colors.white],
                         isTextLeft: true,
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => WorkoutScreen()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => WorkoutScreen()),
+                          );
                         },
                       ),
                       FeatureButton(
@@ -76,10 +76,10 @@ class HomeScreen extends StatelessWidget {
                         gradientColors: [Colors.white, Color(0xFFF48221)],
                         isTextLeft: false,
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => NutritionScreen()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => NutritionScreen()),
+                          );
                         },
                       ),
                     ],
