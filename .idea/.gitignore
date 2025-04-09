@@ -1,3 +1,35 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+# Node.js specific
+node_modules/            # Node.js dependencies
+npm-debug.log            # Debug logs from npm
+yarn-error.log           # Yarn error logs
+.env                     # Environment variable file (keep private)
+
+# Flutter specific
+.dart_tool/              # Flutter-specific tool directories
+.packages                # Flutter package configurations
+.flutter-plugins         # Flutter plugin files
+.flutter-plugins-dependencies # Flutter plugin dependencies
+.idea/                   # IDE files (e.g., IntelliJ, WebStorm)
+.vscode/                 # VS Code settings
+
+# Build and output files (Flutter & Node.js)
+build/                   # Build directories for Flutter & Node.js
+dist/                    # Distribution directory for Node.js
+ios/                     # iOS build files (Flutter)
+android/                 # Android build files (Flutter)
+web/                     # Web build files (Flutter)
+macos/                   # macOS build files (Flutter)
+linux/                   # Linux build files (Flutter)
+
+# System files
+.DS_Store                # macOS system files
+Thumbs.db                # Windows system files
+
+# Logs
+*.log                    # Any log files
+*.log.*                  # Any log file extensions
+# envy
+.env
