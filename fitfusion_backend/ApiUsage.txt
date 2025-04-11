@@ -1,0 +1,103 @@
+
+Base URL: http://localhost:3000/api
+
+========================================
+👤 USER API
+========================================
+
+POST http://localhost:3000/api/user/registration
+Body:
+{
+  "username": "john_doe",
+  "password": "Secret123!"
+}
+
+---
+
+POST http://localhost:3000/api/user/login
+Body:
+{
+  "username": "john_doe",
+  "password": "Secret123!"
+}
+
+---
+
+POST http://localhost:3000/api/user/userInfo/create
+Body:
+{
+  "userId": "uuid-string-here",
+  "fullName": "John Doe",
+  "email": "john@example.com",
+  "phone": "1234567890",
+  "gender": "Male",
+  "age": 25
+}
+
+---
+
+PUT http://localhost:3000/api/user/userInfo/update/:userId
+Body:
+{
+  "fullName": "John Updated",
+  "email": "newemail@example.com"
+}
+
+---
+
+GET http://localhost:3000/api/user/userInfo/getUserInfo
+
+========================================
+🧠 CHATBOT API
+========================================
+
+POST http://localhost:3000/api/chatbot/meals
+Body:
+{
+  " "bmiStatus" : "overweight",
+    "foodAllergy":"potato",
+    "foodFavour":"pork,salad"
+}
+
+---
+
+POST http://localhost:3000/api/chatbot/caloriesCalculate
+Body:
+{
+  "food":"rice 100 gram, pork 250 gram, beef 100 gram 10 gram olive oil"
+}
+
+========================================
+🧑‍🏫 PERSONAL TRAINER API
+========================================
+
+POST http://localhost:3000/api/PT/create
+Body:
+{
+  "fullName": "Emily Smith",
+  "age": 30,
+  "gender": "Female",
+  "major": "Fitness and Nutrition",
+  "tuitionFees": 150,
+  "introduction": "10 years of experience helping clients get fit!"
+}
+
+---
+
+GET http://localhost:3000/api/PT/getAllTrainer
+
+---
+
+GET http://localhost:3000/api/PT/getById/:id
+
+---
+
+PUT http://localhost:3000/api/PT/update/:id
+Body:
+{
+  "tuitionFees": 200
+}
+
+---
+
+DELETE http://localhost:3000/api/PT/delete/:id

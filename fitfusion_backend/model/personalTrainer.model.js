@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
+const db = require('../config/db'); // Use shared DB connection
 
-const personalTrainerSchema = new mongoose.Schema({
+const { Schema } = mongoose;
+
+const PersonalTrainerSchema = new Schema({
   fullName: { type: String, required: true },
   age: { type: Number, required: true, min: 18 },
   gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
@@ -9,4 +12,6 @@ const personalTrainerSchema = new mongoose.Schema({
   introduction: { type: String, required: true },
 });
 
-const personalTrainer = mongoose.model("PersonalTrainer", personalTrainerSchema);
+const PersonalTrainer = db.model("PersonalTrainer", PersonalTrainerSchema);
+
+module.exports = PersonalTrainer;

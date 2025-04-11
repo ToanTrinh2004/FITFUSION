@@ -1,8 +1,14 @@
-const PersonalTrainer = require("../model/PersonalTrainer");
+const PersonalTrainer = require("../model/personalTrainer.model");
 
 class PersonalTrainerService {
   async createTrainer(data) {
-    return await PersonalTrainer.create(data);
+    try {
+      const createPT = new PersonalTrainer(data); // 
+      return await createPT.save();
+    } catch (error) {
+      throw error; // 
+    }
+    
   }
 
   async getAllTrainers() {
