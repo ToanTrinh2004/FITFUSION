@@ -1,0 +1,68 @@
+{
+    "success": true,
+    "data": {
+        "breakfast": {
+            "dishName": "Oatmeal with Berries and Nuts",
+            "ingredients": [
+                "1/2 cup rolled oats",
+                "1 cup unsweetened almond milk",
+                "1/2 cup mixed berries (strawberries, blueberries, raspberries)",
+                "1/4 cup chopped almonds",
+                "1 tablespoon chia seeds",
+                "Pinch of cinnamon"
+            ],
+            "instructions": "1. Combine oats and almond milk in a saucepan. 2. Bring to a boil, then reduce heat and simmer for 5-7 minutes, stirring occasionally. 3. Stir in chia seeds and cinnamon. 4. Top with berries and almonds. Serve warm.",
+            "calories": 400,
+            "macronutrients": {
+                "protein": 15,
+                "carbs": 55,
+                "fats": 15
+            },
+            "note": "High in fiber and protein, keeps you full for longer and helps manage weight. The complex carbs provide sustained energy."
+        },
+        "lunch": {
+            "dishName": "Grilled Chicken Salad with Mixed Greens",
+            "ingredients": [
+                "4 oz grilled chicken breast",
+                "3 cups mixed greens (spinach, romaine, kale)",
+                "1/2 cup sliced cucumber",
+                "1/4 cup cherry tomatoes",
+                "1/4 cup bell peppers (various colors)",
+                "2 tablespoons olive oil and vinegar dressing",
+                "Optional: 1/4 avocado"
+            ],
+            "instructions": "1. Grill or pan-fry the chicken breast until cooked through. Let it rest for a few minutes and then slice. 2. Combine mixed greens, cucumber, tomatoes, and bell peppers in a large bowl. 3. Add the sliced chicken. 4. Drizzle with olive oil and vinegar dressing. 5. Add avocado (optional).",
+            "calories": 450,
+            "macronutrients": {
+                "protein": 40,
+                "carbs": 20,
+                "fats": 25
+            },
+            "note": "Lean protein source (chicken) paired with a large volume of vegetables.  The healthy fats from the avocado and olive oil dressing contribute to satiety."
+        },
+        "dinner": {
+            "dishName": "Baked Pork Tenderloin with Roasted Broccoli",
+            "ingredients": [
+                "4 oz pork tenderloin",
+                "1 cup broccoli florets",
+                "1 tablespoon olive oil",
+                "Salt and pepper to taste",
+                "1/2 cup Quinoa cooked"
+            ],
+            "instructions": "1. Preheat oven to 400°F (200°C). 2. Toss broccoli florets with olive oil, salt, and pepper. Spread on a baking sheet. 3. Season pork tenderloin with salt and pepper. 4. Place pork tenderloin on the same baking sheet with the broccoli. 5. Bake for 20-25 minutes, or until pork is cooked through and broccoli is tender. 6. Serve with 1/2 cup cooked quinoa.",
+            "calories": 550,
+            "macronutrients": {
+                "protein": 45,
+                "carbs": 35,
+                "fats": 25
+            },
+            "note": "Provides lean protein from pork tenderloin and fiber from broccoli and quinoa. Roasting minimizes added fats."
+        },
+        "nutrition": {
+            "calories": 1400,
+            "protein": 100,
+            "carbs": 110,
+            "fats": 65
+        }
+    }
+}

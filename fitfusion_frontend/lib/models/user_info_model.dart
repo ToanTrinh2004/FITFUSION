@@ -11,6 +11,7 @@ class UserInfoModel {
   double weightLossPercentage = 0.0;
   DateTime? aimDate;
   String? health;
+  int? workOutDays;
 
   UserInfoModel({
     required this.fullname,
@@ -22,6 +23,7 @@ class UserInfoModel {
     this.goal,
     this.aimDate,
     this.health,
+    this.workOutDays
   });
 
   void calculateBMI() {
@@ -31,7 +33,7 @@ class UserInfoModel {
       bmi = 0.0;
     }
   }
-
+  
   String get bmiStatus {
     if (bmi < 18.5) {
       return "Gầy";

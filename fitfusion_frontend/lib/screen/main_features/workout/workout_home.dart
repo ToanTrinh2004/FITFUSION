@@ -1,9 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:fitfusion_frontend/models/user_info_model.dart';
 import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:fitfusion_frontend/theme/theme.dart';
-import 'package:flutter/material.dart';
+import 'package:fitfusion_frontend/screen/main_features/workOut/selectDay.dart';
 
 class WorkoutScreen extends StatelessWidget {
-  const WorkoutScreen({super.key});
+  final UserInfoModel userInfo;
+
+  const WorkoutScreen({super.key, required this.userInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +24,10 @@ class WorkoutScreen extends StatelessWidget {
             children: [
               AppBarCustom(),
               const SizedBox(height: 30),
-              Text(
+              const Text(
                 'Bài tập tại nhà',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -35,11 +39,11 @@ class WorkoutScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildButton('Các bài tập cơ bản'),
+                      _buildButton('Các bài tập cơ bản', context),
                       const SizedBox(height: 30),
-                      _buildButton('Các bài tập trung bình'),
+                      _buildButton('Các bài tập trung bình', context),
                       const SizedBox(height: 30),
-                      _buildButton('Các bài tập nâng cao'),
+                      _buildButton('Các bài tập nâng cao', context),
                     ],
                   ),
                 ),
@@ -51,14 +55,19 @@ class WorkoutScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildButton(String text) {
+  Widget _buildButton(String text, BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        // Add navigation or action logic here
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WorkoutDaysSelectionScreen(userInfo: userInfo),
+          ),
+        );
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
-        foregroundColor: Color(0xFFB3261E),
+        foregroundColor: const Color(0xFFB3261E),
         minimumSize: const Size(double.infinity, 100),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
