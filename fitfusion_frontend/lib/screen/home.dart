@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
   final UserInfoModel userInfo;
 
   const HomeScreen({super.key, required this.userInfo});
-
+  
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
