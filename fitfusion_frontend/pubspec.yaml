@@ -52,5 +52,4 @@ flutter:
     - assets/BMI.png
     - assets/body_img/
     - assets/
-    - assets/mock_data/data_meal.json
 

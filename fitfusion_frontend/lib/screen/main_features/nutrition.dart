@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fitfusion_frontend/theme/theme.dart';
+import 'package:fitfusion_frontend/models/meal_model.dart';
+import 'package:fitfusion_frontend/models/meal1_model.dart';
 
 class NutritionScreen extends StatefulWidget {
   const NutritionScreen({super.key});
@@ -9,7 +11,23 @@ class NutritionScreen extends StatefulWidget {
 }
 
 class _NutritionScreenState extends State<NutritionScreen> {
-  int selectedDayIndex = 0; // Ngày đang được chọn
+  int selectedDayIndex = 1; // Default to second day (index 1)
+  late DailyNutrition dailyNutrition;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNutritionData();
+  }
+
+  Future<void> _loadNutritionData() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    setState(() {
+      dailyNutrition = mockNutritionData[selectedDayIndex];
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,52 +39,58 @@ class _NutritionScreenState extends State<NutritionScreen> {
       body: Container(
         decoration: const BoxDecoration(gradient: appGradient),
         child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Thanh tiêu đề + nút back
-              _buildAppBar(context),
-
-              // Thanh chọn ngày (CÓ THỂ CHỌN)
-              _buildWeekSelector(screenWidth, isSmallScreen),
-
-              // Thông tin tổng quan
-              _buildOverview(screenWidth, isSmallScreen),
-
-              // Danh sách bữa ăn
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Column(
-                    children: [
-                      _buildMealSection(
-                        title: "Bữa sáng", 
-                        content: _sampleBreakfast(screenWidth, isSmallScreen),
-                        screenWidth: screenWidth,
-                      ),
-                      _buildMealSection(title: "Bữa trưa", screenWidth: screenWidth),
-                      _buildMealSection(title: "Bữa tối", screenWidth: screenWidth),
-                    ],
+          child: isLoading 
+            ? const Center(child: CircularProgressIndicator(color: Colors.white))
+            : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildAppBar(context),
+                _buildWeekSelector(screenWidth, isSmallScreen),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: Text(
+                    "Kế hoạch ăn uống",
+                    style: AppTextStyles.little_title,
                   ),
                 ),
-              ),
-
-              // Nút về trang chủ
-              _buildHomeButton(context, screenWidth),
-            ],
-          ),
+                _buildOverview(screenWidth, isSmallScreen),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildMealSection(
+                          title: "Bữa sáng", 
+                          meal: dailyNutrition.breakfast,
+                          screenWidth: screenWidth,
+                          isSmallScreen: isSmallScreen,
+                        ),
+                        _buildMealSection(
+                          title: "Bữa trưa", 
+                          meal: dailyNutrition.lunch,
+                          screenWidth: screenWidth,
+                          isSmallScreen: isSmallScreen,
+                        ),
+                        _buildMealSection(
+                          title: "Bữa tối", 
+                          meal: dailyNutrition.dinner,
+                          screenWidth: screenWidth,
+                          isSmallScreen: isSmallScreen,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
         ),
       ),
     );
   }
 
-  // 📌 Thanh tiêu đề
+  // App bar with back button and menu
   Widget _buildAppBar(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width * 0.04,
-        vertical: 8,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
         children: [
           IconButton(
@@ -74,7 +98,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
             onPressed: () => Navigator.pop(context),
           ),
           const Spacer(),
-          const Text("Chế độ dinh dưỡng", style: AppTextStyles.title),
+          const Text("Chế độ dinh dưỡng", style: AppTextStyles.title1),
           const Spacer(),
           IconButton(
             icon: const Icon(Icons.menu, color: AppColors.textPrimary),
@@ -85,14 +109,19 @@ class _NutritionScreenState extends State<NutritionScreen> {
     );
   }
 
-  // 📌 Thanh chọn ngày (CÓ THỂ CHỌN)
+  // Week day selector
   Widget _buildWeekSelector(double screenWidth, bool isSmallScreen) {
     List<String> weekDays = ["S", "M", "T", "W", "T", "F", "S"];
+    final now = DateTime.now();
+    final weekStart = now.subtract(Duration(days: now.weekday - 1));
 
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: screenWidth * 0.02,
-        vertical: 8,
+    return Container(
+      width: screenWidth,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Colors.white30, width: 1),
+        ),
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -100,28 +129,36 @@ class _NutritionScreenState extends State<NutritionScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(7, (index) {
             bool isSelected = index == selectedDayIndex;
+            final day = weekStart.add(Duration(days: index));
+            
             return GestureDetector(
               onTap: () {
                 setState(() {
                   selectedDayIndex = index;
+                  dailyNutrition = mockNutritionData[selectedDayIndex];
                 });
               },
               child: Container(
-                width: screenWidth * 0.12,
-                margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
+                width: screenWidth * 0.13,
+                margin: EdgeInsets.symmetric(horizontal: 2),
                 child: Column(
                   children: [
-                    Text(weekDays[index], style: AppTextStyles.little_title),
+                    Text(
+                      weekDays[index], 
+                      style: AppTextStyles.text
+                    ),
                     const SizedBox(height: 5),
                     CircleAvatar(
-                      radius: isSmallScreen ? 14 : 16,
-                      backgroundColor: isSelected ? AppColors.primary : AppColors.primaryHalf,
-                      child: Text("${9 + index}",
-                          style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: isSmallScreen ? 12 : 14,
-                          )),
+                      radius: 18,
+                      backgroundColor: isSelected ? AppColors.textPrimary : AppColors.primaryHalf,
+                      child: Text(
+                        day.day.toString(),
+                        style: TextStyle(
+                          color: isSelected ? AppColors.primary : AppColors.textPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -133,7 +170,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
     );
   }
 
-  // 📌 Thông tin tổng quan
+  // Nutrition overview section
   Widget _buildOverview(double screenWidth, bool isSmallScreen) {
     return Padding(
       padding: EdgeInsets.all(screenWidth * 0.04),
@@ -148,13 +185,37 @@ class _NutritionScreenState extends State<NutritionScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildInfoBox("1700", "calo", Colors.red, isSmallScreen),
+              _buildInfoBox(
+                "${dailyNutrition.totalCalories}", 
+                "calo", 
+                Colors.red, 
+                isSmallScreen,
+                'assets/icons/flame.png'
+              ),
               SizedBox(width: screenWidth * 0.03),
-              _buildInfoBox("87g", "protein", Colors.blue, isSmallScreen),
+              _buildInfoBox(
+                "${dailyNutrition.nutritionSummary.protein}g", 
+                "protein", 
+                Colors.blue, 
+                isSmallScreen,
+                'assets/icons/protein.png'
+              ),
               SizedBox(width: screenWidth * 0.03),
-              _buildInfoBox("51g", "chất béo", Colors.orange, isSmallScreen),
+              _buildInfoBox(
+                "${dailyNutrition.nutritionSummary.fats}g", 
+                "chất béo", 
+                Colors.orange, 
+                isSmallScreen,
+                'assets/icons/fat.png'
+              ),
               SizedBox(width: screenWidth * 0.03),
-              _buildInfoBox("240g", "carbs", Colors.green, isSmallScreen),
+              _buildInfoBox(
+                "${dailyNutrition.nutritionSummary.carbs}g", 
+                "carbs", 
+                Colors.green, 
+                isSmallScreen,
+                'assets/icons/carbs.png'
+              ),
             ],
           ),
         ),
@@ -162,29 +223,64 @@ class _NutritionScreenState extends State<NutritionScreen> {
     );
   }
 
-  Widget _buildInfoBox(String value, String label, Color color, bool isSmallScreen) {
-    return Column(
+  Widget _buildInfoBox(String value, String label, Color color, bool isSmallScreen, String iconPath) {
+    return Row(
       children: [
-        Text(
-          value, 
-          style: TextStyle(
-            color: color, 
-            fontWeight: FontWeight.bold, 
-            fontSize: isSmallScreen ? 16 : 18
-          )
+        CircleAvatar(
+          radius: 16,
+          backgroundColor: color.withOpacity(0.2),
+          child: Icon(
+            _getIconForNutrient(label),
+            color: color,
+            size: 18,
+          ),
         ),
-        Text(
-          label, 
-          style: TextStyle(
-            fontSize: isSmallScreen ? 12 : 14
-          )
+        const SizedBox(width: 5),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              value, 
+              style: TextStyle(
+                color: color, 
+                fontWeight: FontWeight.bold, 
+                fontSize: 16,
+              )
+            ),
+            Text(
+              label, 
+              style: AppTextStyles.nutrition
+            ),
+          ],
         ),
       ],
     );
   }
 
-  // 📌 Phần bữa ăn
-  Widget _buildMealSection({required String title, Widget? content, required double screenWidth}) {
+  IconData _getIconForNutrient(String nutrient) {
+    switch (nutrient) {
+      case "calo":
+        return Icons.local_fire_department;
+      case "protein":
+        return Icons.fitness_center;
+      case "chất béo":
+        return Icons.opacity;
+      case "carbs":
+        return Icons.grain;
+      default:
+        return Icons.info;
+    }
+  }
+
+  // Meal section 
+  Widget _buildMealSection({
+    required String title, 
+    required Meal meal,
+    required double screenWidth,
+    required bool isSmallScreen,
+  }) {
+    bool hasMealData = meal.dishName.isNotEmpty;
+    
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: screenWidth * 0.04, 
@@ -193,42 +289,128 @@ class _NutritionScreenState extends State<NutritionScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: AppTextStyles.little_title),
-          const SizedBox(height: 5),
+          Text(
+            title, 
+            style: AppTextStyles.little_title
+          ),
+          
+          // Calorie pills
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _buildPill("${meal.calories} calo"),
+                _buildPill("${meal.macronutrients.protein}g protein"),
+                _buildPill("${meal.macronutrients.fats}g chất béo"),
+                _buildPill("${meal.macronutrients.carbs}g carbs"),
+              ],
+            ),
+          ),
+
+          // Meal content
           Container(
+            width: double.infinity,
             padding: EdgeInsets.all(screenWidth * 0.03),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: content ?? const SizedBox(height: 60),
+            child: hasMealData 
+                ? _buildMealContent(meal, screenWidth, isSmallScreen)
+                : SizedBox(
+                    height: 60,
+                    child: Center(
+                      child: Text(
+                        "Chưa có thông tin bữa ăn",
+                        style: AppTextStyles.title1,
+                      ),
+                    ),
+                  ),
           ),
         ],
       ),
     );
   }
 
-  // 📌 Nội dung mẫu cho bữa sáng
-  Widget _sampleBreakfast(double screenWidth, bool isSmallScreen) {
+  Widget _buildPill(String text) {
+    return Container(
+      margin: const EdgeInsets.only(top: 4, right: 8, bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        text,
+        style: AppTextStyles.nutrition
+      ),
+    );
+  }
+
+  // Meal content with details
+  Widget _buildMealContent(Meal meal, double screenWidth, bool isSmallScreen) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("🍞 Bánh mì ốp la với rau sống", style: AppTextStyles.little_title_1),
-        const SizedBox(height: 5),
-        const Text("• 2 quả trứng gà\n• 1 ổ bánh mì\n• 50g rau sống\n• 10g bơ thực vật", style: AppTextStyles.normal),
+        Text(
+          "${meal.dishName}", 
+          style: AppTextStyles.subtitle
+        ),
+        const SizedBox(height: 8),
+        
+        // Ingredients
+        if (meal.ingredients.isNotEmpty) Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: meal.ingredients.map((ingredient) => 
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text("• $ingredient", style: AppTextStyles.normal_nutri),
+            )
+          ).toList(),
+        ),
+        
         const SizedBox(height: 10),
-        const Text("🔹 Cách chuẩn bị", style: AppTextStyles.little_title_1),
-        const Text("Chiên trứng với bơ, sau đó cho rau sống và trứng vào bánh mì."),
-        const SizedBox(height: 10),
-        const Text("💪 Lợi ích sức khỏe", style: AppTextStyles.little_title_1),
-        const Text("Bánh mì ốp la cung cấp năng lượng và protein giúp no lâu."),
-        const SizedBox(height: 5),
-        Wrap(
-          spacing: screenWidth * 0.02,
-          runSpacing: screenWidth * 0.02,
+        
+        // Preparation method
+        if (meal.instructions.isNotEmpty) Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildButton("Đổi thực đơn với AI", screenWidth, isSmallScreen),
-            _buildButton("Chỉnh sửa thực đơn", screenWidth, isSmallScreen),
+            Text(
+              "Cách chuẩn bị", 
+              style: AppTextStyles.little_title_1
+            ),
+            const SizedBox(height: 4),
+            Text(meal.instructions, style: TextStyle(fontSize: 14)),
+          ],
+        ),
+        
+        const SizedBox(height: 10),
+        
+        // Health benefits
+        if (meal.note.isNotEmpty) Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Lợi ích sức khỏe", 
+              style: AppTextStyles.little_title_1
+            ),
+            const SizedBox(height: 4),
+            Text(meal.note, style: AppTextStyles.normal_nutri),
+          ],
+        ),
+        
+        const SizedBox(height: 12),
+        
+        // Action buttons
+        Row(
+          children: [
+            Expanded(
+              child: _buildButton("Đổi thực đơn với AI", screenWidth, isSmallScreen),
+            ),
+            SizedBox(width: 8),
+            Expanded(
+              child: _buildButton("Chỉnh sửa thực đơn", screenWidth, isSmallScreen),
+            ),
           ],
         ),
       ],
@@ -238,42 +420,22 @@ class _NutritionScreenState extends State<NutritionScreen> {
   Widget _buildButton(String text, double screenWidth, bool isSmallScreen) {
     return ElevatedButton(
       onPressed: () {},
-      style: ButtonStyles.buttonTwo.copyWith(
-        minimumSize: MaterialStateProperty.all(
-          Size(
-            screenWidth * (isSmallScreen ? 0.4 : 0.43),
-            isSmallScreen ? 36 : 40,
-          ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.textPrimary,
+        minimumSize: Size(
+          screenWidth * 0.4,
+          isSmallScreen ? 36 : 40,
         ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 0,
       ),
       child: Text(
         text, 
-        style: AppTextStyles.textButtonTwo.copyWith(
-          fontSize: isSmallScreen ? 12 : 14,
-        ),
+        style: AppTextStyles.nutrition_but,
         textAlign: TextAlign.center,
-      ),
-    );
-  }
-
-  // 📌 Nút Trang Chủ
-  Widget _buildHomeButton(BuildContext context, double screenWidth) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: screenWidth * 0.05,
-        vertical: 10,
-      ),
-      child: ElevatedButton(
-        onPressed: () => Navigator.pop(context),
-        style: ButtonStyles.buttonTwo.copyWith(
-          minimumSize: MaterialStateProperty.all(
-            Size(screenWidth * 0.9, 48),
-          ),
-        ),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 12),
-          child: Center(child: Text("TRANG CHỦ", style: AppTextStyles.textButtonTwo)),
-        ),
       ),
     );
   }

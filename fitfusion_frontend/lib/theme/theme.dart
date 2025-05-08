@@ -18,6 +18,12 @@ class AppTextStyles {
     fontWeight: FontWeight.w900,
     color: AppColors.textPrimary,
   );
+  
+  static const TextStyle title1 = TextStyle(
+    fontSize: 25,
+    fontWeight: FontWeight.w900,
+    color: AppColors.textPrimary,
+  );
   static const TextStyle subtitle = TextStyle(
     fontSize: 25,
     fontWeight: FontWeight.bold,
@@ -58,6 +64,21 @@ class AppTextStyles {
   static const TextStyle normal = TextStyle(
     fontSize: 10,
     fontWeight: FontWeight.normal,
+    color: Color.fromARGB(255, 0, 0, 0),
+  );
+  static const TextStyle nutrition = TextStyle( 
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: AppColors.text,
+  );
+  static const TextStyle nutrition_but = TextStyle( 
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
+    static const TextStyle normal_nutri = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
     color: Color.fromARGB(255, 0, 0, 0),
   );
 }
