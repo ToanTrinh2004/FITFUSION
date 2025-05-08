@@ -2,7 +2,6 @@
 import 'package:fitfusion_frontend/screen/intro.dart';
 import 'package:fitfusion_frontend/screen/profile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import '../theme/theme.dart'; // Import theme nếu cần
 class AppBarCustom extends StatelessWidget {
   final VoidCallback? onBackPressed;
