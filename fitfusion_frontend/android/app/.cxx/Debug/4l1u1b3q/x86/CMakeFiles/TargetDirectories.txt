@@ -1,0 +1,2 @@
+C:/Users/admin/FITFUSION/fitfusion_frontend/android/app/.cxx/Debug/4l1u1b3q/x86/CMakeFiles/edit_cache.dir
+C:/Users/admin/FITFUSION/fitfusion_frontend/android/app/.cxx/Debug/4l1u1b3q/x86/CMakeFiles/rebuild_cache.dir

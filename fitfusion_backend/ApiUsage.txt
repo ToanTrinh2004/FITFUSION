@@ -22,7 +22,6 @@ Body:
 }
 
 ---
-
 POST http://localhost:3000/api/user/userInfo/create
 Body:
 {
@@ -54,7 +53,7 @@ GET http://localhost:3000/api/user/userInfo/getUserInfo
 POST http://localhost:3000/api/chatbot/meals
 Body:
 {
-  " "bmiStatus" : "overweight",
+    "bmiStatus" : "overweight",
     "foodAllergy":"potato",
     "foodFavour":"pork,salad"
 }

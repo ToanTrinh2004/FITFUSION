@@ -5,7 +5,6 @@ import 'register.dart';
 
 class IntroApp extends StatelessWidget {
   const IntroApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,14 +54,6 @@ class IntroApp extends StatelessWidget {
                   child: const Text("ĐĂNG KÝ", style: AppTextStyles.textButtonTwo),
                 ),
               ],
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: TextButton(
-                onPressed: () {}, // Xử lý khi bấm quên mật khẩu
-                child: const Text("Forgot your password?", style: AppTextStyles.forgotPassword),
-              ),
             ),
           ],
         ),

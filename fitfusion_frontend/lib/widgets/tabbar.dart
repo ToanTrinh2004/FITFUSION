@@ -95,11 +95,7 @@ class AppBarCustom extends StatelessWidget {
         ),
         const Text(
           "FITFUSION",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: AppTextStyles.title
         ),
         IconButton(
           icon: const Icon(Icons.menu, color: Colors.white, size: 50),

@@ -3,7 +3,7 @@ import '../models/user_info_model.dart';
 import '../theme/theme.dart';
 import '../widgets/tabbar.dart';
 import '../widgets/widget_home.dart';
-import 'package:fitfusion_frontend/screen/main_features/coach.dart'; 
+import 'package:fitfusion_frontend/screen/main_features/coach/coach.dart'; 
 import 'package:fitfusion_frontend/screen/main_features/calories/calories.dart';
 import 'package:fitfusion_frontend/screen/main_features/workout/workout_home.dart';
 import 'package:fitfusion_frontend/screen/main_features/nutrition.dart';
