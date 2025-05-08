@@ -51,15 +51,19 @@ class ChatbotService {
   }`;
   }
   createCaloriesCalculatorPrompt(food) {
-    return `Tính toán dinh dưỡng của những đồ ăn sau "${food}" chỉ trả về dưới dạng JSON với cấu trúc sau {
-      "calories": ....,
-      "protein" : .....,
-      "carbs" : .....,
-      "fats" : ....,
-      "note" : phân tích dinh dưỡng và đưa ra lời khuyên là thức ăn này tốt hay xấu
-    }`;
+    return `Phân tích dinh dưỡng cho "${food}". 
+    
+    Chỉ trả về kết quả dưới dạng JSON với định dạng sau, không có bất kỳ văn bản nào trước hoặc sau đoạn JSON:
+    {
+      "calories": [số],
+      "protein": [số],
+      "carbs": [số],
+      "fats": [số],
+      "note": "[phân tích dinh dưỡng và lời khuyên ngắn gọn trong 50 từ]"
+    }
+    
+    QUAN TRỌNG: Không bao gồm bất kỳ giải thích, tính toán, hoặc văn bản bổ sung nào. Chỉ trả về đối tượng JSON duy nhất.`;
   }
-
   /**
    * Function to process AI response, stripping Markdown and parsing the JSON
    * @param {string} responseText - The raw response from AI

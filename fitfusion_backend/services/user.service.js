@@ -5,14 +5,15 @@ const { v4: uuidv4 } = require('uuid');
 
 class userService {
     // Register a new user
-    static async registerUser(username, password) {
+    static async registerUser(username, password, role = 1) {
         try {
-            const createUser = new UserModel({ username, password });
+            const createUser = new UserModel({ username, password, role });
             return await createUser.save();
         } catch (err) {
             throw err;
         }
     }
+
 
     // Check if a user exists
     static async checkUser(username) {
@@ -31,7 +32,6 @@ class userService {
     // Create User Info with UUID
     static async createUserInfo(data) {
         try {
-            data.userId = uuidv4(); // Generate UUID for userId
             const newUserInfo = new UserInfoModel(data);
             return await newUserInfo.save();
         } catch (err) {
@@ -58,7 +58,49 @@ class userService {
             throw error; // Fix: Throw 'error', not 'err'
         }
     }
-    
+
+    static async getAllUsers() {
+        try {
+            return await UserModel.find({}, { password: 0 }); // exclude password for security
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Get one user by ID
+    static async getUserById(userId) {
+        try {
+            return await UserModel.findById(userId, { password: 0 }); // exclude password
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Update user (username, role — not password here)
+    static async updateUser(userId, updateData) {
+        try {
+            // Don't allow password update through this method
+            delete updateData.password;
+
+            return await UserModel.findByIdAndUpdate(
+                userId,
+                updateData,
+                { new: true, select: '-password' } // Return updated doc without password
+            );
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Delete user
+    static async deleteUser(userId) {
+        try {
+            return await UserModel.findByIdAndDelete(userId);
+        } catch (err) {
+            throw err;
+        }
+    }
+
 }
 
 module.exports = userService;

@@ -1,12 +1,22 @@
 const userService = require('../services/user.service');
-const UserInfoModel = require('../model/userInfo.model'); // Import missing model
+const UserInfoModel = require('../model/userInfo.model');
 
 // Register
 exports.register = async (req, res, next) => {
     try {
-        const { username, password } = req.body;
-        const successRes = await userService.registerUser(username, password);
-        res.json({ status: true, success: "User registered successfully" });
+        const { username, password, role } = req.body;
+
+        const existingUser = await userService.checkUser(username);
+        if (existingUser) {
+            return res.status(400).json({ status: false, error: "Username already exists" });
+        }
+
+        const newUser = await userService.registerUser(username, password, role);
+
+        const tokenData = { _id: newUser.userId, username: newUser.username, role: newUser.role };
+        const token = await userService.generateToken(tokenData, 'secretKey', '1h');
+
+        res.json({ status: true, message: "User registered successfully", token });
     } catch (error) {
         return res.status(500).json({ status: false, error: error.message });
     }
@@ -27,7 +37,7 @@ exports.login = async (req, res, next) => {
             return res.status(401).json({ status: false, error: "Password is incorrect" });
         }
 
-        let tokenData = { _id: user._id, username: user.username };
+        const tokenData = { _id: user.userId, username: user.username, role: user.role };
         const token = await userService.generateToken(tokenData, 'secretKey', '1h');
 
         return res.status(200).json({ status: true, token });
@@ -39,17 +49,22 @@ exports.login = async (req, res, next) => {
 // Create User Info
 exports.createUserInfo = async (req, res, next) => {
     try {
-        const newUserInfo = await userService.createUserInfo(req.body);
+        const userId = req.user._id;
+        const data = { ...req.body, userId };
+        console.log(userId)
+
+        const newUserInfo = await userService.createUserInfo(data);
         res.status(201).json({ status: true, message: "User info created successfully", data: newUserInfo });
     } catch (error) {
         res.status(500).json({ status: false, error: error.message });
     }
 };
 
+
 // Update User Info
 exports.updateUserInfo = async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const userId = req.user._id;
         const updatedUser = await userService.updateUserInfo(userId, req.body);
 
         if (!updatedUser) {
@@ -61,18 +76,13 @@ exports.updateUserInfo = async (req, res, next) => {
         res.status(500).json({ status: false, error: error.message });
     }
 };
+
+// Get User Info
 exports.getUserInfo = async (req, res, next) => {
     try {
-        const { userId } = req.body; // Lấy userId từ req.body
-
-        console.log("Received userId:", userId); // Debugging log
-
-        if (!userId) {
-            return res.status(400).json({ status: false, error: "Missing userId in request body" });
-        }
+        const userId = req.user._id;
 
         const displayUserInfo = await userService.showUserInfo(userId);
-
         if (!displayUserInfo) {
             return res.status(404).json({ status: false, error: "User not found" });
         }
@@ -83,3 +93,47 @@ exports.getUserInfo = async (req, res, next) => {
     }
 };
 
+// ======= CRUD for UserModel =======
+
+// Get all users (admin use)
+exports.getUsers = async (req, res) => {
+    try {
+        const users = await userService.getAllUsers();
+        res.status(200).json({ status: true, data: users });
+    } catch (error) {
+        res.status(500).json({ status: false, error: error.message });
+    }
+};
+
+// Get current user
+exports.getUser = async (req, res) => {
+    try {
+        const user = await userService.getUserById(req.user._id);
+        if (!user) return res.status(404).json({ status: false, error: "User not found" });
+        res.status(200).json({ status: true, data: user });
+    } catch (error) {
+        res.status(500).json({ status: false, error: error.message });
+    }
+};
+
+// Update current user
+exports.updateUser = async (req, res) => {
+    try {
+        const updatedUser = await userService.updateUser(req.user._id, req.body);
+        if (!updatedUser) return res.status(404).json({ status: false, error: "User not found" });
+        res.status(200).json({ status: true, message: "User updated", data: updatedUser });
+    } catch (error) {
+        res.status(500).json({ status: false, error: error.message });
+    }
+};
+
+// Delete current user
+exports.deleteUser = async (req, res) => {
+    try {
+        const deleted = await userService.deleteUser(req.user._id);
+        if (!deleted) return res.status(404).json({ status: false, error: "User not found" });
+        res.status(200).json({ status: true, message: "User deleted" });
+    } catch (error) {
+        res.status(500).json({ status: false, error: error.message });
+    }
+};

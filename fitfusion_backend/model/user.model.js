@@ -1,4 +1,4 @@
-const mongoose =  require('mongoose');
+const mongoose = require('mongoose');
 const db = require('../config/db');
 const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
@@ -8,7 +8,9 @@ const useSchema = new mongoose.Schema({
     userId: { type: String, default: uuidv4 }, 
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    role: { type: Number, enum: [1, 2], default: 1, required: true } // 1 = user, 2 = coach
 });
+
 useSchema.pre('save', async function (next) {
     try {
         if (!this.isModified("password")) return next();
@@ -30,6 +32,6 @@ useSchema.methods.comparePassword = async function (userPassword) {
     }
 };
 
-const UserModel = db.model('user',useSchema);
+const UserModel = db.model('user', useSchema);
 
 module.exports = UserModel;
