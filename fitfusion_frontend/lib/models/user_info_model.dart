@@ -65,18 +65,20 @@ class UserInfoModel {
   }
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) {
-    return UserInfoModel(
-      fullname: json['fullname'],
-      gender: json['gender'],
-      height: (json['height'] as num?)?.toDouble(),
-      weight: (json['weight'] as num?)?.toDouble(),
-      aimWeight: (json['aimWeight'] as num?)?.toDouble(),
-      age: json['age'] as int?,
-      goal: json['goal'],
-      aimDate: json['aimDate'] != null ? DateTime.parse(json['aimDate']) : null,
-      health: json['health'],
-    );
-  }
+  return UserInfoModel(
+    fullname: json['fullname'],
+    gender: json['gender'],
+    height: (json['height'] as num?)?.toDouble(),
+    weight: (json['weight'] as num?)?.toDouble(),
+    aimWeight: (json['aimWeight'] as num?)?.toDouble(),
+    age: json['age'] as int?,
+    goal: json['goal'],
+    aimDate: json['aimDate'] != null ? DateTime.parse(json['aimDate']) : null,
+    health: json['health'],
+    workOutDays: json['workOutDays'] as int?, // ✅ Add this line
+  );
+}
+
 
   Map<String, dynamic> toJson() {
     return {
