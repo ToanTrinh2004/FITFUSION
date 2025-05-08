@@ -1,6 +1,8 @@
+import 'package:fitfusion_frontend/screen/main_features/workout/ExerciseDetailScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:fitfusion_frontend/models/user_info_model.dart';
 import 'package:fitfusion_frontend/widgets/tabbar.dart';
+
 class WorkoutDayDetailScreen extends StatelessWidget {
   final int day;
   final UserInfoModel userInfo;
@@ -9,12 +11,15 @@ class WorkoutDayDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> exercises = [
-      "Bước cao",
-      "Bật nhảy",
-      "Tập cơ bụng",
-      "Đo sàn",
-      "Chạm gót chân",
+    // Exercise data with name and duration
+    List<Map<String, String>> exercises = [
+      {"name": "Nhảy", "duration": "20s", "gif": "assets/exercises/nhay.gif"},
+      {"name": "Gập chân", "duration": "20s", "gif": "assets/exercises/gapchan.gif"},
+      {"name": "Gập cơ bụng", "duration": "20s","gif": "assets/exercises/gapcobung.gif"},
+      {"name": "con bọ", "duration": "20s","gif": "assets/exercises/conbo.gif"},
+      {"name": "Chạm gót chân", "duration": "20s", "gif": "assets/exercises/taychamgot.gif"},
+      {"name": "Nâng chân", "duration": "20s", "gif": "assets/exercises/nangchan.gif"},
+      {"name": "Plank", "duration": "20s", "gif": "assets/exercises/plank.gif"},
     ];
 
     return Scaffold(
@@ -38,8 +43,8 @@ class WorkoutDayDetailScreen extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(50),
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 width: MediaQuery.of(context).size.width * 0.87,
                 child: Row(
@@ -72,22 +77,40 @@ class WorkoutDayDetailScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   itemCount: exercises.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 6),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            exercises[index],
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                    return InkWell(
+                      onTap: () {
+                        // Navigate to exercise detail screen when tapped
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ExerciseDetailScreen(
+                              exerciseName: exercises[index]["name"]!,
+                              duration: exercises[index]["duration"]!,
+                              imagePath: exercises[index]["gif"]!,
+                            ),
                           ),
-                          const Text("00 : 20", style: TextStyle(color: Colors.grey)),
-                        ],
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              exercises[index]["name"]!,
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "00 : ${exercises[index]["duration"]!.replaceAll('s', '')}",
+                              style: const TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
