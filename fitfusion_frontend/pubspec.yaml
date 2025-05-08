@@ -53,4 +53,5 @@ flutter:
     - assets/body_img/
     - assets/
     - assets/mock_data/data_meal.json
+    - assets/exercises/
 
