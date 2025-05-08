@@ -1,6 +1,6 @@
 import 'package:fitfusion_frontend/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:fitfusion_frontend/widgets/tabbar.dart'; // AppBarCustom nằm ở đây
+import 'package:fitfusion_frontend/widgets/tabbar.dart'; 
 
 class CoachDetailScreen extends StatelessWidget {
   final Map<String, String> coach;

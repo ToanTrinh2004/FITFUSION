@@ -75,7 +75,7 @@ class UserInfoModel {
     goal: json['goal'],
     aimDate: json['aimDate'] != null ? DateTime.parse(json['aimDate']) : null,
     health: json['health'],
-    workOutDays: json['workOutDays'] as int?, // ✅ Add this line
+    workOutDays: json['workOutDays'] as int?, 
   );
 }
 
