@@ -81,6 +81,11 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
     color: Color.fromARGB(255, 0, 0, 0),
   );
+    static const TextStyle coach_detail = TextStyle( 
+    fontSize: 17,
+    fontWeight: FontWeight.w600,
+    color: AppColors.text,
+  );
 }
 class ButtonStyles {
   static final ButtonStyle buttonOne = ElevatedButton.styleFrom(

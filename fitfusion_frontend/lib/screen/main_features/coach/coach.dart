@@ -2,13 +2,7 @@ import 'package:fitfusion_frontend/screen/main_features/coach/contactCoach.dart'
 import 'package:fitfusion_frontend/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fitfusion_frontend/widgets/tabbar.dart';
-
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: CoachScreen(),
-  ));
-}
+import 'my_coach.dart';
 
 class CoachScreen extends StatefulWidget {
   const CoachScreen({super.key});
@@ -17,11 +11,12 @@ class CoachScreen extends StatefulWidget {
   State<CoachScreen> createState() => _CoachScreenState();
 }
 
-class _CoachScreenState extends State<CoachScreen> {
+class _CoachScreenState extends State<CoachScreen> with SingleTickerProviderStateMixin {
   double _age = 60;
   String _selectedGender = "Tất cả";
   String _selectedField = "Tất cả";
   String _selectedRegion = "Tất cả";
+  late TabController _tabController;
 
   final List<Map<String, String>> _allCoaches = [
     {
@@ -53,6 +48,13 @@ class _CoachScreenState extends State<CoachScreen> {
   void initState() {
     super.initState();
     _filteredCoaches = _allCoaches;
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   void _showFilterModal() {
@@ -185,6 +187,60 @@ class _CoachScreenState extends State<CoachScreen> {
     });
   }
 
+  Widget _buildCoachList() {
+    return ListView.builder(
+      itemCount: _filteredCoaches.length,
+      itemBuilder: (context, index) {
+        final coach = _filteredCoaches[index];
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CoachDetailScreen(coach: coach),
+              ),
+            );
+          },
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 6,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                const CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.green,
+                  child: Icon(Icons.person, color: Colors.white),
+                ),
+                const SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Tên: ${coach['name']}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text("Giới tính: ${coach['gender']}", style: const TextStyle(fontSize: 13)),
+                    Text("Tuổi: ${coach['age']}", style: const TextStyle(fontSize: 13)),
+                    Text("Chuyên ngành: ${coach['field']}", style: const TextStyle(fontSize: 13)),
+                    Text("Khu vực: ${coach['region']}", style: const TextStyle(fontSize: 13)),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -201,74 +257,67 @@ class _CoachScreenState extends State<CoachScreen> {
               const SizedBox(height: 15),
               AppBarCustom(),
               const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Danh sách HLV',
-                      style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.tune, color: Colors.white, size: 28),
-                      onPressed: _showFilterModal,
-                    ),
+              
+              // TabBar
+              Container(
+                height: 40,
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: TabBar(
+                  controller: _tabController,
+                  indicator: BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  dividerColor: Colors.transparent,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  labelColor: Colors.red[700],
+                  unselectedLabelColor: Colors.white,
+                  tabs: const [
+                    Tab(text: "Danh sách HLV"),
+                    Tab(text: "HLV của tôi"),
                   ],
                 ),
               ),
+              
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: _tabController.index == 0 
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.tune, color: Colors.white, size: 28),
+                          onPressed: _showFilterModal,
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text(
+                          'HLV của tôi',
+                          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 40),
+                      ],
+                    ),
+              ),
+              
               const SizedBox(height: 20),
+              
               Expanded(
-                child: ListView.builder(
-                  itemCount: _filteredCoaches.length,
-                  itemBuilder: (context, index) {
-                    final coach = _filteredCoaches[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CoachDetailScreen(coach: coach),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 6,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            const CircleAvatar(
-                              radius: 30,
-                              backgroundColor: Colors.green,
-                              child: Icon(Icons.person, color: Colors.white),
-                            ),
-                            const SizedBox(width: 16),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Tên: ${coach['name']}", style: const TextStyle(fontWeight: FontWeight.bold)),
-                                Text("Giới tính: ${coach['gender']}", style: const TextStyle(fontSize: 13)),
-                                Text("Tuổi: ${coach['age']}", style: const TextStyle(fontSize: 13)),
-                                Text("Chuyên ngành: ${coach['field']}", style: const TextStyle(fontSize: 13)),
-                                Text("Khu vực: ${coach['region']}", style: const TextStyle(fontSize: 13)),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    //Danh sách HLV
+                    _buildCoachList(),
+                    
+                    // HLV của tôi_Mycoach
+                    const MyCoachList(),
+                  ],
                 ),
               ),
             ],

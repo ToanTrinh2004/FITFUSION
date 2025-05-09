@@ -1,6 +1,5 @@
 import 'package:fitfusion_frontend/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:fitfusion_frontend/widgets/tabbar.dart'; 
 
 class CoachDetailScreen extends StatelessWidget {
   final Map<String, String> coach;
@@ -9,7 +8,19 @@ class CoachDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.primary,
+        title: Text("Thông Tin HLV", style: TextStyle(
+          fontSize: screenWidth * 0.05, // responsive text size
+          fontWeight: FontWeight.bold,
+          color: AppColors.textPrimary,
+        )),
+        centerTitle: true,
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -18,11 +29,11 @@ class CoachDetailScreen extends StatelessWidget {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(screenWidth * 0.04),
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(screenWidth * 0.05),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -35,41 +46,67 @@ class CoachDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Center(
+                  Center(
                     child: CircleAvatar(
-                      radius: 40,
+                      radius: screenWidth * 0.15,
                       backgroundColor: Colors.green,
-                      child: Icon(Icons.person, size: 50, color: Colors.white),
+                      child: Icon(Icons.person,
+                          size: screenWidth * 0.15, color: Colors.white),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: screenHeight * 0.02),
 
-                  const Text("Thông tin cá nhân:", style: TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
+                  Text("Thông tin cá nhân:", style: AppTextStyles.subtitle),
+                  SizedBox(height: screenHeight * 0.01),
 
-                  Text("Họ và Tên : ${coach['name']}", style: const TextStyle(fontSize: 14)),
-                  Text("Giới tính : ${coach['gender']}", style: const TextStyle(fontSize: 14)),
-                  Text("Tuổi : ${coach['age']}", style: const TextStyle(fontSize: 14)),
-                  Text("Lĩnh vực chuyên ngành : ${coach['field']}", style: const TextStyle(fontSize: 14)),
-                  const SizedBox(height: 12),
+                  Text("Họ và Tên : ${coach['name']}",style: AppTextStyles.coach_detail),
+                  Text("Giới tính : ${coach['gender']}",style: AppTextStyles.coach_detail),
+                  Text("Tuổi : ${coach['age']}",style: AppTextStyles.coach_detail),
+                  Text("Lĩnh vực chuyên ngành : ${coach['field']}",style: AppTextStyles.coach_detail),
+                  SizedBox(height: screenHeight * 0.015),
 
                   Text(
-                    "Mô tả :\nXin chào các bạn mình là ${coach['name']!.split(' ').last}, với 2 năm kinh nghiệm trong việc làm PT bla bla ……",
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                  const SizedBox(height: 20),
+                    "Mô tả :\nXin chào các bạn, mình là ${coach['name']!.split(' ').last}, với 2 năm kinh nghiệm trong việc làm PT bla bla ……",
+                    style: AppTextStyles.coach_detail,),
+                  SizedBox(height: screenHeight * 0.03),
 
                   Center(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red[700],
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.06,
+                              vertical: screenHeight * 0.015,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text("Liên Hệ",
+                              style: AppTextStyles.textButtonTwo),
                         ),
-                      ),
-                      child: const Text("Liên Hệ", style: TextStyle(fontSize: 16, color: Colors.white)),
+                        
+                        SizedBox(width: screenWidth * 0.05),
+
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.textPrimary,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.06,
+                              vertical: screenHeight * 0.015,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text("Thuê HLV", style: AppTextStyles.textButtonOne)
+                        ),
+                      ],
                     ),
                   ),
                 ],
