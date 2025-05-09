@@ -1,7 +1,8 @@
 import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
-import 'package:fitfusion_frontend/models/user_info_model.dart';
+import '../models/user_info_model.dart';
+import '../api/auth/auth_service.dart'; // Import your API service
 
 // Mock data for initial display
 final UserInfoModel mockUser = UserInfoModel(

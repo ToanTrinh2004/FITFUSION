@@ -23,6 +23,7 @@ dev_dependencies:
 
   flutter_lints: ^4.0.0
 
+  
 
 
 # For information on the generic Dart part of this file, see the
@@ -61,4 +62,4 @@ flutter:
     - assets/body_img/female_obese.png
     - assets/body_img/female_dangerous.png
     - assets/
-
+    - assets/exercises/
