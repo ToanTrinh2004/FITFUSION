@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../theme/theme.dart';
-import 'login.dart';
-import 'register.dart';
-import 'page_for_coach/intro_coach.dart';
-class IntroApp extends StatelessWidget {
-  const IntroApp({super.key});
+import '/theme/theme.dart';
+import 'login_coach.dart';
+import 'register_coach.dart';
+
+class IntroCoachApp extends StatelessWidget {
+  const IntroCoachApp({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,24 +20,24 @@ class IntroApp extends StatelessWidget {
             // Hình ảnh logo
             Image.asset(
               'assets/logo.png',
-              width: 300, // Điều chỉnh kích thước ảnh
+              width: 300,
             ),
 
-            // Phần chữ và nút bấm
             Column(
               children: [
                 const Text("FITFUSION", style: AppTextStyles.title),
                 const SizedBox(height: 8),
                 const Text("SỐNG CÂN BẰNG, SỐNG TỐT", style: AppTextStyles.subtitle),
+                const SizedBox(height: 15),
+                const Text("TRANG DÀNH CHO HUẤN LUYỆN VIÊN", style: AppTextStyles.little_title),
                 const SizedBox(height: 40),
 
-                // Nút Đăng Nhập
                 ElevatedButton(
                   style: ButtonStyles.buttonOne,
                   onPressed: () {
                     Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>LoginScreen()), 
+                  MaterialPageRoute(builder: (context) =>LoginCoachScreen()), 
                 );
                   }, // Xử lý đăng nhập
                   child: const Text("ĐĂNG NHẬP", style: AppTextStyles.textButtonOne),
@@ -48,28 +48,13 @@ class IntroApp extends StatelessWidget {
                   onPressed: () {
                      Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegisterScreen()), 
+                  MaterialPageRoute(builder: (context) => RegisterCoachScreen()), 
                 );
                   }, // Xử lý đăng ký
                   child: const Text("ĐĂNG KÝ", style: AppTextStyles.textButtonTwo),
                 ),
 
                 const SizedBox(height: 25),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Bạn là HLV? ", style:AppTextStyles.textButtonTwo),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context, 
-                          MaterialPageRoute(builder: (_) => IntroCoachApp()));                       
-                      },
-                      child: Text("Truy cập tại đây", style: AppTextStyles.textButtonOne),
-                    ),
-                  ],
-                ),
               ],
             ),
           ],

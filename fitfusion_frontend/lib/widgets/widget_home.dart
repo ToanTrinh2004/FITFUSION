@@ -89,9 +89,7 @@ class UserImageWidget extends StatelessWidget {
         "Nguy hiểm": "assets/body_img/female_extreme.png",
       }
     };
-      print("Gender: ${userInfo.gender}"); // Expected: "Male" or "Female"
-      String? path = imagePaths[userInfo.gender]?[userInfo.bmiStatus];
-  print("Đường dẫn ảnh tìm được: $path"); // Debug
+
     return imagePaths[userInfo.gender]?[userInfo.bmiStatus] ?? "assets/body_img/default.png";
   }
 }
