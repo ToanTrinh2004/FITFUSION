@@ -98,8 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: usernameController,
               ),
               const SizedBox(height: 10),
-              InputField(
-                label: "Mật khẩu",
+              InputField(label: "Mật khẩu",
                 isPassword: true,
                 controller: passwordController,
               ),

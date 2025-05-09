@@ -12,6 +12,7 @@ class UserInfoModel {
   DateTime? aimDate;
   String? health;
   int? workOutDays;
+  String? password;
 
   UserInfoModel({
     required this.fullname,
@@ -23,9 +24,9 @@ class UserInfoModel {
     this.goal,
     this.aimDate,
     this.health,
-    this.workOutDays
-  });
-
+    this.workOutDays,
+    this.password
+  }); 
   void calculateBMI() {
     if (height != null && weight != null && height! > 0) {
       bmi = weight! / ((height! / 100) * (height! / 100));
