@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(height: screenHeight * 0.03),
+              // SizedBox(height: 5),
               AppBarCustomHeader(fullname: userInfo.fullname),
               Expanded(
                 child: SingleChildScrollView(

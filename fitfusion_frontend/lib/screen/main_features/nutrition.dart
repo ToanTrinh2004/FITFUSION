@@ -1,3 +1,4 @@
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fitfusion_frontend/theme/theme.dart';
 import 'package:fitfusion_frontend/models/meal_model.dart';
@@ -39,49 +40,51 @@ class _NutritionScreenState extends State<NutritionScreen> {
       body: Container(
         decoration: const BoxDecoration(gradient: appGradient),
         child: SafeArea(
-          child: isLoading 
-            ? const Center(child: CircularProgressIndicator(color: Colors.white))
-            : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildAppBar(context),
-                _buildWeekSelector(screenWidth, isSmallScreen),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Text(
-                    "Kế hoạch ăn uống",
-                    style: AppTextStyles.little_title,
-                  ),
-                ),
-                _buildOverview(screenWidth, isSmallScreen),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        _buildMealSection(
-                          title: "Bữa sáng", 
-                          meal: dailyNutrition.breakfast,
-                          screenWidth: screenWidth,
-                          isSmallScreen: isSmallScreen,
-                        ),
-                        _buildMealSection(
-                          title: "Bữa trưa", 
-                          meal: dailyNutrition.lunch,
-                          screenWidth: screenWidth,
-                          isSmallScreen: isSmallScreen,
-                        ),
-                        _buildMealSection(
-                          title: "Bữa tối", 
-                          meal: dailyNutrition.dinner,
-                          screenWidth: screenWidth,
-                          isSmallScreen: isSmallScreen,
-                        ),
-                      ],
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(color: Colors.white))
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildAppBar(context),
+                    _buildWeekSelector(screenWidth, isSmallScreen),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Text(
+                        "Kế hoạch ăn uống",
+                        style: AppTextStyles.little_title,
+                      ),
                     ),
-                  ),
+                    _buildOverview(screenWidth, isSmallScreen),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            _buildMealSection(
+                              title: "Bữa sáng",
+                              meal: dailyNutrition.breakfast,
+                              screenWidth: screenWidth,
+                              isSmallScreen: isSmallScreen,
+                            ),
+                            _buildMealSection(
+                              title: "Bữa trưa",
+                              meal: dailyNutrition.lunch,
+                              screenWidth: screenWidth,
+                              isSmallScreen: isSmallScreen,
+                            ),
+                            _buildMealSection(
+                              title: "Bữa tối",
+                              meal: dailyNutrition.dinner,
+                              screenWidth: screenWidth,
+                              isSmallScreen: isSmallScreen,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
         ),
       ),
     );
@@ -89,25 +92,29 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
   // App bar with back button and menu
   Widget _buildAppBar(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
-            onPressed: () => Navigator.pop(context),
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        AppBarCustom(),
+        const SizedBox(height: 10),
+        const Center(
+          child: Text(
+            'Chế độ dinh dưỡng',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              
+            ),
           ),
-          const Spacer(),
-          const Text("Chế độ dinh dưỡng", style: AppTextStyles.title1),
-          const Spacer(),
-          IconButton(
-            icon: const Icon(Icons.menu, color: AppColors.textPrimary),
-            onPressed: () {},
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+        const SizedBox(height: 16),
+      ],
+    ),
+  );
+}
 
   // Week day selector
   Widget _buildWeekSelector(double screenWidth, bool isSmallScreen) {
@@ -130,7 +137,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
           children: List.generate(7, (index) {
             bool isSelected = index == selectedDayIndex;
             final day = weekStart.add(Duration(days: index));
-            
+
             return GestureDetector(
               onTap: () {
                 setState(() {
@@ -143,18 +150,19 @@ class _NutritionScreenState extends State<NutritionScreen> {
                 margin: EdgeInsets.symmetric(horizontal: 2),
                 child: Column(
                   children: [
-                    Text(
-                      weekDays[index], 
-                      style: AppTextStyles.text
-                    ),
+                    Text(weekDays[index], style: AppTextStyles.text),
                     const SizedBox(height: 5),
                     CircleAvatar(
                       radius: 18,
-                      backgroundColor: isSelected ? AppColors.textPrimary : AppColors.primaryHalf,
+                      backgroundColor: isSelected
+                          ? AppColors.textPrimary
+                          : AppColors.primaryHalf,
                       child: Text(
                         day.day.toString(),
                         style: TextStyle(
-                          color: isSelected ? AppColors.primary : AppColors.textPrimary,
+                          color: isSelected
+                              ? AppColors.primary
+                              : AppColors.textPrimary,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -185,37 +193,29 @@ class _NutritionScreenState extends State<NutritionScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildInfoBox(
-                "${dailyNutrition.totalCalories}", 
-                "calo", 
-                Colors.red, 
-                isSmallScreen,
-                'assets/icons/flame.png'
-              ),
+              _buildInfoBox("${dailyNutrition.totalCalories}", "calo",
+                  Colors.red, isSmallScreen, 'assets/icons/flame.png'),
               SizedBox(width: screenWidth * 0.03),
               _buildInfoBox(
-                "${dailyNutrition.nutritionSummary.protein}g", 
-                "protein", 
-                Colors.blue, 
-                isSmallScreen,
-                'assets/icons/protein.png'
-              ),
+                  "${dailyNutrition.nutritionSummary.protein}g",
+                  "protein",
+                  Colors.blue,
+                  isSmallScreen,
+                  'assets/icons/protein.png'),
               SizedBox(width: screenWidth * 0.03),
               _buildInfoBox(
-                "${dailyNutrition.nutritionSummary.fats}g", 
-                "chất béo", 
-                Colors.orange, 
-                isSmallScreen,
-                'assets/icons/fat.png'
-              ),
+                  "${dailyNutrition.nutritionSummary.fats}g",
+                  "chất béo",
+                  Colors.orange,
+                  isSmallScreen,
+                  'assets/icons/fat.png'),
               SizedBox(width: screenWidth * 0.03),
               _buildInfoBox(
-                "${dailyNutrition.nutritionSummary.carbs}g", 
-                "carbs", 
-                Colors.green, 
-                isSmallScreen,
-                'assets/icons/carbs.png'
-              ),
+                  "${dailyNutrition.nutritionSummary.carbs}g",
+                  "carbs",
+                  Colors.green,
+                  isSmallScreen,
+                  'assets/icons/carbs.png'),
             ],
           ),
         ),
@@ -223,7 +223,8 @@ class _NutritionScreenState extends State<NutritionScreen> {
     );
   }
 
-  Widget _buildInfoBox(String value, String label, Color color, bool isSmallScreen, String iconPath) {
+  Widget _buildInfoBox(String value, String label, Color color,
+      bool isSmallScreen, String iconPath) {
     return Row(
       children: [
         CircleAvatar(
@@ -239,18 +240,13 @@ class _NutritionScreenState extends State<NutritionScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              value, 
-              style: TextStyle(
-                color: color, 
-                fontWeight: FontWeight.bold, 
-                fontSize: 16,
-              )
-            ),
-            Text(
-              label, 
-              style: AppTextStyles.nutrition
-            ),
+            Text(value,
+                style: TextStyle(
+                  color: color,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                )),
+            Text(label, style: AppTextStyles.nutrition),
           ],
         ),
       ],
@@ -272,28 +268,23 @@ class _NutritionScreenState extends State<NutritionScreen> {
     }
   }
 
-  // Meal section 
+  // Meal section
   Widget _buildMealSection({
-    required String title, 
+    required String title,
     required Meal meal,
     required double screenWidth,
     required bool isSmallScreen,
   }) {
     bool hasMealData = meal.dishName.isNotEmpty;
-    
+
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: screenWidth * 0.04, 
-        vertical: 8
-      ),
+      padding:
+          EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title, 
-            style: AppTextStyles.little_title
-          ),
-          
+          Text(title, style: AppTextStyles.little_title),
+
           // Calorie pills
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -315,7 +306,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: hasMealData 
+            child: hasMealData
                 ? _buildMealContent(meal, screenWidth, isSmallScreen)
                 : SizedBox(
                     height: 60,
@@ -340,10 +331,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
         color: Colors.white.withOpacity(0.3),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Text(
-        text,
-        style: AppTextStyles.nutrition
-      ),
+      child: Text(text, style: AppTextStyles.nutrition),
     );
   }
 
@@ -352,64 +340,61 @@ class _NutritionScreenState extends State<NutritionScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "${meal.dishName}", 
-          style: AppTextStyles.subtitle
-        ),
+        Text("${meal.dishName}", style: AppTextStyles.subtitle),
         const SizedBox(height: 8),
-        
+
         // Ingredients
-        if (meal.ingredients.isNotEmpty) Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: meal.ingredients.map((ingredient) => 
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Text("• $ingredient", style: AppTextStyles.normal_nutri),
-            )
-          ).toList(),
-        ),
-        
+        if (meal.ingredients.isNotEmpty)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: meal.ingredients
+                .map((ingredient) => Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Text("• $ingredient",
+                          style: AppTextStyles.normal_nutri),
+                    ))
+                .toList(),
+          ),
+
         const SizedBox(height: 10),
-        
+
         // Preparation method
-        if (meal.instructions.isNotEmpty) Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Cách chuẩn bị", 
-              style: AppTextStyles.little_title_1
-            ),
-            const SizedBox(height: 4),
-            Text(meal.instructions, style: TextStyle(fontSize: 14)),
-          ],
-        ),
-        
+        if (meal.instructions.isNotEmpty)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Cách chuẩn bị", style: AppTextStyles.little_title_1),
+              const SizedBox(height: 4),
+              Text(meal.instructions, style: TextStyle(fontSize: 14)),
+            ],
+          ),
+
         const SizedBox(height: 10),
-        
+
         // Health benefits
-        if (meal.note.isNotEmpty) Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Lợi ích sức khỏe", 
-              style: AppTextStyles.little_title_1
-            ),
-            const SizedBox(height: 4),
-            Text(meal.note, style: AppTextStyles.normal_nutri),
-          ],
-        ),
-        
+        if (meal.note.isNotEmpty)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Lợi ích sức khỏe", style: AppTextStyles.little_title_1),
+              const SizedBox(height: 4),
+              Text(meal.note, style: AppTextStyles.normal_nutri),
+            ],
+          ),
+
         const SizedBox(height: 12),
-        
+
         // Action buttons
         Row(
           children: [
             Expanded(
-              child: _buildButton("Đổi thực đơn với AI", screenWidth, isSmallScreen),
+              child: _buildButton(
+                  "Đổi thực đơn với AI", screenWidth, isSmallScreen),
             ),
             SizedBox(width: 8),
             Expanded(
-              child: _buildButton("Chỉnh sửa thực đơn", screenWidth, isSmallScreen),
+              child: _buildButton(
+                  "Chỉnh sửa thực đơn", screenWidth, isSmallScreen),
             ),
           ],
         ),
@@ -433,7 +418,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
         elevation: 0,
       ),
       child: Text(
-        text, 
+        text,
         style: AppTextStyles.nutrition_but,
         textAlign: TextAlign.center,
       ),

@@ -3,72 +3,32 @@ import 'package:flutter/material.dart';
 import '../theme/theme.dart'; 
 import '../widgets/inputfield.dart';
 import '../models/user_info_model.dart';
-import '../api/auth/auth_service.dart'; // Import your API service
-import '../api/userInfo/fetch_user.dart'; // Ensure this is where loginUser is
 import 'home.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key}); // Đã bỏ tham số userInfo không cần thiết
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
-  Future<void> _handleLogin() async {
-    // Show loading indicator
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
-
-    String username = usernameController.text.trim();
-    String password = passwordController.text;
-
-    // Step 1: Login and get token
-    bool loginSuccess = await AuthService.loginUser(context, username, password);
-
-    if (!loginSuccess) {
-      Navigator.of(context).pop();
-      return;
-    }
-
-    // Step 2: Get user info with token
-    final userData = await FetchUser.getUserInfo(context);
-
-    Navigator.of(context).pop(); // Close loading
-
-    if (userData != null) {
-      final userInfo = UserInfoModel.fromJson(userData)
-        ..calculateBMI()
-        ..calculateBMIAim()
-        ..calculateWeightLossPercentage();
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeScreen(userInfo: userInfo),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Không thể tải thông tin người dùng.'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
-    super.dispose();
+  // Mock login function that simulates API call
+  Future<UserInfoModel?> _mockLogin() async {
+    // Simulate API delay
+    await Future.delayed(const Duration(seconds: 1));
+    
+    // Return the mock user data
+    return UserInfoModel(
+      fullname: "Nguyễn Văn A",
+      gender: "Nam",
+      height: 170.0,
+      weight: 68.5,
+      aimWeight: 62.0,
+      age: 28,
+      goal: "Giảm cân",
+      aimDate: DateTime.now().add(const Duration(days: 90)),
+      health: "Bình thường",
+      workOutDays: 4,
+    )
+      ..calculateBMI()
+      ..calculateBMIAim()
+      ..calculateWeightLossPercentage();
   }
 
   @override
@@ -92,28 +52,54 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 250,
               ),
               const SizedBox(height: 30),
-
-              InputField(
-                label: "Tên đăng nhập",
-                controller: usernameController,
-              ),
+              const InputField(label: "Tên đăng nhập"),
               const SizedBox(height: 10),
-              InputField(label: "Mật khẩu",
-                isPassword: true,
-                controller: passwordController,
-              ),
+              const InputField(label: "Mật khẩu", isPassword: true),
               const SizedBox(height: 40),
 
               ElevatedButton(
                 style: ButtonStyles.buttonTwo,
-                onPressed: _handleLogin,
+                onPressed: () async {
+                  // Show loading indicator
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                  
+                  // Call mock login function
+                  final loggedInUser = await _mockLogin();
+                  
+                  // Close loading indicator
+                  Navigator.of(context).pop();
+                  
+                  // Navigate to home screen with user data
+                  if (loggedInUser != null) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(userInfo: loggedInUser),
+                      ),
+                    );
+                  } else {
+                    // Show error message if login failed
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Đăng nhập thất bại'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
                 child: const Text(
                   "ĐĂNG NHẬP",
                   style: AppTextStyles.textButtonTwo,
                 ),
               ),
               const SizedBox(height: 20),
-
+              // "Quên mật khẩu"
               Center(
                 child: TextButton(
                   onPressed: () {}, 
