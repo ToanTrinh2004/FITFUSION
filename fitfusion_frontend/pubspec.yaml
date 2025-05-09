@@ -50,7 +50,15 @@ flutter:
     - assets/female.png
     - assets/measure_height.png
     - assets/BMI.png
-    - assets/body_img/
+    - assets/body_img/male_underweight.png
+    - assets/body_img/male_normal.png
+    - assets/body_img/male_overweight.png
+    - assets/body_img/male_obese.png
+    - assets/body_img/male_dangerous.png
+    - assets/body_img/female_underweight.png
+    - assets/body_img/female_normal.png
+    - assets/body_img/female_overweight.png
+    - assets/body_img/female_obese.png
+    - assets/body_img/female_dangerous.png
     - assets/
-    - assets/mock_data/data_meal.json
 

@@ -74,14 +74,14 @@ class UserImageWidget extends StatelessWidget {
 
   String _getImagePath() {
     Map<String, Map<String, String>> imagePaths = {
-      "Nam": {
+      "Male": {
         "Gầy": "assets/body_img/male_underweight.png",
         "Bình thường": "assets/body_img/male_normal.png",
         "Thừa cân": "assets/body_img/male_overweight.png",
         "Béo phì": "assets/body_img/male_obese.png",
         "Nguy hiểm": "assets/body_img/male_extreme.png",
       },
-      "Nữ": {
+      "Female": {
         "Gầy": "assets/body_img/female_underweight.png",
         "Bình thường": "assets/body_img/female_normal.png",
         "Thừa cân": "assets/body_img/female_overweight.png",
@@ -89,7 +89,9 @@ class UserImageWidget extends StatelessWidget {
         "Nguy hiểm": "assets/body_img/female_extreme.png",
       }
     };
-
+      print("Gender: ${userInfo.gender}"); // Expected: "Male" or "Female"
+      String? path = imagePaths[userInfo.gender]?[userInfo.bmiStatus];
+  print("Đường dẫn ảnh tìm được: $path"); // Debug
     return imagePaths[userInfo.gender]?[userInfo.bmiStatus] ?? "assets/body_img/default.png";
   }
 }
