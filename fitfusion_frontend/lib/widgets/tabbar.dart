@@ -1,14 +1,17 @@
-
 import 'package:fitfusion_frontend/screen/intro.dart';
 import 'package:fitfusion_frontend/screen/profile.dart';
+import 'package:fitfusion_frontend/screen/review.dart';
 import 'package:flutter/material.dart';
-import '../theme/theme.dart'; // Import theme nếu cần
+import '../theme/theme.dart';
+
 class AppBarCustom extends StatelessWidget {
   final VoidCallback? onBackPressed;
+  
   const AppBarCustom({
     Key? key,
     this.onBackPressed,
   }) : super(key: key);
+
   void _showMenu(BuildContext context) {
     showDialog(
       context: context,
@@ -16,17 +19,17 @@ class AppBarCustom extends StatelessWidget {
         return Stack(
           children: [
             Positioned(
-              top: 70, // Điều chỉnh vị trí dọc
-              right: 10, // Điều chỉnh vị trí ngang
+              top: 70, // Adjust vertical position
+              right: 10, // Adjust horizontal position
               child: Material(
                 color: Colors.transparent,
                 child: Container(
-                  width: 220, // Điều chỉnh kích thước
+                  width: 220, // Adjust size
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black26,
                         blurRadius: 10,
@@ -37,30 +40,46 @@ class AppBarCustom extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildMenuItem( context,Icons.person, "Cơ bản", "Thông tin cá nhân",
-                      onTap: () {
-                          Navigator.pop(context); // Đóng menu trước
+                      _buildMenuItem(
+                        context,
+                        Icons.person, 
+                        "Cơ bản", 
+                        "Thông tin cá nhân",
+                        onTap: () {
+                          Navigator.pop(context); // Close menu first
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => setProfile()), // Chuyển đến màn hình IntroApp
+                            MaterialPageRoute(builder: (context) => setProfile()),
                           );
                         },
                       ),
-                      Divider(),
-                      _buildMenuItem( context,Icons.help, "Trợ giúp","Yêu cầu trợ giúp"),
-                      Divider(),
-                      _buildMenuItem( context,Icons.info,"Giới thiệu",  "Về chúng tôi"),
-                      Divider(),
+                      const Divider(),
+                      _buildMenuItem(context, Icons.help, "Trợ giúp", "Yêu cầu trợ giúp"),
+                      const Divider(),
+                      _buildMenuItem(
+                        context,
+                        Icons.info,
+                        "Giới thiệu",  
+                        "Về chúng tôi",
+                        onTap: () {
+                          Navigator.pop(context); // Close menu first
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => ReviewApp()),
+                          );
+                        },
+                      ),
+                      const Divider(),
                       _buildMenuItem(
                         context,
                         Icons.account_circle,
                         "Tài Khoản",
                         "Đăng xuất",
                         onTap: () {
-                          Navigator.pop(context); // Đóng menu trước
+                          Navigator.pop(context); // Close menu first
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => IntroApp()), // Chuyển đến IntroApp
+                            MaterialPageRoute(builder: (context) => IntroApp()),
                           );
                         },
                       ),
@@ -75,12 +94,12 @@ class AppBarCustom extends StatelessWidget {
     );
   }
 
- Widget _buildMenuItem(BuildContext context, IconData icon, String title, String subtitle, {VoidCallback? onTap}) {
+  Widget _buildMenuItem(BuildContext context, IconData icon, String title, String subtitle, {VoidCallback? onTap}) {
     return ListTile(
       leading: Icon(icon, color: Colors.black),
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-      subtitle: subtitle.isNotEmpty ? Text(subtitle, style: TextStyle(fontSize: 12)) : null,
-      onTap: onTap ?? () {}, // Nếu có onTap thì dùng, không thì để trống
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+      subtitle: subtitle.isNotEmpty ? Text(subtitle, style: const TextStyle(fontSize: 12)) : null,
+      onTap: onTap ?? () {}, // Use onTap if provided, otherwise empty function
     );
   }
 
@@ -105,6 +124,7 @@ class AppBarCustom extends StatelessWidget {
     );
   }
 }
+
 class AppBarCustomHeader extends StatelessWidget {
   final String fullname;
   final VoidCallback? onBackPressed;
@@ -132,7 +152,7 @@ class AppBarCustomHeader extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black26,
                         blurRadius: 10,
@@ -143,45 +163,46 @@ class AppBarCustomHeader extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildMenuItem(context, 
-                      Icons.person, 
-                      "Cơ bản", 
-                      "Thông tin cá nhân",
-                       onTap: () {
-                          Navigator.pop(context); // Đóng menu trước
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => IntroApp()), // Chuyển đến màn hình IntroApp
-                          );
-                        },
-                      ),
-                      Divider(),
-                      _buildMenuItem(context, Icons.help, "Trợ giúp", "Yêu cầu trợ giúp"),
-                      Divider(),
                       _buildMenuItem(
-                      context,
-                      Icons.info,
-                      "Giới thiệu",  
-                      "Về chúng tôi",
-                      onTap: () {
-                          Navigator.pop(context); // Đóng menu trước
+                        context, 
+                        Icons.person, 
+                        "Cơ bản", 
+                        "Thông tin cá nhân",
+                        onTap: () {
+                          Navigator.pop(context); // Close menu first
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => setProfile()), // Chuyển đến màn hình IntroApp
+                            MaterialPageRoute(builder: (context) => setProfile()),
                           );
                         },
                       ),
-                      Divider(),
+                      const Divider(),
+                      _buildMenuItem(context, Icons.help, "Trợ giúp", "Yêu cầu trợ giúp"),
+                      const Divider(),
+                      _buildMenuItem(
+                        context,
+                        Icons.info,
+                        "Giới thiệu",  
+                        "Về chúng tôi",
+                        onTap: () {
+                          Navigator.pop(context); // Close menu first
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => ReviewApp()),
+                          );
+                        },
+                      ),
+                      const Divider(),
                       _buildMenuItem(
                         context,
                         Icons.account_circle,
                         "Tài Khoản",
                         "Đăng xuất",
                         onTap: () {
-                          Navigator.pop(context); // Đóng menu trước
+                          Navigator.pop(context); // Close menu first
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => IntroApp()), // Chuyển đến màn hình IntroApp
+                            MaterialPageRoute(builder: (context) => IntroApp()),
                           );
                         },
                       ),
@@ -195,11 +216,12 @@ class AppBarCustomHeader extends StatelessWidget {
       },
     );
   }
+
   Widget _buildMenuItem(BuildContext context, IconData icon, String title, String subtitle, {VoidCallback? onTap}) {
     return ListTile(
       leading: Icon(icon, color: Colors.black),
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-      subtitle: subtitle.isNotEmpty ? Text(subtitle, style: TextStyle(fontSize: 12)) : null,
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+      subtitle: subtitle.isNotEmpty ? Text(subtitle, style: const TextStyle(fontSize: 12)) : null,
       onTap: onTap ?? () {},
     );
   }
