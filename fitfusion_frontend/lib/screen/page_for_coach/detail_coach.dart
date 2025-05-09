@@ -1,6 +1,7 @@
+import 'package:fitfusion_frontend/screen/page_for_coach/home_coach.dart';
 import 'package:flutter/material.dart';
 import '/theme/theme.dart';
-import '/widgets/tabbar.dart'; // Chứa AppBarCustom()
+import '/widgets/tabbar.dart';
 
 class DetailCoachScreen extends StatefulWidget {
   const DetailCoachScreen({super.key});
@@ -100,7 +101,6 @@ class _DetailCoachScreenState extends State<DetailCoachScreen> {
                         ),
                         const SizedBox(height: 16),
 
-                        // Khu vực
                         const Text("Khu vực", style: AppTextStyles.little_title_1),
                         const SizedBox(height: 4),
                         DropdownButtonFormField<String>(
@@ -119,7 +119,6 @@ class _DetailCoachScreenState extends State<DetailCoachScreen> {
                         ),
                         const SizedBox(height: 16),
 
-                        // Chuyên ngành
                         const Text("Chuyên ngành", style: AppTextStyles.little_title_1),
                         const SizedBox(height: 4),
                         DropdownButtonFormField<String>(
@@ -144,7 +143,10 @@ class _DetailCoachScreenState extends State<DetailCoachScreen> {
                               if (_formKey.currentState!.validate()) {
                                 // xử lý dữ liệu
                               }
-                            },
+                              Navigator.push(
+                              context, 
+                              MaterialPageRoute(builder: (_) => HomeCoachScreen()));                       
+                              },
                             style: ButtonStyles.buttonTwo,
                             child: const Text("Lưu thông tin", style: AppTextStyles.textButtonTwo),
                           ),
