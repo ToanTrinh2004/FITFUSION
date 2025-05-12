@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../auth/auth_service.dart'; // Make sure this path is correct
 
 class FetchUser {
-  static const String baseUrl = 'http://10.0.2.2:3000/api/user';
+  static const String baseUrl = 'http://192.168.0.101:3000/api/user';
 
   /// Fetch user info (from /userinfo)
  static Future<Map<String, dynamic>?> getUserInfo(BuildContext context) async {

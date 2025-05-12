@@ -73,6 +73,9 @@ class _LoginScreenState extends State<LoginCoachScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final screenWidth = size.width;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -80,52 +83,60 @@ class _LoginScreenState extends State<LoginCoachScreen> {
         decoration: const BoxDecoration(
           gradient: appGradient,
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const AppBarCustom(),
-              const SizedBox(height: 20),
-              Image.asset(
-                'assets/logo.png',
-                width: 250,
-              ),
-              const SizedBox(height: 10),
-              const Text("TRANG DÀNH CHO HUẤN LUYỆN VIÊN", style: AppTextStyles.little_title),
-              const SizedBox(height: 30),
-
-              InputField(
-                label: "Tên đăng nhập",
-                controller: usernameController,
-              ),
-              const SizedBox(height: 10),
-              InputField(label: "Mật khẩu",
-                isPassword: true,
-                controller: passwordController,
-              ),
-              const SizedBox(height: 40),
-
-              ElevatedButton(
-                style: ButtonStyles.buttonTwo,
-                onPressed: _handleLogin,
-                child: const Text(
-                  "ĐĂNG NHẬP",
-                  style: AppTextStyles.textButtonTwo,
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              Center(
-                child: TextButton(
-                  onPressed: () {}, 
-                  child: const Text(
-                    "Forgot your password?",
-                    style: AppTextStyles.forgotPassword,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const AppBarCustom(),
+                  const SizedBox(height: 20),
+                  Image.asset(
+                    'assets/logo.png',
+                    width: screenWidth * 0.6,
                   ),
-                ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "TRANG DÀNH CHO HUẤN LUYỆN VIÊN",
+                    style: AppTextStyles.little_title.copyWith(fontSize: screenWidth * 0.05)
+                  ),
+                  const SizedBox(height: 30),
+
+                  InputField(
+                    label: "Tên đăng nhập",
+                    controller: usernameController,
+                  ),
+                  const SizedBox(height: 15),
+                  InputField(
+                    label: "Mật khẩu",
+                    isPassword: true,
+                    controller: passwordController,
+                  ),
+                  const SizedBox(height: 30),
+
+                  ElevatedButton(
+                    style: ButtonStyles.buttonTwo,
+                    onPressed: _handleLogin,
+                    child: const Text(
+                      "ĐĂNG NHẬP",
+                      style: AppTextStyles.textButtonTwo,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  Center(
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        "Forgot your password?",
+                        style: AppTextStyles.forgotPassword,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

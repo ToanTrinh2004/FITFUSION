@@ -23,69 +23,70 @@ class TotalDetailScreen extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(gradient: appGradient),
-        child: Column(
-          children: [
-            SizedBox(height: screenHeight * 0.03),
-            AppBarCustomHeader(fullname: userInfo.fullname),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.05,
-                  vertical: screenHeight * 0.02,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: boxGradient.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.buttonBg),
+      body: SafeArea(
+        child: Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(gradient: appGradient),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: screenHeight * 0.02),
+                AppBarCustomHeader(fullname: userInfo.fullname),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.05,
+                    vertical: screenHeight * 0.02,
                   ),
-                  padding: EdgeInsets.all(screenWidth * 0.05),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "Thông tin cá nhân",
-                        style: AppTextStyles.little_title,
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: screenHeight * 0.05),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: boxGradient.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppColors.buttonBg),
+                    ),
+                    padding: EdgeInsets.all(screenWidth * 0.05),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "Thông tin cá nhân",
+                          style: AppTextStyles.little_title,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: screenHeight * 0.05),
 
-                      _buildInfoRow("Giới tính", userInfo.gender ?? "Chưa cập nhật"),
-                      _buildInfoRow("Chiều cao", userInfo.height != null ? "${userInfo.height} cm" : "Chưa cập nhật"),
-                      _buildInfoRow("Tuổi", userInfo.age != null ? "${userInfo.age}" : "Chưa cập nhật"),
-                      _buildInfoRow("Cân nặng", userInfo.weight != null ? "${userInfo.weight} kg" : "Chưa cập nhật"),
-                      _buildInfoRow("Mục tiêu", userInfo.goal ?? "Chưa cập nhật"),
-                      _buildInfoRow("Cân nặng mục tiêu", userInfo.aimWeight != null ? "${userInfo.aimWeight} kg" : "Chưa cập nhật"),
-                      _buildInfoRow("Chỉ số BMI", userInfo.bmi > 0 ? userInfo.bmi.toStringAsFixed(1) : "Chưa tính"),
-                      _buildInfoRow("Trạng thái BMI", userInfo.bmiStatus),
-                      _buildInfoRow("Ngày hoàn thành", formatDate(userInfo.aimDate)),
-                      _buildInfoRow("Tình trạng sức khỏe", userInfo.health ?? "Chưa cập nhật"),
+                        _buildInfoRow("Giới tính", userInfo.gender ?? "Chưa cập nhật"),
+                        _buildInfoRow("Chiều cao", userInfo.height != null ? "${userInfo.height} cm" : "Chưa cập nhật"),
+                        _buildInfoRow("Tuổi", userInfo.age != null ? "${userInfo.age}" : "Chưa cập nhật"),
+                        _buildInfoRow("Cân nặng", userInfo.weight != null ? "${userInfo.weight} kg" : "Chưa cập nhật"),
+                        _buildInfoRow("Mục tiêu", userInfo.goal ?? "Chưa cập nhật"),
+                        _buildInfoRow("Cân nặng mục tiêu", userInfo.aimWeight != null ? "${userInfo.aimWeight} kg" : "Chưa cập nhật"),
+                        _buildInfoRow("Chỉ số BMI", userInfo.bmi > 0 ? userInfo.bmi.toStringAsFixed(1) : "Chưa tính"),
+                        _buildInfoRow("Trạng thái BMI", userInfo.bmiStatus),
+                        _buildInfoRow("Ngày hoàn thành", formatDate(userInfo.aimDate)),
+                        _buildInfoRow("Tình trạng sức khỏe", userInfo.health ?? "Chưa cập nhật"),
 
-                      SizedBox(height: screenHeight * 0.05),
+                        SizedBox(height: screenHeight * 0.05),
 
-                      ElevatedButton(
-                        style: ButtonStyles.buttonTwo,
-                        onPressed: () {
-                          Navigator.push( 
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(userInfo: userInfo),
-                            ),
-                          );
-                        },
-                        child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
-                      ),
-                    ],
+                        ElevatedButton(
+                          style: ButtonStyles.buttonTwo,
+                          onPressed: () {
+                            Navigator.push( 
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomeScreen(userInfo: userInfo),
+                              ),
+                            );
+                          },
+                          child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ),   
     );
   }
 

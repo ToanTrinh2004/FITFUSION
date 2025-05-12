@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class AuthService {
   // Use a variable for easy changing between emulator/physical device
-  static const String baseUrl = 'http://10.0.2.2:3000/api/user'; 
+  static const String baseUrl = 'http://192.168.0.101:3000/api/user'; 
   
   // For storing user token
   static String? authToken;

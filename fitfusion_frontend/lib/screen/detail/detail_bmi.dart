@@ -24,6 +24,10 @@ class _WeightInputScreenState extends State<WeightInputScreen> {
     _weightController =
         TextEditingController(text: widget.userInfo.weight?.toString() ?? "60");
     _weightController.addListener(_updateBMI);
+    // Calculate initial BMI
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateBMI();
+    });
   }
 
   void _updateBMI() {
@@ -47,79 +51,97 @@ class _WeightInputScreenState extends State<WeightInputScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(gradient: appGradient),
-        child: Column(
-          children: [
-            SizedBox(height: screenHeight * 0.03),
-            AppBarCustomHeader(fullname: widget.userInfo.fullname),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.05,
-                  vertical: screenHeight * 0.02,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: boxGradient.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.buttonBg),
+      body: SafeArea(
+        child: Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(gradient: appGradient),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: screenHeight * 0.02),
+                AppBarCustomHeader(fullname: widget.userInfo.fullname),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.05,
+                    vertical: screenHeight * 0.02,
                   ),
-                  padding: EdgeInsets.all(screenWidth * 0.05),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "Cân nặng của bạn là bao nhiêu?",
-                        style: AppTextStyles.little_title,
-                        textAlign: TextAlign.center,
-                      ),
-                      InputField(
-                          label: '',
-                          controller: _weightController,
-                          width: 100,
-                          height: 50,
-                          isNumeric: true),
-                      SizedBox(height: screenHeight * 0.03),
-                      const Text(
-                        "Chỉ số BMI của bạn là:",
-                        style: AppTextStyles.little_title,
-                      ),
-                      Text(widget.userInfo.bmi.toStringAsFixed(1),
-                          style: AppTextStyles.title),
-                      Text(
-                        "Bạn đang ở mức: ${widget.userInfo.bmiStatus}",
-                        style: AppTextStyles.subtitle.copyWith(
-                          fontSize: screenHeight * 0.025,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: boxGradient.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppColors.buttonBg),
+                    ),
+                    padding: EdgeInsets.all(screenWidth * 0.05),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          "Cân nặng của bạn là bao nhiêu?",
+                          style: AppTextStyles.little_title,
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: screenHeight * 0.01),
-                      Image.asset("assets/BMI.png", width: screenWidth * 0.8),
-                      SizedBox(height: screenHeight * 0.015),
-                      ElevatedButton(
-                        style: ButtonStyles.buttonTwo,
-                        onPressed: isButtonEnabled
-                            ? () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => GoalSelectionScreen(
-                                        userInfo: widget.userInfo),
-                                  ),
-                                );
-                              }
-                            : null,
-                        child: const Text("TIẾP TỤC",
-                            style: AppTextStyles.textButtonTwo),
-                      ),
-                    ],
+                        SizedBox(height: screenHeight * 0.03),
+                        InputField(
+                          label: 'Nhập cân nặng (kg)',
+                          controller: _weightController,
+                          width: screenWidth * 0.5,
+                          height: 50,
+                          isNumeric: true,
+                        ),
+                        SizedBox(height: screenHeight * 0.04),
+                        const Text(
+                          "Chỉ số BMI của bạn là:",
+                          style: AppTextStyles.little_title,
+                        ),
+                        SizedBox(height: screenHeight * 0.01),
+                        Text(
+                          widget.userInfo.bmi.toStringAsFixed(1),
+                          style: AppTextStyles.title,
+                        ),
+                        SizedBox(height: screenHeight * 0.01),
+                        Text(
+                          "Bạn đang ở mức: ${widget.userInfo.bmiStatus}",
+                          style: AppTextStyles.subtitle.copyWith(
+                            fontSize: screenHeight * 0.05,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: screenHeight * 0.03),
+                        Image.asset(
+                          "assets/BMI.png",
+                          width: screenWidth * 0.8,
+                          fit: BoxFit.contain,
+                        ),
+                        SizedBox(height: screenHeight * 0.04),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: screenHeight * 0.02),
+                          child: ElevatedButton(
+                            style: ButtonStyles.buttonTwo,
+                            onPressed: isButtonEnabled
+                                ? () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => GoalSelectionScreen(
+                                            userInfo: widget.userInfo),
+                                      ),
+                                    );
+                                  }
+                                : null,
+                            child: const Text(
+                              "TIẾP TỤC",
+                              style: AppTextStyles.textButtonTwo,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+                SizedBox(height: screenHeight * 0.02),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
