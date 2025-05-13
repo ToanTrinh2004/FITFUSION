@@ -18,8 +18,8 @@ class _GenderSelectionScreenState extends State<GenderSelectionScreen> {
   String? selectedGender;
 
   final List<Map<String, String>> genders = [
-    {"gender": "Nam", "imagePath": "assets/male.png"},
-    {"gender": "Nữ", "imagePath": "assets/female.png"},
+    {"gender": "Male", "imagePath": "assets/male.png"},
+    {"gender": "Female", "imagePath": "assets/female.png"},
   ];
 
   void selectGender(String gender) {

@@ -2,7 +2,7 @@ import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fitfusion_frontend/theme/theme.dart';
 import 'package:fitfusion_frontend/models/meal_model.dart';
-import 'package:fitfusion_frontend/models/meal1_model.dart';
+import 'package:fitfusion_frontend/api/chatbot/mealsService.dart'; // Import the new service
 
 class NutritionScreen extends StatefulWidget {
   const NutritionScreen({super.key});
@@ -12,9 +12,17 @@ class NutritionScreen extends StatefulWidget {
 }
 
 class _NutritionScreenState extends State<NutritionScreen> {
-  int selectedDayIndex = 1; // Default to second day (index 1)
+  int selectedDayIndex = DateTime.now().weekday - 1; // Default to current day
+  List<DailyNutrition> mealPlanData = [];
   late DailyNutrition dailyNutrition;
   bool isLoading = true;
+  bool hasError = false;
+  String errorMessage = '';
+
+  // User preferences - these could come from user profile
+  final String bmiStatus = "normal"; // Replace with actual user data
+  final String? foodAllergy = null; // Replace with actual user data
+  final String? foodFavour = null; // Replace with actual user data
 
   @override
   void initState() {
@@ -23,11 +31,114 @@ class _NutritionScreenState extends State<NutritionScreen> {
   }
 
   Future<void> _loadNutritionData() async {
-    await Future.delayed(const Duration(milliseconds: 300));
     setState(() {
-      dailyNutrition = mockNutritionData[selectedDayIndex];
-      isLoading = false;
+      isLoading = true;
+      hasError = false;
     });
+
+    try {
+      // First try to get cached meal plan
+      var cachedPlan = await MealService.getCachedMealPlan();
+      
+      if (cachedPlan != null) {
+        // Convert the cached Map to our List structure
+        final List<DailyNutrition> loadedPlan = [];
+        cachedPlan.forEach((day, nutrition) {
+          loadedPlan.add(nutrition);
+        });
+        mealPlanData = loadedPlan;
+      } else {
+        // Otherwise fetch from API
+        final apiMealPlan = await MealService.fetchAndCacheMealPlan(
+          bmiStatus: bmiStatus,
+          foodAllergy: foodAllergy,
+          foodFavour: foodFavour,
+        );
+        
+        // Convert Map to List for our existing UI structure
+        final List<DailyNutrition> loadedPlan = [];
+        apiMealPlan.forEach((day, nutrition) {
+          loadedPlan.add(nutrition);
+        });
+        mealPlanData = loadedPlan;
+      }
+
+      // Ensure we have 7 days of data, fill with empty data if necessary
+      while (mealPlanData.length < 7) {
+        //mealPlanData.add(DailyNutrition.empty());
+      }
+      
+      // Limit to exactly 7 days if more data was returned
+      if (mealPlanData.length > 7) {
+        mealPlanData = mealPlanData.sublist(0, 7);
+      }
+
+      // Set the daily nutrition based on selected day
+      dailyNutrition = mealPlanData[selectedDayIndex];
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        hasError = true;
+        errorMessage = e.toString();
+      });
+    }
+  }
+
+  void _selectDay(int index) {
+    setState(() {
+      selectedDayIndex = index;
+      dailyNutrition = mealPlanData[selectedDayIndex];
+    });
+  }
+
+  Future<void> _refreshMealPlan() async {
+    // Force refresh from API by skipping cache
+    setState(() {
+      isLoading = true;
+      hasError = false;
+    });
+
+    try {
+      final apiMealPlan = await MealService.getMealPlan(
+        bmiStatus: bmiStatus,
+        foodAllergy: foodAllergy,
+        foodFavour: foodFavour,
+      );
+
+      // Convert Map to List for our existing UI structure
+      final List<DailyNutrition> loadedPlan = [];
+      apiMealPlan.forEach((day, nutrition) {
+        loadedPlan.add(nutrition);
+      });
+      
+      mealPlanData = loadedPlan;
+      
+      // Ensure we have 7 days of data
+      while (mealPlanData.length < 7) {
+        //mealPlanData.add(DailyNutrition.empty());
+      }
+      
+      // Limit to exactly 7 days
+      if (mealPlanData.length > 7) {
+        mealPlanData = mealPlanData.sublist(0, 7);
+      }
+
+      dailyNutrition = mealPlanData[selectedDayIndex];
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        hasError = true;
+        errorMessage = e.toString();
+      });
+    }
   }
 
   @override
@@ -43,48 +154,87 @@ class _NutritionScreenState extends State<NutritionScreen> {
           child: isLoading
               ? const Center(
                   child: CircularProgressIndicator(color: Colors.white))
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildAppBar(context),
-                    _buildWeekSelector(screenWidth, isSmallScreen),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                      child: Text(
-                        "Kế hoạch ăn uống",
-                        style: AppTextStyles.little_title,
+              : hasError
+                  ? _buildErrorView()
+                  : RefreshIndicator(
+                      onRefresh: _refreshMealPlan,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildAppBar(context),
+                          _buildWeekSelector(screenWidth, isSmallScreen),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                            child: Text(
+                              "Kế hoạch ăn uống",
+                              style: AppTextStyles.little_title,
+                            ),
+                          ),
+                          _buildOverview(screenWidth, isSmallScreen),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  _buildMealSection(
+                                    title: "Bữa sáng",
+                                    meal: dailyNutrition.breakfast,
+                                    screenWidth: screenWidth,
+                                    isSmallScreen: isSmallScreen,
+                                  ),
+                                  _buildMealSection(
+                                    title: "Bữa trưa",
+                                    meal: dailyNutrition.lunch,
+                                    screenWidth: screenWidth,
+                                    isSmallScreen: isSmallScreen,
+                                  ),
+                                  _buildMealSection(
+                                    title: "Bữa tối",
+                                    meal: dailyNutrition.dinner,
+                                    screenWidth: screenWidth,
+                                    isSmallScreen: isSmallScreen,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    _buildOverview(screenWidth, isSmallScreen),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            _buildMealSection(
-                              title: "Bữa sáng",
-                              meal: dailyNutrition.breakfast,
-                              screenWidth: screenWidth,
-                              isSmallScreen: isSmallScreen,
-                            ),
-                            _buildMealSection(
-                              title: "Bữa trưa",
-                              meal: dailyNutrition.lunch,
-                              screenWidth: screenWidth,
-                              isSmallScreen: isSmallScreen,
-                            ),
-                            _buildMealSection(
-                              title: "Bữa tối",
-                              meal: dailyNutrition.dinner,
-                              screenWidth: screenWidth,
-                              isSmallScreen: isSmallScreen,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorView() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, color: Colors.white, size: 48),
+            const SizedBox(height: 16),
+            Text(
+              "Không thể tải dữ liệu",
+              style: AppTextStyles.little_title,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              errorMessage,
+              style: const TextStyle(color: Colors.white70),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _loadNutritionData,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: AppColors.primary,
+              ),
+              child: const Text("Thử lại"),
+            ),
+          ],
         ),
       ),
     );
@@ -92,29 +242,28 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
   // App bar with back button and menu
   Widget _buildAppBar(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        AppBarCustom(),
-        const SizedBox(height: 10),
-        const Center(
-          child: Text(
-            'Chế độ dinh dưỡng',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          AppBarCustom(),
+          const SizedBox(height: 10),
+          const Center(
+            child: Text(
+              'Chế độ dinh dưỡng',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-      ],
-    ),
-  );
-}
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
 
   // Week day selector
   Widget _buildWeekSelector(double screenWidth, bool isSmallScreen) {
@@ -139,15 +288,10 @@ class _NutritionScreenState extends State<NutritionScreen> {
             final day = weekStart.add(Duration(days: index));
 
             return GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedDayIndex = index;
-                  dailyNutrition = mockNutritionData[selectedDayIndex];
-                });
-              },
+              onTap: () => _selectDay(index),
               child: Container(
                 width: screenWidth * 0.13,
-                margin: EdgeInsets.symmetric(horizontal: 2),
+                margin: const EdgeInsets.symmetric(horizontal: 2),
                 child: Column(
                   children: [
                     Text(weekDays[index], style: AppTextStyles.text),
@@ -389,12 +533,16 @@ class _NutritionScreenState extends State<NutritionScreen> {
           children: [
             Expanded(
               child: _buildButton(
-                  "Đổi thực đơn với AI", screenWidth, isSmallScreen),
+                  "Đổi thực đơn với AI", screenWidth, isSmallScreen, () {
+                // Add action for changing meal with AI
+              }),
             ),
             SizedBox(width: 8),
             Expanded(
               child: _buildButton(
-                  "Chỉnh sửa thực đơn", screenWidth, isSmallScreen),
+                  "Chỉnh sửa thực đơn", screenWidth, isSmallScreen, () {
+                // Add action for editing meal plan
+              }),
             ),
           ],
         ),
@@ -402,9 +550,9 @@ class _NutritionScreenState extends State<NutritionScreen> {
     );
   }
 
-  Widget _buildButton(String text, double screenWidth, bool isSmallScreen) {
+  Widget _buildButton(String text, double screenWidth, bool isSmallScreen, VoidCallback onPressed) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.textPrimary,

@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginCoachScreen> {
     String password = passwordController.text;
 
     // Step 1: Login and get token
-    bool loginSuccess = await AuthService.loginUser(context, username, password);
+    bool loginSuccess = await AuthService.loginUser(context, username, password,2);
 
     if (!loginSuccess) {
       Navigator.of(context).pop();

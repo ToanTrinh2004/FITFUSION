@@ -1,18 +1,20 @@
 import 'dart:convert';
+import 'package:fitfusion_frontend/api/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../auth/auth_service.dart'; // Make sure this path is correct
 
 class FetchUser {
   static const String baseUrl = 'http://10.0.2.2:3000/api/user';
+  
+
 
   /// Fetch user info (from /userinfo)
  static Future<Map<String, dynamic>?> getUserInfo(BuildContext context) async {
   final url = Uri.parse('$baseUrl/userinfo');
 
   try {
-    final token = AuthService.authToken;
-
+    final token = TokenManager().token;
     // DEBUG: Print token
     debugPrint('DEBUG: Auth Token = $token');
 

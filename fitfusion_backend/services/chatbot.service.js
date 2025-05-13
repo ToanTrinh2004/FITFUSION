@@ -25,7 +25,7 @@ class ChatbotService {
    */
   createMealsPrompt(bmiStatus, foodAllergy, foodFavour) {
     return `Một người có chỉ số BMI là "${bmiStatus}", dị ứng thực phẩm: "${foodAllergy}", món ăn yêu thích: "${foodFavour}". 
-  Hãy tạo một kế hoạch bữa ăn hàng ngày (bữa sáng, trưa và tối) dưới dạng JSON với cấu trúc sau:
+  Hãy tạo một kế hoạch bữa ăn hàng ngày (bữa sáng, trưa và tối) cho 1 tuan dưới dạng JSON với cấu trúc sau:
   
   {
     "breakfast": {
@@ -48,7 +48,7 @@ class ChatbotService {
       "carbs": ...,
       "fats": ...
     }
-  }`;
+  }  QUAN TRỌNG: Không bao gồm bất kỳ giải thích, tính toán, hoặc văn bản bổ sung nào. Chỉ trả về đối tượng JSON duy nhất.`;
   }
   createCaloriesCalculatorPrompt(food) {
     return `Phân tích dinh dưỡng cho "${food}". 

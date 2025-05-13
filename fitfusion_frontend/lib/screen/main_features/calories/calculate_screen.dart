@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fitfusion_frontend/theme/theme.dart';
 import 'package:fitfusion_frontend/widgets/tabbar.dart';
+import 'package:fitfusion_frontend/api/chatbot/chatbotService.dart';
 import 'calories_summary.dart';
 
 class CalculateScreen extends StatefulWidget {
@@ -14,6 +15,8 @@ class _CalculateScreenState extends State<CalculateScreen> {
   List<Map<String, TextEditingController>> foodInputs = [
     {'food': TextEditingController(), 'gram': TextEditingController()},
   ];
+  
+  bool _isLoading = false;
 
   void _addFoodInput() {
     setState(() {
@@ -33,28 +36,54 @@ class _CalculateScreenState extends State<CalculateScreen> {
     }
   }
 
-  void _calculateNutrition() {
-    final foodString = foodInputs.map((input) {
-      final food = input['food']!.text;
-      final gram = input['gram']!.text;
-      return "$food ${gram} gram";
-    }).join(', ');
+  Future<void> _calculateNutrition() async {
+    try {
+      // Check if any fields are empty
+      for (var input in foodInputs) {
+        if (input['food']!.text.isEmpty || input['gram']!.text.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Vui lòng điền đầy đủ thông tin thực phẩm')),
+          );
+          return;
+        }
+      }
 
-    print('Calling API with: $foodString');
+      setState(() {
+        _isLoading = true;
+      });
 
-    final mockData = {
-      "calories": 845,
-      "protein": 74,
-      "carbs": 78,
-      "fats": 35,
-      "note":
-          "Bữa ăn này cung cấp lượng protein khá cao, chủ yếu từ thịt lợn và thịt bò, rất tốt cho việc xây dựng và phục hồi cơ bắp..."
-    };
+      // Combine food inputs into a single string
+      final foodString = foodInputs.map((input) {
+        final food = input['food']!.text;
+        final gram = input['gram']!.text;
+        return "$food $gram gram";
+      }).join(', ');
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CaloriesSummary(data: mockData)),
-    );
+      print('Calling API with: $foodString');
+
+      // Call service
+      final nutritionData = await ChatbotService.calculateCalories(foodString);
+      
+      setState(() {
+        _isLoading = false;
+      });
+
+      // Navigate to summary screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CaloriesSummary(data: nutritionData),
+        ),
+      );
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Lỗi: ${e.toString()}')),
+      );
+    }
   }
 
   @override
@@ -171,11 +200,20 @@ class _CalculateScreenState extends State<CalculateScreen> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton.icon(
-                            onPressed: _calculateNutrition,
-                            icon: const Icon(Icons.calculate_outlined),
-                            label: const Text(
-                              'TÍNH',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            onPressed: _isLoading ? null : _calculateNutrition,
+                            icon: _isLoading 
+                                ? SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : const Icon(Icons.calculate_outlined),
+                            label: Text(
+                              _isLoading ? 'ĐANG TÍNH...' : 'TÍNH',
+                              style: const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,

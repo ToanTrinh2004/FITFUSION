@@ -66,7 +66,7 @@ class CoachDetailScreen extends StatelessWidget {
                   SizedBox(height: screenHeight * 0.015),
 
                   Text(
-                    "Mô tả :\nXin chào các bạn, mình là ${coach['name']!.split(' ').last}, với 2 năm kinh nghiệm trong việc làm PT bla bla ……",
+                    "Mô tả :${coach['introduction']}",
                     style: AppTextStyles.coach_detail,),
                   SizedBox(height: screenHeight * 0.03),
 

@@ -72,6 +72,7 @@ class _RegisterCoachScreenState extends State<RegisterCoachScreen> {
         context,
         usernameController.text,
         passwordController.text,
+        2
       );
       
       if (success && mounted) {

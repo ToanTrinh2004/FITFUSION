@@ -25,9 +25,9 @@ exports.register = async (req, res, next) => {
 // Login
 exports.login = async (req, res, next) => {
     try {
-        const { username, password } = req.body;
-        const user = await userService.checkUser(username);
+        const { username, password, role } = req.body; // role is sent from client
 
+        const user = await userService.checkUser(username);
         if (!user) {
             return res.status(404).json({ status: false, error: "User doesn't exist" });
         }
@@ -35,6 +35,11 @@ exports.login = async (req, res, next) => {
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
             return res.status(401).json({ status: false, error: "Password is incorrect" });
+        }
+
+        // ✅ Check the role if provided
+        if (role && parseInt(role) !== user.role) {
+            return res.status(403).json({ status: false, error: "Unauthorized role" });
         }
 
         const tokenData = { _id: user.userId, username: user.username, role: user.role };

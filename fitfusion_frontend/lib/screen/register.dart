@@ -72,6 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         context,
         usernameController.text,
         passwordController.text,
+        1
       );
       
       if (success && mounted) {
