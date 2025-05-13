@@ -25,8 +25,7 @@ class _GenderSelectionScreenState extends State<GenderSelectionScreen> {
   void selectGender(String gender) {
     setState(() {
       selectedGender = gender;
-          print("Giới tính đã chọn: $selectedGender"); 
-
+      print("Giới tính đã chọn: $selectedGender");
     });
   }
 
@@ -36,78 +35,98 @@ class _GenderSelectionScreenState extends State<GenderSelectionScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(gradient: appGradient),
-        child: Column(
-          children: [
-            SizedBox(height: screenHeight * 0.02),
-            AppBarCustomHeader(fullname: widget.userInfo.fullname),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.05,
-                  vertical: screenHeight * 0.02,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: boxGradient.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.buttonBg),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(height: screenHeight * 0.03),
-                      const Text("Giới tính của bạn là gì?", style: AppTextStyles.little_title),
-                      SizedBox(height: screenHeight * 0.03),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: genders.map((genderData) {
-                          return Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-                            child: GenderOptionWidget(
-                              gender: genderData['gender']!,
-                              imagePath: genderData['imagePath']!,
-                              isSelected: selectedGender == genderData['gender'],
-                              onTap: () => selectGender(genderData['gender']!),
+      body: SafeArea(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(gradient: appGradient),
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height -
+                    MediaQuery.of(context).padding.top -
+                    MediaQuery.of(context).padding.bottom,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: screenHeight * 0.02),
+                  AppBarCustomHeader(fullname: widget.userInfo.fullname),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05,
+                      vertical: screenHeight * 0.02,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: boxGradient.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: AppColors.buttonBg),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(height: screenHeight * 0.03),
+                          const Text(
+                            "Giới tính của bạn là gì?",
+                            style: AppTextStyles.little_title,
+                          ),
+                          SizedBox(height: screenHeight * 0.03),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: genders.map((genderData) {
+                              return Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: screenWidth * 0.02),
+                                  child: GenderOptionWidget(
+                                    gender: genderData['gender']!,
+                                    imagePath: genderData['imagePath']!,
+                                    isSelected:
+                                        selectedGender == genderData['gender'],
+                                    onTap: () =>
+                                        selectGender(genderData['gender']!),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          SizedBox(height: screenHeight * 0.04),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: screenWidth * 0.05),
+                            child: Text(
+                              "Chúng tôi sử dụng giới tính của bạn để thiết kế kế hoạch ăn kiêng tốt nhất cho bạn.",
+                              style: AppTextStyles.normal,
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                          );
-                        }).toList(),
+                          SizedBox(height: screenHeight * 0.05),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: screenHeight * 0.03),
+                            child: ElevatedButton(
+                              style: ButtonStyles.buttonTwo,
+                              onPressed: selectedGender != null
+                                  ? () {
+                                      widget.userInfo.gender = selectedGender;
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) =>HeightInputScreen(userInfo: widget.userInfo)),
+                                      );
+                                    }
+                                  : null,
+                              child: const Text("TIẾP TỤC",
+                                  style: AppTextStyles.textButtonTwo),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: screenHeight * 0.04),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-                        child: Text(
-                          "Chúng tôi sử dụng giới tính của bạn để thiết kế kế hoạch ăn kiêng tốt nhất cho bạn.",
-                          style: AppTextStyles.normal,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.05),
-                      ElevatedButton(
-                        style: ButtonStyles.buttonTwo,
-                        onPressed: selectedGender != null
-                            ? () {
-                                widget.userInfo.gender = selectedGender;
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HeightInputScreen(userInfo: widget.userInfo), 
-                                  ),
-                                );
-                              }
-                            : null,
-                        child: const Text("TIẾP TỤC", style: AppTextStyles.textButtonTwo),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

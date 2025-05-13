@@ -101,6 +101,8 @@ class _RegisterCoachScreenState extends State<RegisterCoachScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -111,7 +113,7 @@ class _RegisterCoachScreenState extends State<RegisterCoachScreen> {
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -119,10 +121,14 @@ class _RegisterCoachScreenState extends State<RegisterCoachScreen> {
                   const SizedBox(height: 20),
                   Image.asset(
                     'assets/logo.png',
-                    width: 200,
+                    width: screenWidth * 0.6,
                   ),
                   const SizedBox(height: 10),
-                  const Text("TRANG DÀNH CHO HUẤN LUYỆN VIÊN", style: AppTextStyles.little_title),
+                  Text(
+                    "TRANG DÀNH CHO HUẤN LUYỆN VIÊN",
+                    style: AppTextStyles.little_title.copyWith(fontSize: screenWidth * 0.05),
+                    textAlign: TextAlign.center,
+                  ),
                   const SizedBox(height: 20),
                   InputField(label: "Họ và tên", controller: fullnameController),
                   const SizedBox(height: 15),
@@ -131,25 +137,25 @@ class _RegisterCoachScreenState extends State<RegisterCoachScreen> {
                   InputField(
                     label: "Mật khẩu",
                     controller: passwordController,
-                    isPassword: true
+                    isPassword: true,
                   ),
                   const SizedBox(height: 15),
                   InputField(
                     label: "Nhập lại mật khẩu",
                     controller: confirmPasswordController,
-                    isPassword: true
+                    isPassword: true,
                   ),
                   const SizedBox(height: 30),
-                  isLoading 
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : ElevatedButton(
-                        style: ButtonStyles.buttonTwo,
-                        onPressed: _registerUser,
-                        child: const Text(
-                          "ĐĂNG KÝ", 
-                          style: AppTextStyles.textButtonTwo
+                  isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : ElevatedButton(
+                          style: ButtonStyles.buttonTwo,
+                          onPressed: _registerUser,
+                          child: const Text(
+                            "ĐĂNG KÝ",
+                            style: AppTextStyles.textButtonTwo,
+                          ),
                         ),
-                      ),
                   const SizedBox(height: 20),
                   TextButton(
                     onPressed: () {

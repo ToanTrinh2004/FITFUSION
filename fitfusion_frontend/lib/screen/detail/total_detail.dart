@@ -116,9 +116,9 @@ class TotalDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ],
+          ),
         ),
-      ),
+      ),   
     );
   }
 

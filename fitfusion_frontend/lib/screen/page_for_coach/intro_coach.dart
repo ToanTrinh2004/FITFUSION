@@ -5,61 +5,94 @@ import 'register_coach.dart';
 
 class IntroCoachApp extends StatelessWidget {
   const IntroCoachApp({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final screenWidth = size.width;
+    final screenHeight = size.height;
+
     return Scaffold(
-      body: Container(                                                                                                
+      body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
-          gradient: appGradient, // Áp dụng gradient từ theme.dart
+          gradient: appGradient,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // Căn giữa theo chiều dọc
-          children: [
-            // Hình ảnh logo
-            Image.asset(
-              'assets/logo.png',
-              width: 300,
-            ),
-
-            Column(
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: screenHeight,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("FITFUSION", style: AppTextStyles.title),
-                const SizedBox(height: 8),
-                const Text("SỐNG CÂN BẰNG, SỐNG TỐT", style: AppTextStyles.subtitle),
-                const SizedBox(height: 15),
-                const Text("TRANG DÀNH CHO HUẤN LUYỆN VIÊN", style: AppTextStyles.little_title),
-                const SizedBox(height: 40),
-
-                ElevatedButton(
-                  style: ButtonStyles.buttonOne,
-                  onPressed: () {
-                    Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) =>LoginCoachScreen()), 
-                );
-                  }, // Xử lý đăng nhập
-                  child: const Text("ĐĂNG NHẬP", style: AppTextStyles.textButtonOne),
+                Image.asset(
+                  'assets/logo.png',
+                  width: screenWidth * 0.6,
                 ),
-                const SizedBox(height: 15),
-                ElevatedButton(
-                  style: ButtonStyles.buttonTwo,
-                  onPressed: () {
-                     Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RegisterCoachScreen()), 
-                );
-                  }, // Xử lý đăng ký
-                  child: const Text("ĐĂNG KÝ", style: AppTextStyles.textButtonTwo),
-                ),
+                SizedBox(height: screenHeight * 0.02),
 
-                const SizedBox(height: 25),
+                Column(
+                  children: [
+                    Text("FITFUSION", style: AppTextStyles.title.copyWith(
+                      fontSize: screenWidth * 0.1)),
+                    SizedBox(height: screenHeight * 0.01),
+                    Text("SỐNG CÂN BẰNG, SỐNG TỐT", style: AppTextStyles.subtitle.copyWith(
+                      fontSize: screenWidth * 0.05)),
+                    SizedBox(height: screenHeight * 0.01),
+                    const Text("TRANG DÀNH CHO HUẤN LUYỆN VIÊN", style: AppTextStyles.little_title),
+                    SizedBox(height: screenHeight * 0.04),
+
+                    // Nút Đăng Nhập
+                    SizedBox(
+                      width: screenWidth * 0.7,
+                      child: ElevatedButton(
+                        style: ButtonStyles.buttonOne,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => LoginCoachScreen()),
+                          );
+                        },
+                        child: const Text("ĐĂNG NHẬP", style: AppTextStyles.textButtonOne),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+
+                    // Nút Đăng Ký
+                    SizedBox(
+                      width: screenWidth * 0.7,
+                      child: ElevatedButton(
+                        style: ButtonStyles.buttonTwo,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => RegisterCoachScreen()),
+                          );
+                        },
+                        child: const Text("ĐĂNG KÝ", style: AppTextStyles.textButtonTwo),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Bạn là người dùng? ", style: AppTextStyles.textButtonTwo),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context); // Quay lại IntroApp
+                          },
+                          child: Text("Truy cập tại đây", style: AppTextStyles.textButtonOne),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
-} 
+}
