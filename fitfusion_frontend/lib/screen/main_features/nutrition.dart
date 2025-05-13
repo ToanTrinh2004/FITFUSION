@@ -1,8 +1,8 @@
-import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fitfusion_frontend/theme/theme.dart';
 import 'package:fitfusion_frontend/models/meal_model.dart';
-import 'package:fitfusion_frontend/api/chatbot/mealsService.dart'; // Import the new service
+import 'package:fitfusion_frontend/api/chatbot/mealsService.dart';
+import 'package:fitfusion_frontend/widgets/tabbar.dart';
 
 class NutritionScreen extends StatefulWidget {
   const NutritionScreen({super.key});
@@ -14,15 +14,18 @@ class NutritionScreen extends StatefulWidget {
 class _NutritionScreenState extends State<NutritionScreen> {
   int selectedDayIndex = DateTime.now().weekday - 1; // Default to current day
   List<DailyNutrition> mealPlanData = [];
-  late DailyNutrition dailyNutrition;
   bool isLoading = true;
-  bool hasError = false;
   String errorMessage = '';
-
+  
   // User preferences - these could come from user profile
-  final String bmiStatus = "normal"; // Replace with actual user data
-  final String? foodAllergy = null; // Replace with actual user data
-  final String? foodFavour = null; // Replace with actual user data
+  final String bmiStatus = "normal";
+  final String? foodAllergy = "chicken";
+  final String? foodFavour = "peanut";
+  
+  final List<String> weekDays = ["S", "M", "T", "W", "T", "F", "S"];
+  final List<String> dayOrder = [
+    'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'
+  ];
 
   @override
   void initState() {
@@ -33,57 +36,33 @@ class _NutritionScreenState extends State<NutritionScreen> {
   Future<void> _loadNutritionData() async {
     setState(() {
       isLoading = true;
-      hasError = false;
+      errorMessage = '';
     });
 
     try {
-      // First try to get cached meal plan
-      var cachedPlan = await MealService.getCachedMealPlan();
-      
-      if (cachedPlan != null) {
-        // Convert the cached Map to our List structure
-        final List<DailyNutrition> loadedPlan = [];
-        cachedPlan.forEach((day, nutrition) {
-          loadedPlan.add(nutrition);
-        });
-        mealPlanData = loadedPlan;
-      } else {
-        // Otherwise fetch from API
-        final apiMealPlan = await MealService.fetchAndCacheMealPlan(
-          bmiStatus: bmiStatus,
-          foodAllergy: foodAllergy,
-          foodFavour: foodFavour,
-        );
-        
-        // Convert Map to List for our existing UI structure
-        final List<DailyNutrition> loadedPlan = [];
-        apiMealPlan.forEach((day, nutrition) {
-          loadedPlan.add(nutrition);
-        });
-        mealPlanData = loadedPlan;
-      }
+      final WeeklyNutrition weeklyPlan = await MealService.getMealPlan(
+        bmiStatus: bmiStatus,
+        foodAllergy: foodAllergy,
+        foodFavour: foodFavour,
+      );
 
-      // Ensure we have 7 days of data, fill with empty data if necessary
-      while (mealPlanData.length < 7) {
-        //mealPlanData.add(DailyNutrition.empty());
-      }
+      List<DailyNutrition> dailyData = [];
       
-      // Limit to exactly 7 days if more data was returned
-      if (mealPlanData.length > 7) {
-        mealPlanData = mealPlanData.sublist(0, 7);
+      // Convert map data to ordered list
+      for (String day in dayOrder) {
+        if (weeklyPlan.data.containsKey(day)) {
+          dailyData.add(weeklyPlan.data[day]!);
+        }
       }
-
-      // Set the daily nutrition based on selected day
-      dailyNutrition = mealPlanData[selectedDayIndex];
 
       setState(() {
+        mealPlanData = dailyData;
         isLoading = false;
       });
     } catch (e) {
       setState(() {
-        isLoading = false;
-        hasError = true;
         errorMessage = e.toString();
+        isLoading = false;
       });
     }
   }
@@ -91,150 +70,88 @@ class _NutritionScreenState extends State<NutritionScreen> {
   void _selectDay(int index) {
     setState(() {
       selectedDayIndex = index;
-      dailyNutrition = mealPlanData[selectedDayIndex];
     });
-  }
-
-  Future<void> _refreshMealPlan() async {
-    // Force refresh from API by skipping cache
-    setState(() {
-      isLoading = true;
-      hasError = false;
-    });
-
-    try {
-      final apiMealPlan = await MealService.getMealPlan(
-        bmiStatus: bmiStatus,
-        foodAllergy: foodAllergy,
-        foodFavour: foodFavour,
-      );
-
-      // Convert Map to List for our existing UI structure
-      final List<DailyNutrition> loadedPlan = [];
-      apiMealPlan.forEach((day, nutrition) {
-        loadedPlan.add(nutrition);
-      });
-      
-      mealPlanData = loadedPlan;
-      
-      // Ensure we have 7 days of data
-      while (mealPlanData.length < 7) {
-       // mealPlanData.add(DailyNutrition.empty());
-      }
-      
-      // Limit to exactly 7 days
-      if (mealPlanData.length > 7) {
-        mealPlanData = mealPlanData.sublist(0, 7);
-      }
-
-      dailyNutrition = mealPlanData[selectedDayIndex];
-
-      setState(() {
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-        hasError = true;
-        errorMessage = e.toString();
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final isSmallScreen = screenWidth < 360;
 
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: appGradient),
         child: SafeArea(
-          child: isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(color: Colors.white))
-              : hasError
-                  ? _buildErrorView()
-                  : RefreshIndicator(
-                      onRefresh: _refreshMealPlan,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildAppBar(context),
-                          _buildWeekSelector(screenWidth, isSmallScreen),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                            child: Text(
-                              "Kế hoạch ăn uống",
-                              style: AppTextStyles.little_title,
+          child: isLoading 
+            ? const Center(child: CircularProgressIndicator())
+            : errorMessage.isNotEmpty
+              ? Center(child: Text('Error: $errorMessage', style: TextStyle(color: Colors.white)))
+              : mealPlanData.isEmpty
+                ? Center(child: Text('No meal plan data available', style: TextStyle(color: Colors.white)))
+                : RefreshIndicator(
+                    onRefresh: _loadNutritionData,
+                    child: Column(
+                      children: [
+                        _buildAppBar(context),
+                        _buildWeekSelector(screenWidth, isSmallScreen),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              children: [
+                                _buildOverview(screenWidth, isSmallScreen),
+                                _buildRefreshButton(screenWidth),
+                                _buildMealSection(
+                                  title: "Breakfast",
+                                  meal: mealPlanData[selectedDayIndex].breakfast,
+                                  screenWidth: screenWidth,
+                                  isSmallScreen: isSmallScreen,
+                                ),
+                                _buildMealSection(
+                                  title: "Lunch",
+                                  meal: mealPlanData[selectedDayIndex].lunch,
+                                  screenWidth: screenWidth,
+                                  isSmallScreen: isSmallScreen,
+                                ),
+                                _buildMealSection(
+                                  title: "Dinner",
+                                  meal: mealPlanData[selectedDayIndex].dinner,
+                                  screenWidth: screenWidth,
+                                  isSmallScreen: isSmallScreen,
+                                ),
+                              ],
                             ),
                           ),
-                          _buildOverview(screenWidth, isSmallScreen),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  _buildMealSection(
-                                    title: "Bữa sáng",
-                                    meal: dailyNutrition.breakfast,
-                                    screenWidth: screenWidth,
-                                    isSmallScreen: isSmallScreen,
-                                  ),
-                                  _buildMealSection(
-                                    title: "Bữa trưa",
-                                    meal: dailyNutrition.lunch,
-                                    screenWidth: screenWidth,
-                                    isSmallScreen: isSmallScreen,
-                                  ),
-                                  _buildMealSection(
-                                    title: "Bữa tối",
-                                    meal: dailyNutrition.dinner,
-                                    screenWidth: screenWidth,
-                                    isSmallScreen: isSmallScreen,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+                  ),
         ),
       ),
     );
   }
-
-  Widget _buildErrorView() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, color: Colors.white, size: 48),
-            const SizedBox(height: 16),
-            Text(
-              "Không thể tải dữ liệu",
-              style: AppTextStyles.little_title,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              errorMessage,
-              style: const TextStyle(color: Colors.white70),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _loadNutritionData,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: AppColors.primary,
-              ),
-              child: const Text("Thử lại"),
-            ),
-          ],
+  
+  Widget _buildRefreshButton(double screenWidth) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: 8),
+      child: ElevatedButton.icon(
+        onPressed: () {
+          setState(() {
+            isLoading = true;
+          });
+          _loadNutritionData();
+        },
+        icon: const Icon(Icons.refresh, color: Colors.white),
+        label: const Text(
+          'Làm mới thực đơn',
+          style: TextStyle(color: Colors.white),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary.withOpacity(0.8),
+          minimumSize: Size(double.infinity, 40),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
       ),
     );
@@ -267,7 +184,6 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
   // Week day selector
   Widget _buildWeekSelector(double screenWidth, bool isSmallScreen) {
-    List<String> weekDays = ["S", "M", "T", "W", "T", "F", "S"];
     final now = DateTime.now();
     final weekStart = now.subtract(Duration(days: now.weekday - 1));
 
@@ -324,6 +240,8 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
   // Nutrition overview section
   Widget _buildOverview(double screenWidth, bool isSmallScreen) {
+    final dailyNutrition = mealPlanData[selectedDayIndex];
+    
     return Padding(
       padding: EdgeInsets.all(screenWidth * 0.04),
       child: Container(
@@ -338,28 +256,25 @@ class _NutritionScreenState extends State<NutritionScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildInfoBox("${dailyNutrition.totalCalories}", "calo",
-                  Colors.red, isSmallScreen, 'assets/icons/flame.png'),
+                  Colors.red, isSmallScreen),
               SizedBox(width: screenWidth * 0.03),
               _buildInfoBox(
-                  "${dailyNutrition.nutritionSummary.protein}g",
+                  "${dailyNutrition.nutrition.protein}g",
                   "protein",
                   Colors.blue,
-                  isSmallScreen,
-                  'assets/icons/protein.png'),
+                  isSmallScreen),
               SizedBox(width: screenWidth * 0.03),
               _buildInfoBox(
-                  "${dailyNutrition.nutritionSummary.fats}g",
+                  "${dailyNutrition.nutrition.fats}g",
                   "chất béo",
                   Colors.orange,
-                  isSmallScreen,
-                  'assets/icons/fat.png'),
+                  isSmallScreen),
               SizedBox(width: screenWidth * 0.03),
               _buildInfoBox(
-                  "${dailyNutrition.nutritionSummary.carbs}g",
+                  "${dailyNutrition.nutrition.carbs}g",
                   "carbs",
                   Colors.green,
-                  isSmallScreen,
-                  'assets/icons/carbs.png'),
+                  isSmallScreen),
             ],
           ),
         ),
@@ -367,8 +282,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
     );
   }
 
-  Widget _buildInfoBox(String value, String label, Color color,
-      bool isSmallScreen, String iconPath) {
+  Widget _buildInfoBox(String value, String label, Color color, bool isSmallScreen) {
     return Row(
       children: [
         CircleAvatar(
@@ -422,8 +336,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
     bool hasMealData = meal.dishName.isNotEmpty;
 
     return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -451,7 +364,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: hasMealData
-                ? _buildMealContent(meal, screenWidth, isSmallScreen)
+                ? _buildDetailedMealContent(meal, screenWidth)
                 : SizedBox(
                     height: 60,
                     child: Center(
@@ -461,6 +374,121 @@ class _NutritionScreenState extends State<NutritionScreen> {
                       ),
                     ),
                   ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildDetailedMealContent(Meal meal, double screenWidth) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(meal.dishName, style: AppTextStyles.subtitle),
+        const SizedBox(height: 12),
+        
+        // Ingredients section
+        Text("Nguyên liệu:", style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 15,
+          color: AppColors.primary,
+        )),
+        const SizedBox(height: 4),
+        meal.ingredients.isNotEmpty
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: meal.ingredients
+                    .map((ingredient) => Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text("• ", style: TextStyle(fontWeight: FontWeight.bold)),
+                              Expanded(
+                                child: Text(
+                                  ingredient,
+                                  style: AppTextStyles.normal_nutri,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ))
+                    .toList(),
+              )
+            : Text("No ingredients listed", style: AppTextStyles.normal_nutri),
+        
+        const SizedBox(height: 12),
+        
+        // Instructions section
+        Text("Chuẩn bị:", style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 15,
+          color: AppColors.primary,
+        )),
+        const SizedBox(height: 4),
+        meal.instructions.isNotEmpty
+            ? Text(meal.instructions, style: AppTextStyles.normal_nutri)
+            : Text("No preparation instructions available", style: AppTextStyles.normal_nutri),
+        
+        const SizedBox(height: 12),
+        
+        // Health benefits section
+        Text("Lợi ích:", style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 15,
+          color: AppColors.primary,
+        )),
+        const SizedBox(height: 4),
+        meal.note.isNotEmpty
+            ? Text(meal.note, style: AppTextStyles.normal_nutri)
+            : Text("No health benefit information available", style: AppTextStyles.normal_nutri),
+        
+        const SizedBox(height: 16),
+        
+        // Nutritional breakdown
+        ExpansionTile(
+          title: Text(
+            "Thông tin dinh dưỡng",
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
+            ),
+          ),
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Column(
+                children: [
+                  _buildNutritionRow("Calories", "${meal.calories} kcal"),
+                  _buildNutritionRow("Protein", "${meal.macronutrients.protein}g"),
+                  _buildNutritionRow("Carbohydrates", "${meal.macronutrients.carbs}g"),
+                  _buildNutritionRow("Fats", "${meal.macronutrients.fats}g"),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildNutritionRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(fontSize: 14),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -476,134 +504,6 @@ class _NutritionScreenState extends State<NutritionScreen> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(text, style: AppTextStyles.nutrition),
-    );
-  }
-
-  // Meal content with details
-  Widget _buildMealContent(Meal meal, double screenWidth, bool isSmallScreen) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("${meal.dishName}", style: AppTextStyles.subtitle),
-        const SizedBox(height: 8),
-
-        // Ingredients
-        if (meal.ingredients.isNotEmpty)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: meal.ingredients
-                .map((ingredient) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text("• $ingredient",
-                          style: AppTextStyles.normal_nutri),
-                    ))
-                .toList(),
-          ),
-
-        const SizedBox(height: 10),
-
-        // Preparation method
-        if (meal.instructions.isNotEmpty)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Cách chuẩn bị", style: AppTextStyles.little_title_1),
-              const SizedBox(height: 4),
-              Text(meal.instructions, style: TextStyle(fontSize: 14)),
-            ],
-          ),
-
-        const SizedBox(height: 10),
-
-        // Health benefits
-        if (meal.note.isNotEmpty)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Lợi ích sức khỏe", style: AppTextStyles.little_title_1),
-              const SizedBox(height: 4),
-              Text(meal.note, style: AppTextStyles.normal_nutri),
-            ],
-          ),
-
-        const SizedBox(height: 12),
-
-        // Action buttons
-        Row(
-          children: [
-            Expanded(
-              child: _buildButton(
-                  "Đổi thực đơn với AI", screenWidth, isSmallScreen, () {
-                // Add action for changing meal with AI
-              }),
-            ),
-            SizedBox(width: 8),
-            Expanded(
-              child: _buildButton(
-                  "Chỉnh sửa thực đơn", screenWidth, isSmallScreen, () {
-                // Add action for editing meal plan
-              }),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildButton(String text, double screenWidth, bool isSmallScreen, VoidCallback onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.textPrimary,
-        minimumSize: Size(
-          screenWidth * 0.4,
-          isSmallScreen ? 36 : 40,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        elevation: 0,
-      ),
-      child: Text(
-        text,
-        style: AppTextStyles.nutrition_but,
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-}
-
-// Extension to provide an empty DailyNutrition object
-extension DailyNutritionExtension on DailyNutrition {
-  static DailyNutrition empty() {
-    return DailyNutrition(
-      breakfast: Meal(
-        dishName: '',
-        calories: 0,
-        ingredients: [],
-        instructions: '',
-        note: '',
-        macronutrients: Macronutrients(protein: 0, fats: 0, carbs: 0),
-      ),
-      lunch: Meal(
-        dishName: '',
-        calories: 0,
-        ingredients: [],
-        instructions: '',
-        note: '',
-        macronutrients: Macronutrients(protein: 0, fats: 0, carbs: 0),
-      ),
-      dinner: Meal(
-        dishName: '',
-        calories: 0,
-        ingredients: [],
-        instructions: '',
-        note: '',
-        macronutrients: Macronutrients(protein: 0, fats: 0, carbs: 0),
-      ),
-      totalCalories: 0,
-      nutritionSummary: Macronutrients(protein: 0, fats: 0, carbs: 0),
     );
   }
 }

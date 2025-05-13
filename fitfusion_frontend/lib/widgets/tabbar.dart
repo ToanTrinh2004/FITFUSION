@@ -1,3 +1,4 @@
+import 'package:fitfusion_frontend/models/user_info_model.dart';
 import 'package:fitfusion_frontend/screen/intro.dart';
 import 'package:fitfusion_frontend/screen/profile.dart';
 import 'package:fitfusion_frontend/screen/review.dart';
@@ -49,7 +50,7 @@ class AppBarCustom extends StatelessWidget {
                           Navigator.pop(context); // Close menu first
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => setProfile()),
+                            MaterialPageRoute(builder: (context) => SetProfile()),
                           );
                         },
                       ),
@@ -172,7 +173,7 @@ class AppBarCustomHeader extends StatelessWidget {
                           Navigator.pop(context); // Close menu first
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => setProfile()),
+                            MaterialPageRoute(builder: (context) => SetProfile()),
                           );
                         },
                       ),

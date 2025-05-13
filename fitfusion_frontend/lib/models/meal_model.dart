@@ -51,14 +51,14 @@ class DailyNutrition {
   final Meal breakfast;
   final Meal lunch;
   final Meal dinner;
-  final Macronutrients nutritionSummary;
+  final Macronutrients nutrition;
   final int totalCalories;
 
   DailyNutrition({
     required this.breakfast,
     required this.lunch,
     required this.dinner,
-    required this.nutritionSummary,
+    required this.nutrition,
     required this.totalCalories,
   });
 
@@ -67,8 +67,24 @@ class DailyNutrition {
       breakfast: Meal.fromJson(json['breakfast']),
       lunch: Meal.fromJson(json['lunch']),
       dinner: Meal.fromJson(json['dinner']),
-      nutritionSummary: Macronutrients.fromJson(json['nutrition']),
-      totalCalories: json['nutrition']['calories'],
+      nutrition: Macronutrients.fromJson(json['nutrition']),
+      totalCalories: json['nutrition']['calories'], // ✅ Lấy từ tổng calories đã cho
     );
+  }
+}
+
+class WeeklyNutrition {
+  final Map<String, DailyNutrition> data;
+
+  WeeklyNutrition({required this.data});
+
+  factory WeeklyNutrition.fromJson(Map<String, dynamic> json) {
+    final daysData = Map<String, DailyNutrition>.fromEntries(
+      (json['data'] as Map<String, dynamic>).entries.map(
+        (entry) => MapEntry(entry.key, DailyNutrition.fromJson(entry.value)),
+      ),
+    );
+
+    return WeeklyNutrition(data: daysData);
   }
 }
