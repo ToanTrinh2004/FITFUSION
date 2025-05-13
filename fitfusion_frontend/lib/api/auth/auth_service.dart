@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../token_manager.dart';
 
 class AuthService {
-  static const String baseUrl = 'http://10.0.2.2:3000/api/user';
+  static const String baseUrl = 'http://192.168.5.173:3000/api/user';
   static String? authToken;
 
   static void showNotification(BuildContext context, String message, {Color color = Colors.red}) {
