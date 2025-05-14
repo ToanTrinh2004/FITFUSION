@@ -12,9 +12,9 @@ router.put('/userinfo/update', verifyToken, userController.updateUserInfo);
 router.get('/userinfo', verifyToken, userController.getUserInfo);
 
 // User CRUD Routes (Admin or self-management)
-router.get('/users', verifyToken, userController.getUsers);         // Get all users
+router.get('/users', userController.getUsers);         // Get all users
 router.get('/user', verifyToken, userController.getUser);           // Get current user
 router.put('/user/update', verifyToken, userController.updateUser); // Update current user
-router.delete('/user/delete', verifyToken, userController.deleteUser); // Delete current user
+router.delete('/delete', userController.deleteUser); // Delete current user
 
 module.exports = router;

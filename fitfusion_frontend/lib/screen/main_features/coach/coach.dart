@@ -161,7 +161,9 @@ class _CoachScreenState extends State<CoachScreen> with SingleTickerProviderStat
                 'age': coach.age.toString(),
                 'field': coach.major,
                 'region': 'Hà Nội',
-                'introduction' : coach.introduction
+                'introduction' : coach.introduction,
+                'coachId' : coach.coachId,
+                'tuitionFees' : coach.tuitionFees.toString()
               });
             }));
           },

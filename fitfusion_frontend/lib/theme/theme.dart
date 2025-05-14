@@ -9,7 +9,9 @@ class AppColors {
   static const Color textSecondary = Color(0xFFB3261E); // Màu chữ phụ (xám)
   static const Color buttonBg = Color(0x7FB3261E); // Nền button đỏ mờ
   static const Color buttonText = Color(0xFFFFFFFF); // Chữ trên button
-  static const Color text = Color.fromARGB(255, 0, 0, 0); // Chữ trên button
+  static const Color text = Color.fromARGB(255, 0, 0, 0);
+
+  static var accent; // Chữ trên button
 }
 
 class AppTextStyles {

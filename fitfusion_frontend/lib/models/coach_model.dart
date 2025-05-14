@@ -1,5 +1,5 @@
 class Coach {
-  final String id;
+  final String coachId;
   final String fullName;
   final int age;
   final String gender;
@@ -8,7 +8,7 @@ class Coach {
   final String introduction;
 
   Coach({
-    required this.id,
+    required this.coachId,
     required this.fullName,
     required this.age,
     required this.gender,
@@ -20,7 +20,7 @@ class Coach {
   // Parse from JSON
   factory Coach.fromJson(Map<String, dynamic> json) {
     return Coach(
-      id: json['_id'] as String,
+      coachId: json['coachId'] as String,
       fullName: json['fullName'] as String,
       age: json['age'] as int,
       gender: json['gender'] as String,
@@ -33,7 +33,7 @@ class Coach {
   // Convert to JSON
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
+      'coachId': coachId,
       'fullName': fullName,
       'age': age,
       'gender': gender,

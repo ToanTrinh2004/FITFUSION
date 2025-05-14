@@ -1,11 +1,12 @@
+import 'package:fitfusion_frontend/api/coach/fetch_coach_info.dart';
 import 'package:fitfusion_frontend/widgets/tabbar.dart';
 import 'package:flutter/material.dart';
 import '/theme/theme.dart'; 
 import '/widgets/inputfield.dart';
-import '/models/user_info_model.dart';
+import '/models/coach_model.dart';
 import '/api/auth/auth_service.dart'; // Import your API service
-import '/api/userInfo/fetch_user.dart'; // Ensure this is where loginUser is
-import '../home.dart';
+import 'package:fitfusion_frontend/models/coach_model.dart';
+import './home_coach.dart';
 
 class LoginCoachScreen extends StatefulWidget {
   const LoginCoachScreen({super.key});
@@ -38,20 +39,17 @@ class _LoginScreenState extends State<LoginCoachScreen> {
     }
 
     // Step 2: Get user info with token
-    final userData = await FetchUser.getUserInfo(context);
+    final coachData = await FetchCoachInfo.getCoachInfo(context);
 
     Navigator.of(context).pop(); // Close loading
 
-    if (userData != null) {
-      final userInfo = UserInfoModel.fromJson(userData)
-        ..calculateBMI()
-        ..calculateBMIAim()
-        ..calculateWeightLossPercentage();
+    if (coachData != null) {
+      final coachInfo = Coach.fromJson(coachData);
 
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeScreen(userInfo: userInfo),
+          builder: (context) => HomeCoachScreen(coachInfo : coachInfo),
         ),
       );
     } else {

@@ -1,3 +1,4 @@
+import 'package:fitfusion_frontend/models/coach_model.dart';
 import 'package:flutter/material.dart';
 import '../models/user_info_model.dart';
 import '../theme/theme.dart';
