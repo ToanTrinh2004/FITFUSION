@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { mockCoaches } from '../data/mockData';
+import axios from 'axios';
 import CoachForm from './CoachForm';
 
 function CoachesManagement() {
@@ -8,13 +8,37 @@ function CoachesManagement() {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
-    // Tải dữ liệu huấn luyện viên mẫu
-    setCoaches(mockCoaches);
+    // Fetch coaches from the API
+    const fetchCoaches = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/user/users');
+        if (response.data.status) {
+          // Filter users with role 2 (coaches)
+          const filteredCoaches = response.data.data.filter(user => user.role === 2);
+          setCoaches(filteredCoaches);
+        } else {
+          console.error('Failed to fetch coaches:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching coaches:', error);
+      }
+    };
+
+    fetchCoaches();
   }, []);
 
-  const handleDelete = (coachId) => {
+  const handleDelete = async (coachId) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa huấn luyện viên này?')) {
-      setCoaches(coaches.filter(coach => coach.id !== coachId));
+      try {
+        await axios.delete(`http://localhost:3000/api/user/delete`, {
+          data: { userId: coachId }, // Send userId in the request body
+        });
+        setCoaches(coaches.filter(coach => coach.userId !== coachId));
+        alert('Huấn luyện viên đã được xóa thành công.');
+      } catch (error) {
+        console.error('Error deleting coach:', error);
+        alert('Không thể xóa huấn luyện viên. Vui lòng thử lại sau.');
+      }
     }
   };
 
@@ -25,13 +49,11 @@ function CoachesManagement() {
 
   const handleFormSubmit = (coachData) => {
     if (editingCoach) {
-      // Cập nhật huấn luyện viên
-      setCoaches(coaches.map(coach => 
-        coach.id === coachData.id ? coachData : coach
-      ));
+      // Update coach logic
+      setCoaches(coaches.map(coach => (coach.userId === coachData.userId ? coachData : coach)));
     } else {
-      // Thêm huấn luyện viên mới
-      setCoaches([...coaches, { ...coachData, id: Date.now().toString() }]);
+      // Add new coach logic
+      setCoaches([...coaches, { ...coachData, userId: Date.now().toString() }]);
     }
     setIsFormOpen(false);
     setEditingCoach(null);
@@ -68,18 +90,14 @@ function CoachesManagement() {
             <tr>
               <th>ID</th>
               <th>Tài khoản</th>
-              <th>Họ tên</th>
-              <th>Học viên</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
             {coaches.map(coach => (
-              <tr key={coach.id}>
-                <td>{coach.id}</td>
+              <tr key={coach.userId}>
+                <td>{coach.userId}</td>
                 <td>{coach.username}</td>
-                <td>{coach.fullname}</td>
-                <td>{coach.mystudents ? coach.mystudents.join(', ') : 'Chưa có học viên'}</td>
                 <td>
                   <button 
                     className="btn btn-sm btn-edit"
@@ -89,7 +107,7 @@ function CoachesManagement() {
                   </button>
                   <button 
                     className="btn btn-sm btn-delete"
-                    onClick={() => handleDelete(coach.id)}
+                    onClick={() => handleDelete(coach.userId)}
                   >
                     Xóa
                   </button>

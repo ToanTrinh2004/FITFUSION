@@ -95,7 +95,8 @@ class userService {
     // Delete user
     static async deleteUser(userId) {
         try {
-            return await UserModel.findByIdAndDelete(userId);
+            // Use findOneAndDelete to find and delete by custom userId field
+            return await UserModel.findOneAndDelete({ userId });
         } catch (err) {
             throw err;
         }

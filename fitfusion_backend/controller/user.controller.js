@@ -135,10 +135,17 @@ exports.updateUser = async (req, res) => {
 // Delete current user
 exports.deleteUser = async (req, res) => {
     try {
-        const id = req.body
-        const deleted = await userService.deleteUser(id);
-        if (!deleted) return res.status(404).json({ status: false, error: "User not found" });
-        res.status(200).json({ status: true, message: "User deleted" });
+        const { userId } = req.body; // Extract userId from the request body
+        if (!userId) {
+            return res.status(400).json({ status: false, error: "User ID is required" });
+        }
+
+        const deleted = await userService.deleteUser(userId);
+        if (!deleted) {
+            return res.status(404).json({ status: false, error: "User not found" });
+        }
+
+        res.status(200).json({ status: true, message: "User deleted successfully" });
     } catch (error) {
         res.status(500).json({ status: false, error: error.message });
     }

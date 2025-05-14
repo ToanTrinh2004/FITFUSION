@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { mockUsers } from '../data/mockData';
+import axios from 'axios';
 import UserForm from './UserForm';
 
 function UsersManagement() {
@@ -8,13 +8,38 @@ function UsersManagement() {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
-    // Tải dữ liệu người dùng mẫu
-    setUsers(mockUsers);
+    // Fetch users from the API
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/user/users');
+        if (response.data.status) {
+          // Filter users with role 1
+          const filteredUsers = response.data.data.filter(user => user.role === 1);
+          setUsers(filteredUsers);
+          console.log('Fetched users:', filteredUsers);
+        } else {
+          console.error('Failed to fetch users:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
   }, []);
 
-  const handleDelete = (userId) => {
+  const handleDelete = async (userId) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa người dùng này?')) {
-      setUsers(users.filter(user => user.id !== userId));
+      try {
+        await axios.delete(`http://localhost:3000/api/user/delete`, {
+          data: { userId }, // Send userId in the request body
+        });
+        setUsers(users.filter(user => user.userId !== userId));
+        alert('Người dùng đã được xóa thành công.');
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        alert('Không thể xóa người dùng. Vui lòng thử lại sau.');
+      }
     }
   };
 
@@ -25,13 +50,11 @@ function UsersManagement() {
 
   const handleFormSubmit = (userData) => {
     if (editingUser) {
-      // Cập nhật người dùng
-      setUsers(users.map(user => 
-        user.id === userData.id ? userData : user
-      ));
+      // Update user logic
+      setUsers(users.map(user => (user.userId === userData.userId ? userData : user)));
     } else {
-      // Thêm người dùng mới
-      setUsers([...users, { ...userData, id: Date.now().toString() }]);
+      // Add new user logic
+      setUsers([...users, { ...userData, userId: Date.now().toString() }]);
     }
     setIsFormOpen(false);
     setEditingUser(null);
@@ -68,18 +91,14 @@ function UsersManagement() {
             <tr>
               <th>ID</th>
               <th>Tài khoản</th>
-              <th>Họ tên</th>
-              <th>Huấn luyện viên</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
             {users.map(user => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
+              <tr key={user.userId}>
+                <td>{user.userId}</td>
                 <td>{user.username}</td>
-                <td>{user.fullname}</td>
-                <td>{user.mycoach || 'Chưa có'}</td>
                 <td>
                   <button 
                     className="btn btn-sm btn-edit"
@@ -89,7 +108,7 @@ function UsersManagement() {
                   </button>
                   <button 
                     className="btn btn-sm btn-delete"
-                    onClick={() => handleDelete(user.id)}
+                    onClick={() => handleDelete(user.userId)}
                   >
                     Xóa
                   </button>
