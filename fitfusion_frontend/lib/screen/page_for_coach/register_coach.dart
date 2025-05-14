@@ -31,11 +31,6 @@ class _RegisterCoachScreenState extends State<RegisterCoachScreen> {
   
   // Validate input fields
   bool _validateFields() {
-    if (fullnameController.text.isEmpty) {
-      AuthService.showNotification(context, "Vui lòng nhập họ và tên");
-      return false;
-    }
-    
     if (usernameController.text.isEmpty) {
       AuthService.showNotification(context, "Vui lòng nhập tên đăng nhập");
       return false;
@@ -130,8 +125,6 @@ class _RegisterCoachScreenState extends State<RegisterCoachScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  InputField(label: "Họ và tên", controller: fullnameController),
-                  const SizedBox(height: 15),
                   InputField(label: "Tên đăng nhập", controller: usernameController),
                   const SizedBox(height: 15),
                   InputField(

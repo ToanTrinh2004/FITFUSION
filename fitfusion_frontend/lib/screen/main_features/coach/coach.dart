@@ -110,15 +110,7 @@ class _CoachScreenState extends State<CoachScreen> with SingleTickerProviderStat
                     }).toList(),
                     onChanged: (newValue) => setModalState(() => tempField = newValue!),
                   ),
-                  const Text("Khu vực"),
-                  DropdownButton<String>(
-                    value: tempRegion,
-                    isExpanded: true,
-                    items: ["Tất cả", "Hà Nội", "Hồ Chí Minh", "Đà Nẵng"].map((String value) {
-                      return DropdownMenuItem<String>(value: value, child: Text(value));
-                    }).toList(),
-                    onChanged: (newValue) => setModalState(() => tempRegion = newValue!),
-                  ),
+
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
@@ -175,7 +167,6 @@ class _CoachScreenState extends State<CoachScreen> with SingleTickerProviderStat
                 'gender': coach.gender,
                 'age': coach.age.toString(),
                 'field': coach.major,
-                'region': 'Hà Nội',
                 'introduction' : coach.introduction,
                 'coachId' : coach.coachId,
                 'tuitionFees' : coach.tuitionFees.toString()
@@ -201,7 +192,6 @@ class _CoachScreenState extends State<CoachScreen> with SingleTickerProviderStat
                     Text("Giới tính: ${coach.gender}", style: const TextStyle(fontSize: 13)),
                     Text("Tuổi: ${coach.age}", style: const TextStyle(fontSize: 13)),
                     Text("Chuyên ngành: ${coach.major}", style: const TextStyle(fontSize: 13)),
-                    Text("Khu vực: Hà Nội", style: const TextStyle(fontSize: 13)),
                   ],
                 )
               ],

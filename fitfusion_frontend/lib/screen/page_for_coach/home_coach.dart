@@ -47,9 +47,6 @@ class _HomeCoachScreenState extends State<HomeCoachScreen> {
         _trainingRequests = requests;
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load training requests. $e')),
-      );
     } finally {
       setState(() {
         _isLoading = false;
@@ -69,9 +66,6 @@ class _HomeCoachScreenState extends State<HomeCoachScreen> {
         _students = contracts;
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load contracts. $e')),
-      );
     } finally {
       setState(() {
         _isLoading = false;
