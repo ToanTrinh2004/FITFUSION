@@ -94,15 +94,30 @@ class CaloriesSummary extends StatelessWidget {
                   _buildNutritionRow("Carbs", carbs, Colors.orange),
                   _buildNutritionRow("Fats", fats, Colors.green),
                   const SizedBox(height: 24),
-                  Text(
-                    "Ghi chú:",
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(color: const Color.fromARGB(255, 0, 0, 0)),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    note,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: const Color.fromARGB(179, 0, 0, 0)),
-                  ),
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Ghi chú:",style: AppTextStyles.subtitle),
+                        const SizedBox(height: 8),
+                        Text(note,style: AppTextStyles.coach_detail),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
@@ -125,7 +140,7 @@ class CaloriesSummary extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          SizedBox(width: 80, child: Text(label, style: const TextStyle(color: Colors.white))),
+          SizedBox(width: 80, child: Text(label, style: AppTextStyles.nutrition_but)),
           Expanded(
             child: LinearProgressIndicator(
               value: (value > 100 ? 1 : value / 100),
@@ -136,7 +151,7 @@ class CaloriesSummary extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          Text("${value.toInt()}g", style: const TextStyle(color: Colors.white)),
+          Text("${value.toInt()}g", style: AppTextStyles.nutrition_but),
         ],
       ),
     );

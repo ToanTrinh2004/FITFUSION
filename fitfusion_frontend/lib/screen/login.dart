@@ -115,13 +115,6 @@ Widget build(BuildContext context) {
                   child: const Text("ĐĂNG NHẬP",style: AppTextStyles.textButtonTwo,),
                 ),
                 const SizedBox(height: 20),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Quên mật khẩu?",
-                    style: AppTextStyles.forgotPassword,
-                  ),
-                ),
               ],
             ),
           ),

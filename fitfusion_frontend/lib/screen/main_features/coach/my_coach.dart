@@ -43,7 +43,7 @@ class MyCoachScreen extends StatelessWidget {
                         radius: 25,
                         backgroundColor: AppColors.primary,
                         child: Text(
-                          (contract.coachName ?? "U")[0], // Lấy chữ cái đầu tiên của tên huấn luyện viên
+                          (contract.coachName ?? "U")[0], 
                           style: const TextStyle(color: Colors.white, fontSize: 20),
                         ),
                       ),
@@ -61,16 +61,16 @@ class MyCoachScreen extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             "Thời gian: ${contract.duration ?? 'Không rõ'}",
-                            style: const TextStyle(fontSize: 14, color: Colors.black54),
+                            style: AppTextStyles.normal_nutri,
                           ),
                           Text(
                             "Học phí: ${contract.fee != null ? '${contract.fee!.toStringAsFixed(2)} VNĐ' : 'Không rõ'}",
-                            style: const TextStyle(fontSize: 14, color: Colors.black54),
+                            style: AppTextStyles.normal_nutri,
                           ),
                           if (contract.schedule != null && contract.schedule!.isNotEmpty)
                             Text(
-                              "Lịch tập: ${contract.schedule.map((s) => '${s.day} (${s.time})').join(', ')}",
-                              style: const TextStyle(fontSize: 14, color: Colors.black54),
+                              "Lịch tập: ${contract.schedule.map((s) => '${s.day})').join(', ')}",
+                            style: AppTextStyles.normal_nutri,
                             ),
                         ],
                       ),

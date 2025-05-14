@@ -14,13 +14,13 @@ class CreateRequestScreen extends StatefulWidget {
 
 class _CreateRequestScreenState extends State<CreateRequestScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _selectedDuration = '1 month';
-  final List<String> _durations = ['1 month', '3 months', '6 months', '12 months'];
+  String _selectedDuration = '1 tháng';
+  final List<String> _durations = ['1 tháng', '3 tháng', '6 tháng', '12 tháng'];
   
   // Schedule management
   final List<Map<String, String>> _schedule = [];
-  final List<String> _days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  String _selectedDay = 'Monday';
+  final List<String> _days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  String _selectedDay = 'monday';
   TimeOfDay _selectedTime = TimeOfDay(hour: 20, minute: 0); // 8:00 PM
 
   // Fee calculation
@@ -28,7 +28,7 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
   
   bool _isLoading = false;
   String? _errorMessage;
-
+  
   @override
   void initState() {
     super.initState();
@@ -43,22 +43,34 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
     double baseFee = double.tryParse(widget.coach['tuitionFees'] ?? '') ?? 1500000;
     
     switch (_selectedDuration) {
-      case '1 month':
+      case '1 tháng':
         _fee = baseFee;
         break;
-      case '3 months':
-        _fee = baseFee ;
+      case '3 tháng':
+        _fee = 3*baseFee ;
         break;
-      case '6 months':
-        _fee = baseFee ;
+      case '6 tháng':
+        _fee = 6*baseFee ;
         break;
-      case '12 months':
-        _fee = baseFee;
+      case '12 tháng':
+        _fee = 12*baseFee;
         break;
     }
     setState(() {});
   }
-
+  String formatMoney(int amount) {
+    if (amount < 1000) return amount.toString();
+    final String amountStr = amount.toString();
+    final int length = amountStr.length;
+    String result = '';
+    for (int i = 0; i < length; i++) {
+      if ((length - i) % 3 == 0 && i != 0) {
+        result += '.';
+      }
+      result += amountStr[i];
+    }
+    return result;
+  }
   void _addScheduleSlot() {
     // Check if this day and time combination already exists
     bool exists = _schedule.any((slot) => 
@@ -73,7 +85,7 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('This day and time slot is already added'))
+        SnackBar(content: Text('Thời gian này đã được thêm vào'))
       );
     }
   }
@@ -107,7 +119,7 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
   Future<void> _submitRequest() async {
     if (_schedule.isEmpty) {
       setState(() {
-        _errorMessage = 'Please add at least one schedule slot';
+        _errorMessage = 'Vui lòng thêm ít nhất một khoảng thời gian trong lịch trình';
       });
       return;
     }
@@ -137,14 +149,14 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
         // Request created successfully
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Request sent successfully!'))
+            SnackBar(content: Text('Yêu cầu đã được gửi thành công!'))
           );
           Navigator.pop(context); // Go back to previous screen
         }
       } else {
         // Handle error
         setState(() {
-          _errorMessage = 'Failed to send request: ${response['error'] ?? response['message'] ?? 'Unknown error'}';
+          _errorMessage = 'Không thể gửi yêu cầu: ${response['error'] ?? response['message'] ?? 'Unknown error'}';
         });
       }
     } catch (e) {
@@ -201,16 +213,16 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Coach info section
-                    Text("Coach Information", style: AppTextStyles.subtitle),
+                    Text("Thông tin HLV", style: AppTextStyles.subtitle),
                     SizedBox(height: screenHeight * 0.01),
-                    Text("Name: ${widget.coach['name'] ?? 'N/A'}", style: AppTextStyles.coach_detail),
-                    Text("Field: ${widget.coach['field'] ?? 'N/A'}", style: AppTextStyles.coach_detail),
+                    Text("Họ và tên: ${widget.coach['name'] ?? 'N/A'}", style: AppTextStyles.coach_detail),
+                    Text("Lĩnh vực: ${widget.coach['field'] ?? 'N/A'}", style: AppTextStyles.coach_detail),
                     if (widget.coach['specialization'] != null)
-                      Text("Specialization: ${widget.coach['specialization']}", style: AppTextStyles.coach_detail),
+                      Text("Chuyên môn: ${widget.coach['specialization']}", style: AppTextStyles.coach_detail),
                     SizedBox(height: screenHeight * 0.02),
                   
                     // Duration selection
-                    Text("Select Duration", style: AppTextStyles.subtitle),
+                    Text("Chọn thời lượng thuê", style: AppTextStyles.subtitle),
                     SizedBox(height: screenHeight * 0.01),
                     DropdownButtonFormField<String>(
                       value: _selectedDuration,
@@ -242,13 +254,7 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Set Schedule", style: AppTextStyles.subtitle),
-                            Text("(Add multiple slots as needed)", 
-                                style: TextStyle(
-                                  fontSize: 12, 
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.grey[600]
-                                )),
+                            Text("Đặt lịch trình", style: AppTextStyles.subtitle),
                           ],
                         ),
                         SizedBox(height: screenHeight * 0.01),
@@ -287,7 +293,7 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                               label: Text(_formatTimeOfDay(_selectedTime)),
                               onPressed: _showTimePicker,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primary,
+                                backgroundColor: AppColors.background,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -302,9 +308,9 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                         Center(
                           child: ElevatedButton.icon(
                             onPressed: _addScheduleSlot,
-                            icon: Icon(Icons.add, color: Colors.white),
-                            label: Text("Add to Schedule", 
-                              style: TextStyle(color: Colors.white),
+                            icon: Icon(Icons.add, color: Colors.red),
+                            label: Text("Thêm buổi tập", 
+                              style: AppTextStyles.textButtonOne,
                             ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.accent,
@@ -325,7 +331,7 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                     
                     // Display selected schedule slots
                     if (_schedule.isNotEmpty) ...[
-                      Text("Selected Schedule", style: AppTextStyles.subtitle),
+                      Text("Lịch trình đã chọn", style: AppTextStyles.subtitle),
                       SizedBox(height: screenHeight * 0.01),
                       Container(
                         padding: EdgeInsets.all(8),
@@ -359,19 +365,15 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                     ],
                     
                     // Fee information
-                    Text("Fee Information", style: AppTextStyles.subtitle),
+                    Text("Thông tin về lệ phí", style: AppTextStyles.subtitle),
                     SizedBox(height: screenHeight * 0.01),
                     Text(
-                      "Total Fee: ${_fee.toStringAsFixed(0)} VND",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
+                      "Tổng lệ phí: ${formatMoney(_fee.toInt())} VND",
+                      style: AppTextStyles.coach_detail,
                     ),
                     Text(
-                      "For ${_selectedDuration} of coaching",
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                      "Cho ${_selectedDuration} thuê huấn luyện viên",
+                      style: AppTextStyles.coach_detail,
                     ),
                     SizedBox(height: screenHeight * 0.03),
                     
@@ -401,7 +403,7 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
                         ),
                         child: _isLoading
                             ? CircularProgressIndicator(color: Colors.white)
-                            : Text("Submit Request", style: AppTextStyles.textButtonOne),
+                            : Text("Gửi yêu cầu", style: AppTextStyles.textButtonOne),
                       ),
                     ),
                   ],

@@ -96,54 +96,73 @@ class _ScheduleCalendarState extends State<ScheduleCalendar> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TableCalendar(
-          firstDay: DateTime.utc(2022, 1, 1),
-          lastDay: DateTime.utc(2030, 12, 31),
-          focusedDay: _focusedDay,
-          calendarFormat: _calendarFormat,
-          eventLoader: _getEventsForDay,
-          selectedDayPredicate: (day) {
-            return isSameDay(_selectedDay, day);
-          },
-          onDaySelected: (selectedDay, focusedDay) {
-            setState(() {
-              _selectedDay = selectedDay;
-              _focusedDay = focusedDay;
-            });
-          },
-          onFormatChanged: (format) {
-            setState(() {
-              _calendarFormat = format;
-            });
-          },
-          onPageChanged: (focusedDay) {
-            setState(() {
-              _focusedDay = focusedDay;
-              _prepareEvents(); // Recalculate events when month changes
-            });
-          },
-          calendarStyle: CalendarStyle(
-            markerDecoration: const BoxDecoration(
-              color: AppColors.primary,
-              shape: BoxShape.circle,
-            ),
-            selectedDecoration: const BoxDecoration(
-              color: AppColors.primary,
-              shape: BoxShape.circle,
-            ),
-            todayDecoration: const BoxDecoration(
-              color: AppColors.primaryHalf,
-              shape: BoxShape.circle,
-            ),
+        // Added Container with white background and rounded corners for the calendar
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
           ),
-          headerStyle: const HeaderStyle(
-            formatButtonTextStyle: TextStyle(fontSize: 14),
-            formatButtonDecoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.all(Radius.circular(16)),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: TableCalendar(
+              firstDay: DateTime.utc(2022, 1, 1),
+              lastDay: DateTime.utc(2030, 12, 31),
+              focusedDay: _focusedDay,
+              calendarFormat: _calendarFormat,
+              eventLoader: _getEventsForDay,
+              selectedDayPredicate: (day) {
+                return isSameDay(_selectedDay, day);
+              },
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                });
+              },
+              onFormatChanged: (format) {
+                setState(() {
+                  _calendarFormat = format;
+                });
+              },
+              onPageChanged: (focusedDay) {
+                setState(() {
+                  _focusedDay = focusedDay;
+                  _prepareEvents(); // Recalculate events when month changes
+                });
+              },
+              calendarStyle: CalendarStyle(
+                markerDecoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+                selectedDecoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+                todayDecoration: const BoxDecoration(
+                  color: AppColors.primaryHalf,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              headerStyle: const HeaderStyle(
+                formatButtonTextStyle: TextStyle(fontSize: 14),
+                formatButtonDecoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                ),
+                formatButtonShowsNext: false,
+                titleCentered: true,
+              ),
             ),
-            formatButtonShowsNext: false,
-            titleCentered: true,
           ),
         ),
         const SizedBox(height: 16),

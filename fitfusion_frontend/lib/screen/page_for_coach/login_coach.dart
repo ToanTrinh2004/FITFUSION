@@ -121,17 +121,6 @@ class _LoginScreenState extends State<LoginCoachScreen> {
                       style: AppTextStyles.textButtonTwo,
                     ),
                   ),
-                  const SizedBox(height: 20),
-
-                  Center(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "Forgot your password?",
-                        style: AppTextStyles.forgotPassword,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),

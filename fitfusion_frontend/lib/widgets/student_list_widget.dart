@@ -15,6 +15,7 @@ class StudentsListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       itemCount: contracts.length,
       itemBuilder: (context, index) {
         final contract = contracts[index];
