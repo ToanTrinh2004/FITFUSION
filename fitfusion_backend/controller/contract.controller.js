@@ -89,3 +89,21 @@ exports.rejectRequest = async (req,res) =>{
        res.status(500).json({ success: false, error: error.message });
      }
 }
+exports.getAllContractsHandler = async (req, res) => {
+  try {
+    const contracts = await contractService.getAllContracts();
+    res.status(200).json({ success: true, contracts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to fetch contracts", error: error.message });
+  }
+};
+exports.deleteContractHandler = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedContract = await contractService.deleteContractById(id);
+    res.status(200).json({ success: true, message: "Contract deleted successfully", contract: deletedContract });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to delete contract", error: error.message });
+  }
+};

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { mockContracts, mockCoaches, mockUsers } from '../data/mockData';
+import axios from 'axios';
 import ContractForm from './ContractForm';
 
 function ContractsManagement() {
@@ -8,16 +8,38 @@ function ContractsManagement() {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
-    // Tải dữ liệu hợp đồng mẫu
-    setContracts(mockContracts);
+    // Fetch contracts from the API
+    const fetchContracts = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/contract/contracts');
+        if (response.data.success) {
+          setContracts(response.data.contracts);
+        } else {
+          console.error('Failed to fetch contracts:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching contracts:', error);
+      }
+    };
+
+    fetchContracts();
   }, []);
 
-  const handleDelete = (contractId) => {
+  const handleDelete = async (contractId) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa hợp đồng này?')) {
-      setContracts(contracts.filter(contract => contract.id !== contractId));
+      try {
+        // Pass the contractId as a URL parameter
+        await axios.delete(`http://localhost:3000/api/contract/contracts/${contractId}`);
+        
+        // Update state to remove the deleted contract
+        setContracts(contracts.filter(contract => contract._id !== contractId));
+        alert('Hợp đồng đã được xóa thành công.');
+      } catch (error) {
+        console.error('Error deleting contract:', error);
+        alert('Không thể xóa hợp đồng. Vui lòng thử lại sau.');
+      }
     }
   };
-
   const handleEdit = (contract) => {
     setEditingContract(contract);
     setIsFormOpen(true);
@@ -25,13 +47,11 @@ function ContractsManagement() {
 
   const handleFormSubmit = (contractData) => {
     if (editingContract) {
-      // Cập nhật hợp đồng
-      setContracts(contracts.map(contract => 
-        contract.id === contractData.id ? contractData : contract
-      ));
+      // Update contract logic
+      setContracts(contracts.map(contract => (contract._id === contractData._id ? contractData : contract)));
     } else {
-      // Thêm hợp đồng mới
-      setContracts([...contracts, { ...contractData, id: Date.now().toString() }]);
+      // Add new contract logic
+      setContracts([...contracts, { ...contractData, _id: Date.now().toString() }]);
     }
     setIsFormOpen(false);
     setEditingContract(null);
@@ -69,23 +89,27 @@ function ContractsManagement() {
               <th>ID</th>
               <th>Huấn luyện viên</th>
               <th>Học viên</th>
-              <th>Bộ môn</th>
               <th>Thời gian đào tạo</th>
-              <th>Thời hạn hợp đồng</th>
               <th>Giá trị</th>
+              <th>Lịch trình</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
             {contracts.map(contract => (
-              <tr key={contract.id}>
-                <td>{contract.id}</td>
+              <tr key={contract._id}>
+                <td>{contract._id}</td>
                 <td>{contract.coachName}</td>
-                <td>{contract.userName}</td>
-                <td>{contract.trainingType}</td>
-                <td>{contract.trainingDuration}</td>
-                <td>{contract.contractEndDate}</td>
-                <td>{contract.contractValue}</td>
+                <td>{contract.customerName}</td>
+                <td>{contract.duration}</td>
+                <td>{contract.fee.toLocaleString('vi-VN')} đ</td>
+                <td>
+                  {contract.schedule.map(scheduleItem => (
+                    <div key={scheduleItem._id}>
+                      {scheduleItem.day} - {scheduleItem.time}
+                    </div>
+                  ))}
+                </td>
                 <td>
                   <button 
                     className="btn btn-sm btn-edit"
@@ -95,7 +119,7 @@ function ContractsManagement() {
                   </button>
                   <button 
                     className="btn btn-sm btn-delete"
-                    onClick={() => handleDelete(contract.id)}
+                    onClick={() => handleDelete(contract._id)}
                   >
                     Xóa
                   </button>

@@ -98,3 +98,25 @@ exports.getRequestsByCoachId = async (coachId) => {
     throw error;
   }
 };
+// Function to get all contracts
+exports.getAllContracts = async () => {
+  try {
+    return await Contract.find({});
+  } catch (error) {
+    console.error("Error in getAllContracts:", error);
+    throw error;
+  }
+};
+// Function to delete a contract by ID
+exports.deleteContractById = async (contractId) => {
+  try {
+    const deletedContract = await Contract.findByIdAndDelete(contractId);
+    if (!deletedContract) {
+      throw new Error(`Contract with ID ${contractId} not found`);
+    }
+    return deletedContract;
+  } catch (error) {
+    console.error("Error in deleteContractById:", error);
+    throw error;
+  }
+};
