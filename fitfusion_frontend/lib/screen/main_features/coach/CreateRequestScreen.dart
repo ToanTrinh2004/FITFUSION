@@ -47,13 +47,13 @@ class _CreateRequestScreenState extends State<CreateRequestScreen> {
         _fee = baseFee;
         break;
       case '3 months':
-        _fee = baseFee * 2.7; // 10% discount for 3 months
+        _fee = baseFee ;
         break;
       case '6 months':
-        _fee = baseFee * 5; // ~17% discount for 6 months
+        _fee = baseFee ;
         break;
       case '12 months':
-        _fee = baseFee * 9.3; // ~23% discount for 12 months
+        _fee = baseFee;
         break;
     }
     setState(() {});

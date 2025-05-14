@@ -1,7 +1,8 @@
-// screen/main_features/coach/coachScreen.dart
+import 'package:fitfusion_frontend/api/contract/fetch_contract_service.dart';
 import 'package:flutter/material.dart';
 import '../../../api/coach/coachService.dart';
 import '../../../models/coach_model.dart';
+import '../../../models/contract_model.dart';
 import 'contactCoach.dart';
 import 'my_coach.dart';
 import '../../../widgets/tabbar.dart';
@@ -23,12 +24,14 @@ class _CoachScreenState extends State<CoachScreen> with SingleTickerProviderStat
 
   List<Coach> _allCoaches = [];
   List<Coach> _filteredCoaches = [];
+  List<ContractModel> _myContracts = [];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _fetchCoaches();
+    _fetchMyCoaches();
   }
 
   void _fetchCoaches() async {
@@ -40,6 +43,18 @@ class _CoachScreenState extends State<CoachScreen> with SingleTickerProviderStat
       });
     } catch (e) {
       print('Error fetching coaches: $e');
+    }
+  }
+
+  void _fetchMyCoaches() async {
+    try {
+      final contracts = await FetchContractService.fetchContractsByUserId();
+      setState(() {
+        _myContracts = contracts;
+      });
+      debugPrint("[DEBUG] Fetched contracts: $contracts");
+    } catch (e) {
+      debugPrint("[DEBUG] ❌ Error fetching my coaches: $e");
     }
   }
 
@@ -241,8 +256,7 @@ class _CoachScreenState extends State<CoachScreen> with SingleTickerProviderStat
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: const [
-                          Text('HLV của tôi', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
-                          SizedBox(width: 40),
+        
                         ],
                       ),
               ),
@@ -252,7 +266,7 @@ class _CoachScreenState extends State<CoachScreen> with SingleTickerProviderStat
                   controller: _tabController,
                   children: [
                     _buildCoachList(),
-                    const MyCoachList(),
+                    MyCoachScreen(contracts: _myContracts), // Pass contracts here
                   ],
                 ),
               ),

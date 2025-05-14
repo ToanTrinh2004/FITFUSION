@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fitfusion_frontend/api/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,6 +16,7 @@ class RequestService {
     required double fee,
   }) async {
     try {
+       final token = TokenManager().token;
       // Prepare the request body
       final requestBody = {
         'customerId': customerId,
@@ -27,11 +29,12 @@ class RequestService {
       // Print the request details for debugging
       debugPrint("[DEBUG] Sending POST request to: $_baseUrl");
       debugPrint("[DEBUG] Body: ${jsonEncode(requestBody)}");
+      debugPrint("[DEBUG] Token: $token");
 
       // Make the POST request to the backend
       final response = await http.post(
         Uri.parse(_baseUrl),
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token',},
         body: jsonEncode(requestBody),
       );
 

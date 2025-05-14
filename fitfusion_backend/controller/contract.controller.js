@@ -2,21 +2,35 @@ const contractService = require("../services/contract.service");
 // Modify this function in your controller
 exports.createHireRequest = async (req, res) => {
   try {
+    // Take customerId from the token (overriding body)
+    const customerId = req.user._id;
+
+    // Extract the rest from req.body
+    const { coachId, duration, schedule, fee } = req.body;
+
+    console.log("Customer ID from token:", customerId);
     console.log("Received hire request:", req.body);
-    
-    // Data validation
-    const { customerId, coachId, duration, schedule, fee } = req.body;
-    
+
+    // Validate required fields
     if (!customerId || !coachId || !duration || !schedule || !fee) {
       return res.status(400).json({ 
         success: false, 
         error: "Missing required fields" 
       });
     }
-    
-    // Proceed with service call
-    const request = await contractService.createHireRequest(req.body);
-    
+
+    // Build request payload with token's customerId
+    const hireRequestData = {
+      customerId,
+      coachId,
+      duration,
+      schedule,
+      fee
+    };
+
+    // Call the service
+    const request = await contractService.createHireRequest(hireRequestData);
+
     return res.status(201).json({ success: true, data: request });
   } catch (error) {
     console.error("Controller error:", error);
@@ -27,6 +41,7 @@ exports.createHireRequest = async (req, res) => {
     });
   }
 };
+
 
 exports.acceptRequest = async (req, res) => {
   try {
@@ -39,7 +54,7 @@ exports.acceptRequest = async (req, res) => {
 
 exports.getContractsByUserId = async (req, res) => {
   try {
-    const contracts = await contractService.getContractsByCustomerId(req.params.userId);
+    const contracts = await contractService.getContractsByCustomerId(req.user._id);
     res.status(200).json({ success: true, contracts });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
