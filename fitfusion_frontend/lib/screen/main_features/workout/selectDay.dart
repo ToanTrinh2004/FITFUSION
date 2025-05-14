@@ -1,13 +1,19 @@
-import 'package:fitfusion_frontend/screen/main_features/workOut/listex.dart';
 import 'package:flutter/material.dart';
 import 'package:fitfusion_frontend/models/user_info_model.dart';
 import 'package:fitfusion_frontend/theme/theme.dart';
 import 'package:fitfusion_frontend/widgets/tabbar.dart';
+import 'package:fitfusion_frontend/models/workout_model.dart';
+import 'package:fitfusion_frontend/screen/main_features/workOut/listex.dart';
 
 class WorkoutDaysSelectionScreen extends StatefulWidget {
   final UserInfoModel userInfo;
+  final WorkoutLevel level;
 
-  const WorkoutDaysSelectionScreen({super.key, required this.userInfo});
+  const WorkoutDaysSelectionScreen({
+    super.key,
+    required this.userInfo,
+    required this.level,
+  });
 
   @override
   State<WorkoutDaysSelectionScreen> createState() =>
@@ -22,14 +28,14 @@ class _WorkoutDaysSelectionScreenState
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: appGradient),
         child: SafeArea(
           child: Column(
             children: [
-              // Fixed AppBar Section
+              // App Bar section
               Column(
                 children: [
                   AppBarCustomHeader(fullname: widget.userInfo.fullname),
@@ -45,8 +51,8 @@ class _WorkoutDaysSelectionScreenState
                   const SizedBox(height: 10),
                 ],
               ),
-              
-              // Scrollable Content Section
+
+              // Scrollable content
               Expanded(
                 child: SingleChildScrollView(
                   child: Center(
@@ -58,7 +64,7 @@ class _WorkoutDaysSelectionScreenState
                         border: Border.all(color: Colors.white),
                       ),
                       padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
+                          vertical: 20, horizontal: 10),
                       child: Column(
                         children: [
                           SizedBox(height: screenHeight * 0.05),
@@ -115,7 +121,7 @@ class _WorkoutDaysSelectionScreenState
                                     ),
                                   );
                                 },
-                                childCount: 5, // 3 đến 7
+                                childCount: 5, // Từ 3 đến 7
                               ),
                             ),
                           ),
@@ -123,21 +129,33 @@ class _WorkoutDaysSelectionScreenState
                           ElevatedButton(
                             style: ButtonStyles.buttonTwo,
                             onPressed: () {
+                              // Lưu số ngày tập vào thông tin người dùng
                               widget.userInfo.workOutDays = selectedDay;
-                              print(
-                                  "Ngày tập đã chọn: ${widget.userInfo.workOutDays}");
+                              print("Ngày tập đã chọn: ${widget.userInfo.workOutDays}");
+                              print("Mức độ: ${widget.level}");
+
+                              // Tạo chương trình tập luyện dựa trên cấp độ và số ngày đã chọn
+                              WorkoutModel workoutModel = WorkoutModel();
+                              WorkoutProgram program = workoutModel.createWorkoutProgram(
+                                widget.level, 
+                                selectedDay
+                              );
+
+                              // Chuyển đến màn hình hiển thị chương trình tập luyện
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => WorkoutDayDetailScreen(
-                                    day: 1,
+                                  builder: (context) => CombinedWorkoutExerciseScreen(
                                     userInfo: widget.userInfo,
+                                    program: program,
                                   ),
                                 ),
                               );
                             },
-                            child: const Text("TIẾP TỤC",
-                                style: AppTextStyles.textButtonTwo),
+                            child: const Text(
+                              "TIẾP TỤC",
+                              style: AppTextStyles.textButtonTwo,
+                            ),
                           ),
                         ],
                       ),
@@ -152,3 +170,4 @@ class _WorkoutDaysSelectionScreenState
     );
   }
 }
+

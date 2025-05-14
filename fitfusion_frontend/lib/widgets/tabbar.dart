@@ -1,4 +1,3 @@
-import 'package:fitfusion_frontend/models/user_info_model.dart';
 import 'package:fitfusion_frontend/screen/intro.dart';
 import 'package:fitfusion_frontend/screen/profile.dart';
 import 'package:fitfusion_frontend/screen/review.dart';

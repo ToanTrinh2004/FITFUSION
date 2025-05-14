@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../../models/meal_model.dart';
 
 class MealService {
-  static const String baseUrl = 'http://192.168.5.173:3000/api/chatbot';
+  static const String baseUrl = 'http://10.0.2.2:3000/api/chatbot';
 
   static Future<WeeklyNutrition> getMealPlan({
     required String bmiStatus,
