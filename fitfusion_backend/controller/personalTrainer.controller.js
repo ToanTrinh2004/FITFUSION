@@ -3,6 +3,8 @@ const personalTrainerService = require("../services/personalTrainer.service");
 class PersonalTrainerController {
   async createTrainer(req, res) {
     try {
+      const coachId= req.user._id;
+      req.body.coachId = coachId
       const trainer = await personalTrainerService.createTrainer(req.body);
       res.status(201).json({ success: true, data: trainer });
     } catch (error) {
@@ -21,7 +23,8 @@ class PersonalTrainerController {
 
   async getTrainerById(req, res) {
     try {
-      const trainer = await personalTrainerService.getTrainerById(req.params.id);
+      const coachId = req.user._id;
+      const trainer = await personalTrainerService.getTrainerById(coachId);
       if (!trainer) {
         return res.status(404).json({ success: false, error: "Trainer not found" });
       }

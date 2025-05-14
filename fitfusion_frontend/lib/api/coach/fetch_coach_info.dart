@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../auth/auth_service.dart'; // Make sure this path is correct
 
-class FetchUser {
-  static const String baseUrl = 'http://10.0.2.2:3000/api/user';
+class FetchCoachInfo {
+  static const String baseUrl = 'http://10.0.2.2:3000/api/PT';
   
   /// Fetch user info (from /userinfo)
- static Future<Map<String, dynamic>?> getUserInfo(BuildContext context) async {
-  final url = Uri.parse('$baseUrl/userinfo');
+ static Future<Map<String, dynamic>?> getCoachInfo(BuildContext context) async {
+  final url = Uri.parse('$baseUrl/getById');
 
   try {
     final token = TokenManager().token;
@@ -29,8 +29,8 @@ class FetchUser {
     );
 
     // DEBUG: Print full response
-    debugPrint('DEBUG: UserInfo Response Code = ${response.statusCode}');
-    debugPrint('DEBUG: UserInfo Response Body = ${response.body}');
+    debugPrint('DEBUG:CoachInfo Response Code = ${response.statusCode}');
+    debugPrint('DEBUG:CoachInfo Response Body = ${response.body}');
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -52,7 +52,7 @@ class FetchUser {
 
 
   /// Fetch user account (from /user)
-  static Future<Map<String, dynamic>?> getUserAccount(BuildContext context) async {
+  static Future<Map<String, dynamic>?> getCoachAccount(BuildContext context) async {
     final url = Uri.parse('$baseUrl');
 
     try {

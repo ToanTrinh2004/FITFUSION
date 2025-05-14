@@ -15,8 +15,8 @@ class PersonalTrainerService {
     return await PersonalTrainer.find();
   }
 
-  async getTrainerById(id) {
-    return await PersonalTrainer.findById(id);
+  async getTrainerById(coachId) {
+    return await PersonalTrainer.findOne({ coachId }); 
   }
 
   async updateTrainer(id, data) {

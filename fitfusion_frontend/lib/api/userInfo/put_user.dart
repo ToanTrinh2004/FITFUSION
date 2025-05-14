@@ -5,7 +5,7 @@ import '../../models/user_info_model.dart';
 import '../token_manager.dart';
 
 class UpdateUserInfoService {
-  static const String _baseUrl = 'http://192.168.5.173:3000/api/user/userinfo/update';
+  static const String _baseUrl = 'http://10.0.2.2:3000/api/user/userinfo/update';
 
   /// Update user info and send it to the backend API.
   static Future<bool> updateUserInfo(UserInfoModel userInfo) async {

@@ -1,4 +1,5 @@
 class UserInfoModel {
+  String? userId;
   final String fullname;
   String? gender;
   double? height;
@@ -15,6 +16,7 @@ class UserInfoModel {
   String? password;
 
   UserInfoModel({
+    this.userId,
     required this.fullname,
     this.gender,
     this.height,
@@ -67,6 +69,7 @@ class UserInfoModel {
 
   factory UserInfoModel.fromJson(Map<String, dynamic> json) {
   return UserInfoModel(
+    userId:json['userId'],
     fullname: json['fullname'],
     gender: json['gender'],
     height: (json['height'] as num?)?.toDouble(),
@@ -83,6 +86,7 @@ class UserInfoModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'userId' :userId,
       'fullname': fullname,
       'gender': gender,
       'height': height,
